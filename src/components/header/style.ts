@@ -1,0 +1,33 @@
+export const styles = {
+  header: {
+    position: "fixed" as const,
+    top: 0,
+    left: 0,
+    right: 0,
+    width: "100%",
+    backgroundColor: "#fff",
+    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+    zIndex: 1000,
+    padding: "16px 24px",
+    display: "flex",
+    flexDirection: "column" as const,
+    alignItems: "center" as const,
+    justifyContent: "center" as const,
+  },
+  title: {
+    fontSize: "30px",
+    fontWeight: "bold",
+    color: "#000",
+    margin: 0,
+    lineHeight: 1.5,
+    letterSpacing: "2px",
+  },
+  subtitle: {
+    fontSize: "20px",
+    fontWeight: "normal",
+    color: "#333",
+    margin: "4px 0 0 0",
+    lineHeight: 1.2,
+    letterSpacing: "3.5px",
+  },
+};
