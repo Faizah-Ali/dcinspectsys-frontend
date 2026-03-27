@@ -1,0 +1,89 @@
+import { COLORS } from "../../common/constants/colors";
+
+export const styles = {
+  sideBar: {
+    width: "350px",
+    position: "fixed" as const,
+    height: "calc(100vh - 100px)",
+    left: 0,
+    top: "100px", // Start below the header
+    zIndex: 100,
+    overflow: "hidden" as const,
+    backgroundColor: COLORS.sidebarBg,
+    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15), 0 4px 16px rgba(0, 0, 0, 0.1)",
+    display: "flex",
+    flexDirection: "column" as const,
+  },
+  userInfoContainer: {
+    padding: "20px 16px",
+    borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+  },
+  userName: {
+    fontSize: "14px",
+    fontWeight: 600,
+    color: COLORS.white,
+    marginBottom: "4px",
+  },
+  loginTime: {
+    fontSize: "12px",
+    color: "rgba(255, 255, 255, 0.7)",
+  },
+  itemList: {
+    padding: "16px 0",
+    flex: 1,
+    overflow: "auto" as const,
+  },
+  sidebarItem: {
+    padding: "12px 16px",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center" as const,
+    gap: "12px",
+    color: COLORS.white,
+    fontSize: "14px",
+    fontWeight: 500,
+    transition: "all 0.2s ease",
+    "&:hover": {
+      backgroundColor: COLORS.sidebarHoverBg,
+      borderRadius: "8px",
+    },
+  },
+  activeItem: {
+    backgroundColor: COLORS.primary,
+    borderRadius: "8px",
+    color: COLORS.white,
+    fontWeight: 600,
+    "&:hover": {
+      backgroundColor: COLORS.primary,
+    },
+  },
+  itemIcon: {
+    width: "20px",
+    height: "20px",
+    color: "inherit",
+  },
+  logoutContainer: {
+    paddingBottom: "10px",
+    borderTop: "1px solid rgba(255, 255, 255, 0.1)",
+    paddingLeft: "5px",
+    marginTop: "auto",
+    flexShrink: 0, 
+    "&:hover": {
+      backgroundColor: COLORS.sidebarHoverBg,
+      borderRadius: "8px",
+    },
+  },
+  logoutButton: {
+    padding: "12px 16px",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center" as const,
+    gap: "12px",
+    color: COLORS.white,
+    fontSize: "16px",
+    fontWeight: 500,
+    transition: "all 0.2s ease",
+    borderRadius: "8px",
+    width: "100%",   
+  },
+};

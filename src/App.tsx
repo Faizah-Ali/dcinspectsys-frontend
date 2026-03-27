@@ -1,26 +1,16 @@
-import Header from './components/header/index.tsx'
-import Login from './pages/login/index.tsx'
-import { ToastContainer } from 'react-toastify'
-import './App.css'
+import { Provider } from 'react-redux';
+import { store } from './redux/store.ts';
+import RoutesManager from './routes/index.tsx';
+import Toast from './components/toast/index.tsx';
+import './App.css';
 
 function App() {
   return (
-    <>
-      <Header />
-      <Login />
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
-    </>
-  )
+    <Provider store={store}>
+      <RoutesManager />
+      <Toast />
+    </Provider>
+  );
 }
 
-export default App
+export default App;
