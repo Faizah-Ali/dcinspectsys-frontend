@@ -37,13 +37,13 @@ const Login = () => {
         />
       </Box>
 
-      {/* Right Section - Login Form with Curved Border */}
+      {/* Right Section - Login Form */}
       <Box sx={styles.rightSection}>
         <Box sx={styles.formContainer}>
           <Box component="h2" sx={styles.title}>
             Login
           </Box>
-          <form onSubmit={handleSubmit(formData, setErrors, setFormData, setIsSubmitting, () => navigate(Paths.INSPECT_APPLICATIONS))}>
+          <form onSubmit={handleSubmit(formData, setErrors, setIsSubmitting, () => navigate(Paths.INSPECT_APPLICATIONS))}>
             <TextField
               label="Username"
               type="text"

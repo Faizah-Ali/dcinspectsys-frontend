@@ -51,7 +51,6 @@ export const handleChange = (
 export const handleSubmit = (
   formData: LoginFormData,
   setErrors: React.Dispatch<React.SetStateAction<LoginFormErrors>>,
-  setFormData: React.Dispatch<React.SetStateAction<LoginFormData>>,
   setIsSubmitting: React.Dispatch<React.SetStateAction<boolean>>,
   onLoginSuccess: () => void
 ) => async (e: React.FormEvent) => {
