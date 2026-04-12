@@ -1,16 +1,46 @@
 import { Provider } from 'react-redux';
-import { store } from './redux/store.ts';
-import RoutesManager from './routes/index.tsx';
-import Toast from './components/toast/index.tsx';
+import { store } from './redux/store';
+import RoutesManager from './routes';
+import Toast from './components/toast';
 import './App.css';
+
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setAuth, clearAuth } from "./redux/auth.slice";
+import { getLoginState, getUsername, isSessionValid } from "./utils/authSession.utils";
 
 function App() {
   return (
-    <Provider store={store}>
+    <>
       <RoutesManager />
       <Toast />
-    </Provider>
+    </>
   );
 }
 
-export default App;
+function AppWrapper() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const isLoggedIn = getLoginState();
+    const username = getUsername();
+    const isValid = isSessionValid();
+
+    if (isLoggedIn && isValid && username) {
+      dispatch(setAuth({ username, permissions: [] }));
+    } else {
+      dispatch(clearAuth());
+    }
+  }, [dispatch]);
+
+  return <App />;
+}
+
+// ✅ ONLY THIS EXPORT
+export default function Root() {
+  return (
+    <Provider store={store}>
+      <AppWrapper />
+    </Provider>
+  );
+}

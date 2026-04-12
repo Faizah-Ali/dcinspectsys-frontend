@@ -7,6 +7,7 @@ import type { RootState } from "../redux/store.ts";
 import Header from "../components/header/index.tsx";
 import Sidebar from "../components/sidebar/index.tsx";
 import { getUsername, getLoginTime } from "../utils/authSession.utils.ts";
+import { isSessionValid } from "../utils/authSession.utils.ts";
 
 interface PermissionRouteProps {
     children: React.JSX.Element;
@@ -15,6 +16,7 @@ interface PermissionRouteProps {
 
 const PermissionRoute = ({ children, requiredModule }: PermissionRouteProps) => {
     const isLoggedIn = localStorage.getItem(LOGGED_IN_KEY) === "true";
+    const isValidSession = isSessionValid();
     const location = useLocation();
     const { permissions, isAuthenticated, username: reduxUsername } = useAppSelector(
         (state: RootState) => state.auth
@@ -26,7 +28,7 @@ const PermissionRoute = ({ children, requiredModule }: PermissionRouteProps) => 
         window.scrollTo(0, 0);
     }, [location]);
 
-    if (!isLoggedIn || !isAuthenticated) {
+    if (!isLoggedIn || !isAuthenticated || !isValidSession) {
         return <Navigate to={Paths.LOGIN} replace />;
     }
 

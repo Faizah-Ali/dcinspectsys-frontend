@@ -4,6 +4,7 @@ import { saveLoginState, saveUsername, saveLoginTime } from "../../utils/authSes
 import { store } from "../../redux/store.ts";
 import { setAuth } from "../../redux/auth.slice.ts";
 import type { LoginFormData, LoginFormErrors } from "./type.ts";
+import sha256 from "crypto-js/sha256";
 
 // Validate form data using Yup schema
 export const validateForm = async (
@@ -23,14 +24,6 @@ export const validateForm = async (
     }
     return errors;
   }
-};
-
-// Check if credentials are correct
-export const checkCredentials = (
-  username: string,
-  password: string
-): boolean => {
-  return username === "faizah" && password === "abc123";
 };
 
 // Handle input changes
@@ -65,9 +58,8 @@ export const handleSubmit = (
   e.preventDefault();
   setIsSubmitting(true);
 
-  // Validate form using schema
   const validationErrors = await validateForm(formData);
-  
+
   if (Object.keys(validationErrors).length > 0) {
     setErrors(validationErrors);
     setIsSubmitting(false);
@@ -75,33 +67,48 @@ export const handleSubmit = (
     return;
   }
 
-  // Check credentials
-  const isValid = checkCredentials(formData.username, formData.password);
+  try {
+    const salt = "123"; // TEMP (same as backend)
 
-  if (isValid) {
-    // Save login state, username, and login time to localStorage
+    // 🔐 HASH PASSWORD HERE
+    const hashedPassword = sha256(formData.password + salt).toString();
+
+    const response = await fetch("http://localhost:8080/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: formData.username,
+        password: hashedPassword, 
+        salt: salt
+      }),
+    });
+
+  const data = await response.json();
+
+  if (data && data.token) {
+    localStorage.setItem("token", data.token);
+
     saveLoginState(true);
     saveUsername(formData.username);
     saveLoginTime();
-    
-    // Update Redux state
+
     store.dispatch(setAuth({
       username: formData.username,
       permissions: [],
     }));
-    
-    toast.success("Login successful!");
-    // Call the callback to navigate to table page
-    setTimeout(() => {
-      onLoginSuccess();
-    }, 1000); // Small delay to show success message
-  } else {
-    toast.error("Invalid username or password");
-    setFormData((prev) => ({
-      ...prev,
-      password: "",
-    }));
-  }
 
-  setIsSubmitting(false);
-};
+    toast.success("Login successful!");
+    onLoginSuccess();
+
+  } else {
+    toast.error(data.message || "Login failed");
+  }
+    } catch (error) {
+      console.error(error);
+      toast.error("Server error");
+    }
+
+    setIsSubmitting(false);
+  };
