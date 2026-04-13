@@ -1,36 +1,59 @@
 import React, { useEffect } from "react";
 import { useLocation, Navigate } from "react-router-dom";
-import { LOGGED_IN_KEY } from "../common/constants/storageKeys.ts";
 import { Paths } from "../common/constants";
-import Header from "../components/header/index.tsx";
-import Sidebar from "../components/sidebar/index.tsx";
-import { getUsername, getLoginTime } from "../utils/authSession.utils.ts";
+import Header from "../components/header";
+import Sidebar from "../components/sidebar";
+import {
+    getUsername,
+    getLoginTime,
+    isSessionValid,
+    logout,
+} from "../utils/authSession.utils";
+import { useAppSelector } from "../hooks/useAppSelector";
 
 interface PrivateRouteProps {
     children: React.JSX.Element;
 }
 
 const PrivateRoute = ({ children }: PrivateRouteProps) => {
-    const isLoggedIn = localStorage.getItem(LOGGED_IN_KEY) === "true";
+    const { isAuthenticated } = useAppSelector((state) => state.auth);
     const location = useLocation();
+
+    const isValidSession = isSessionValid();
     const username = getUsername();
     const loginTime = getLoginTime();
-    
+
+    // Scroll to top on route change
     useEffect(() => {
         window.scrollTo(0, 0);
     }, [location]);
 
-    if (!isLoggedIn) {
+    // Session expiry check (optimized)
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (!isSessionValid()) {
+                logout("Session expired. Please login again.");
+            }
+        }, 10000); 
+
+        return () => clearInterval(interval);
+    }, []);
+
+    // 🔐 FINAL AUTH CHECK
+    if (!isAuthenticated || !isValidSession) {
         return <Navigate to={Paths.LOGIN} replace />;
     }
 
     return (
         <>
             <Header />
-            <Sidebar 
-                userInfo={{ name: username || "User", loginTime: loginTime }}
+            <Sidebar
+                userInfo={{
+                    name: username || "User",
+                    loginTime: loginTime,
+                }}
                 activeRoute={location.pathname}
-                onItemClick={(item) => console.log("Clicked:", item)}
+                onItemClick={() => {}}
             />
             {children}
         </>
