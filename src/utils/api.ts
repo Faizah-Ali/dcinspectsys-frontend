@@ -1,9 +1,9 @@
-// src/utils/api.ts
+const BASE_URL = "/inspection-system-0.0.1-SNAPSHOT";
 
 export const authFetch = async (url: string, options: RequestInit = {}) => {
   const token = localStorage.getItem("token");
 
-  return fetch(url, {
+  return fetch(BASE_URL + url, {
     ...options,
     headers: {
       "Content-Type": "application/json",

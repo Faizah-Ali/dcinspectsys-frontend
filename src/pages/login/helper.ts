@@ -5,6 +5,7 @@ import { store } from "../../redux/store.ts";
 import { setAuth } from "../../redux/auth.slice.ts";
 import type { LoginFormData, LoginFormErrors } from "./type.ts";
 import sha256 from "crypto-js/sha256";
+import { BASE_URL } from "../../config";
 
 // Validate form data using Yup schema
 export const validateForm = async (
@@ -71,8 +72,7 @@ export const handleSubmit = (
 
     // 🔐 HASH PASSWORD HERE
     const hashedPassword = sha256(formData.password + salt).toString();
-
-    const response = await fetch("http://localhost:8080/api/login", {
+    const response = await fetch(`${BASE_URL}/api/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
