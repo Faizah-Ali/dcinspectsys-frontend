@@ -1,4 +1,4 @@
-const BASE_URL = "/inspection-system-0.0.1-SNAPSHOT";
+import { BASE_URL } from "../config";
 
 export const authFetch = async (url: string, options: RequestInit = {}) => {
   const token = localStorage.getItem("token");
