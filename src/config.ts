@@ -1,1 +1,1 @@
-export const BASE_URL = "/inspection-system";
+export const BASE_URL = "/inspection-system-1.0";
