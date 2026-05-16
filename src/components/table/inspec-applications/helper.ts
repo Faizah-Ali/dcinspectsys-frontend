@@ -25,3 +25,20 @@ export const getStatusColor = (status: string): string => {
       return "#757575"; // Grey
   }
 };
+
+export const getApplicationStatus = (status: string): string => {
+
+  switch (status) {
+    case "Y":
+      return "New Filing";
+
+    case "C":
+      return "Completed";
+
+    case "R":
+      return "Rejected";
+
+    default:
+      return status;
+  }
+};

@@ -8,7 +8,7 @@ export const styles = {
     // backgroundColor: "#f5f5f5",
   },
   tableContainer: {
-    width: "100%",
+    width: "115%",
     padding: "20px",
   },
   tableHeading: {
@@ -16,7 +16,7 @@ export const styles = {
     fontWeight: "bold",
     color: "#000",
     marginBottom: "40px",
-    marginTop: "60px",
+    marginTop: "50px",
     textAlign: "left" as const,
   },
   tableWrapper: {
