@@ -3,6 +3,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import type {
   PaginatedApplicationResponse,
 } from "./applications.type";
+import { BASE_URL } from "../../../config";
 
 type GetApplicationsPayload = {
   page: number;
@@ -18,8 +19,8 @@ export const getApplications = createAsyncThunk<
   async ({ page, size }, { fulfillWithValue }) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/applications?owner=A&page=${page}&size=${size}`
-      );
+  `${BASE_URL}/api/applications?owner=A&page=${page}&size=${size}`
+)
 
       if (!response.ok) {
         throw new Error("Failed to fetch applications");
