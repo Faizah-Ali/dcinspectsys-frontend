@@ -11,12 +11,14 @@ import {
 import { useEffect, useState, useCallback } from "react";
 import type { SelectChangeEvent } from "@mui/material";
 import { useDispatch } from "react-redux";
+import { useSearchParams } from "react-router-dom";
 
 import { styles } from "../../../pages/inspec-applications/style";
 
 import {
   formatDate,
   getApplicationStatus,
+  getCaseStatus,
 } from "./helper";
 
 import { IMAGES } from "../../../common/constants/images";
@@ -27,25 +29,44 @@ import {
 
 import type { ApplicationResponse } from "../../../pages/inspec-applications/services/applications.type";
 
-import { generateApplicationPDF } from "./pdfHelper";
+import { generateApplicationPDF, printApplication } from "../../../common/constants/pdfHelper";
 
 import PaginationSection from "../../pagination";
 
 import type { AppDispatch } from "../../../redux/store";
 
+const DEFAULT_PAGE = 1;
+
+const DEFAULT_LIMIT = 10;
+
+const parsePositiveInt = (value: string | null, fallback: number) => {
+
+  const parsed = Number(value);
+
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+};
+
 const ApplicationsTable = () => {
 
   const dispatch = useDispatch<AppDispatch>();
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const page = parsePositiveInt(
+    searchParams.get("page"),
+    DEFAULT_PAGE
+  );
+
+  const limit = parsePositiveInt(
+    searchParams.get("limit"),
+    DEFAULT_LIMIT
+  );
 
   const [applications, setApplications] = useState<ApplicationResponse[]>([]);
 
   const [totalRecords, setTotalRecords] = useState(0);
 
   const [totalPages, setTotalPages] = useState(0);
-
-  const [page, setPage] = useState(1);
-
-  const [limit, setLimit] = useState(10);
 
   const fetchApplications = useCallback(async () => {
     const data = await dispatch(
@@ -61,8 +82,23 @@ const ApplicationsTable = () => {
   fetchApplications();
 }, [fetchApplications]);
 
+  const updateSearchParams = useCallback(
+    (nextPage: number, nextLimit: number) => {
+      setSearchParams(
+        (prev) => {
+          const params = new URLSearchParams(prev);
+          params.set("page", String(nextPage));
+          params.set("limit", String(nextLimit));
+          return params;
+        },
+        { replace: true }
+      );
+    },
+    [setSearchParams]
+  );
+
   const handlePageChange = (value: number) => {
-    setPage(value);
+    updateSearchParams(value, limit);
   };
 
   const handleLimitChange = (
@@ -71,9 +107,7 @@ const ApplicationsTable = () => {
 
     const value = Number(event.target.value);
 
-    setLimit(value);
-
-    setPage(1);
+    updateSearchParams(DEFAULT_PAGE, value);
   };
 
   return (
@@ -175,7 +209,7 @@ const ApplicationsTable = () => {
                 </TableCell>
 
                 <TableCell sx={styles.dataCell}>
-                  {row.caseStatus || "-"}
+                  {getCaseStatus(row.caseStatus)}
                 </TableCell>
 
                 <TableCell sx={styles.dataCell}>
@@ -243,10 +277,23 @@ const ApplicationsTable = () => {
 
                     <Box
                       component="button"
+                      sx={styles.assignButton}
+                      title="Download"
+                      onClick={() =>
+                        generateApplicationPDF(row)
+                      }
+                    >
+                      <IMAGES.DownloadIcon
+                        sx={{ fontSize: "18px" }}
+                      />
+                    </Box>
+
+                    <Box
+                      component="button"
                       sx={styles.printButton}
                       title="Print"
                       onClick={() =>
-                        generateApplicationPDF(row)
+                        printApplication(row)
                       }
                     >
                       <IMAGES.PrintIcon

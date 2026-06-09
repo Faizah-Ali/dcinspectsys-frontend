@@ -5,6 +5,7 @@ import PrintIcon from '@mui/icons-material/Print';
 import DhcLogo from "../../assets/images/dhclogo.png";
 import Emblem from "../../assets/images/emblem.png";
 import CourtBuilding from "../../assets/images/dhc3.jpg";
+import DownloadIcon from '@mui/icons-material/Download';
 
 export const IMAGES = {
     DhcLogo,
@@ -12,5 +13,6 @@ export const IMAGES = {
     CourtBuilding,
     LogoutIcon,
     AssignmentIcon,
-    PrintIcon
+    PrintIcon,
+    DownloadIcon
 };

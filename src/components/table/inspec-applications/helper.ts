@@ -42,3 +42,24 @@ export const getApplicationStatus = (status: string): string => {
       return status;
   }
 };
+
+export const getCaseStatus = (status: string | null | undefined): string => {
+
+  if (!status) {
+    return "-";
+  }
+
+  switch (status) {
+    case "P":
+      return "Pending";
+
+    case "D":
+      return "Dispose";
+
+    case "R":
+      return "Reject";
+
+    default:
+      return status;
+  }
+};
