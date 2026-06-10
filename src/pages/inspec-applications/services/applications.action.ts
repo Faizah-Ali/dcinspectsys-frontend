@@ -8,6 +8,7 @@ import { BASE_URL } from "../../../config";
 type GetApplicationsPayload = {
   page: number;
   size: number;
+  search?: string;
 };
 
 export const getApplications = createAsyncThunk<
@@ -16,11 +17,18 @@ export const getApplications = createAsyncThunk<
 >(
   "applications/getApplications",
 
-  async ({ page, size }, { fulfillWithValue }) => {
+  async ({ page, size, search }, { signal, fulfillWithValue, rejectWithValue }) => {
     try {
+      const trimmedSearch = search?.trim() ?? "";
+
+      const searchQuery = trimmedSearch
+        ? `&search=${encodeURIComponent(trimmedSearch)}`
+        : "";
+
       const response = await fetch(
-  `${BASE_URL}/api/applications?owner=A&page=${page}&size=${size}`
-)
+        `${BASE_URL}/api/applications?owner=A&page=${page}&size=${size}${searchQuery}`,
+        { signal }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to fetch applications");
@@ -31,6 +39,11 @@ export const getApplications = createAsyncThunk<
       return fulfillWithValue(data);
 
     } catch (error) {
+      // Let aborted requests propagate as a rejection so stale results don't
+      // overwrite fresh state in the component.
+      if (signal.aborted || (error as Error)?.name === "AbortError") {
+        return rejectWithValue("aborted");
+      }
 
       console.error("Error fetching applications:", error);
 
