@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Box, TextField, Button } from "@mui/material";
 import { styles } from "./style";
+import { VARIANTS } from "../../common/constants";
 
 const ReassignApplications = () => {
   const [diaryNo, setDiaryNo] = useState("");
@@ -50,7 +51,7 @@ const ReassignApplications = () => {
         />
         
         <Button
-          variant="contained"
+          variant={VARIANTS.CONTAINED}
           onClick={handleGetDetails}
           sx={styles.getDetailsButton}
         >

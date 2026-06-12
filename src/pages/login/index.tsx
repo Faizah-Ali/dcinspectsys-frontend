@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { styles } from "./style";
 import { handleChange, handleSubmit } from "./helper";
 import { IMAGES } from "../../common/constants/images";
-import { Paths } from "../../common/constants";
+import { Paths, VARIANTS } from "../../common/constants";
 import type { LoginFormData, LoginFormErrors } from "./type";
 
 const Login = () => {
@@ -68,7 +68,7 @@ const Login = () => {
             />
             <Button
               type="submit"
-              variant="contained"
+              variant={VARIANTS.CONTAINED}
               sx={styles.loginButton}
               disabled={isSubmitting}
             >

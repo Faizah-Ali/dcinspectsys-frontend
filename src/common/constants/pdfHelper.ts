@@ -3,8 +3,6 @@ import autoTable from "jspdf-autotable";
 import type { ApplicationResponse } from "../../pages/inspec-applications/services/applications.type";
 import {
   formatDate,
-  getApplicationStatus,
-  getCaseStatus,
 } from "../../components/table/inspec-applications/helper";
 
 const buildCaseNumber = (row: ApplicationResponse) => {
@@ -48,10 +46,10 @@ const buildApplicationPDF = (row: ApplicationResponse) => {
       ["Party-In-Person ID", row.username],
       ["Reference No.", `${row.diaryNo}/${row.diaryYr}`],
       ["Case No.", buildCaseNumber(row)],
-      ["Case Status", getCaseStatus(row.caseStatus)],
+      ["Case Status", row.caseStatus],
       ["Remarks", row.remarks || "-"],
       ["Application Date", formatDate(row.appliedDate)],
-      ["Application Status", getApplicationStatus(row.status)],
+      ["Application Status", row.status],
       ["Court Fee ID", buildCourtFeeDetails(row)],
     ],
     styles: {

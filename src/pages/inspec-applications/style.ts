@@ -90,4 +90,34 @@ export const styles = {
       color: "#fff",
     },
   },
+  tableSection: {
+    position: "relative" as const,
+  },
+  placeholderCell: {
+    textAlign: "center" as const,
+    padding: "32px",
+  },
+  remarksLink: {
+    color: "#1976d2",
+    cursor: "pointer",
+    textDecoration: "underline",
+  },
+  actionIcon: {
+    fontSize: "18px",
+  },
+  loadingOverlay: {
+    position: "absolute" as const,
+    inset: 0,
+    display: "flex",
+    alignItems: "flex-start",
+    justifyContent: "center",
+    paddingTop: "32px",
+    backgroundColor: "rgba(255, 255, 255, 0.55)",
+    pointerEvents: "none" as const,
+    zIndex: 1,
+  },
+  recordsSummary: {
+    mt: 1,
+    fontSize: "14px",
+  },
 };

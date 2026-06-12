@@ -23,10 +23,13 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
     const username = getUsername();
     const loginTime = getLoginTime();
 
-    // Scroll to top on route change
+    // Scroll to top on route (pathname) change only.
+    // Depending on the full `location` object would also fire for search-param
+    // updates (e.g. ?page=2 from pagination, ?search=... from the table search),
+    // which would yank the user back to the top on every pagination click.
     useEffect(() => {
         window.scrollTo(0, 0);
-    }, [location]);
+    }, [location.pathname]);
 
     // Session expiry check (optimized)
     useEffect(() => {

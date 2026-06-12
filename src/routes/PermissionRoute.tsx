@@ -24,9 +24,13 @@ const PermissionRoute = ({ children, requiredModule }: PermissionRouteProps) => 
     const username = getUsername() || reduxUsername || null;
     const loginTime = getLoginTime();
 
+    // Only scroll to top when the route (pathname) actually changes.
+    // `location` would also change for search-param updates (pagination, search,
+    // filters), which previously caused the page to jump to the top on every
+    // pagination click.
     useEffect(() => {
         window.scrollTo(0, 0);
-    }, [location]);
+    }, [location.pathname]);
 
     if (!isLoggedIn || !isAuthenticated || !isValidSession) {
         return <Navigate to={Paths.LOGIN} replace />;
