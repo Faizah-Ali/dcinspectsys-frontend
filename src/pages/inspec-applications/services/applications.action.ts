@@ -5,10 +5,12 @@ import type {
 } from "./applications.type";
 import { BASE_URL } from "../../../config";
 
-type GetApplicationsPayload = {
+export type GetApplicationsPayload = {
   page: number;
   size: number;
   search?: string;
+  caseStatus?: string;
+  applicationStatus?: string;
 };
 
 export const getApplications = createAsyncThunk<
@@ -17,7 +19,10 @@ export const getApplications = createAsyncThunk<
 >(
   "applications/getApplications",
 
-  async ({ page, size, search }, { signal, fulfillWithValue, rejectWithValue }) => {
+  async (
+    { page, size, search, caseStatus, applicationStatus },
+    { signal, fulfillWithValue, rejectWithValue }
+  ) => {
     try {
       const trimmedSearch = search?.trim() ?? "";
 
@@ -25,8 +30,11 @@ export const getApplications = createAsyncThunk<
         ? `&search=${encodeURIComponent(trimmedSearch)}`
         : "";
 
+      const caseStatusQuery = `&caseStatus=${encodeURIComponent(caseStatus ?? "")}`;
+      const applicationStatusQuery = `&applicationStatus=${encodeURIComponent(applicationStatus ?? "")}`;
+
       const response = await fetch(
-        `${BASE_URL}/api/applications?owner=A&page=${page}&size=${size}${searchQuery}`,
+        `${BASE_URL}/api/applications?owner=A&page=${page}&size=${size}${searchQuery}${caseStatusQuery}${applicationStatusQuery}`,
         { signal }
       );
 

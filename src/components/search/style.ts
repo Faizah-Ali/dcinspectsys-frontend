@@ -6,5 +6,8 @@ export const searchStyles = {
   },
   field: {
     width: { xs: "100%", sm: "360px" },
+    "& .MuiOutlinedInput-root": {
+      borderRadius: "20px",
+    },
   },
 };

@@ -59,3 +59,20 @@ export const getStatusColor = (statusLabel?: string | null): string => {
 
   return entry?.color ?? UNKNOWN_STATUS_COLOR;
 };
+
+export interface StatusFilterOption {
+  value: string;
+  label: string;
+}
+
+// Dropdown options for Case Status / Application Status filters.
+// Empty value means "All" (no filter applied).
+export const STATUS_FILTER_OPTIONS: StatusFilterOption[] = [
+  { value: "", label: "All" },
+  ...(Object.entries(STATUS_MAP) as [StatusCode, StatusInfo][]).map(
+    ([code, info]) => ({
+      value: code,
+      label: info.label,
+    })
+  ),
+];

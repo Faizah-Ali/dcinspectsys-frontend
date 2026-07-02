@@ -1,38 +1,20 @@
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import type { ApplicationResponse } from "../../pages/inspec-applications/services/applications.type";
-import {
-  formatDate,
-} from "../../components/table/inspec-applications/helper";
+import { formatDate } from "../../components/table/inspec-applications/helper";
+import { getStatusLabel } from "./status";
 
-const buildCaseNumber = (row: ApplicationResponse) => {
-
-  const caseNo = `${row.casetype}-${row.regNo}/${row.regYr}`;
-
-  return row.caseTitle ? `${caseNo}\n${row.caseTitle}` : caseNo;
-};
-
-const buildCourtFeeDetails = (row: ApplicationResponse) => {
-
-  const lines: string[] = [row.ecourtFeeId || "Not Entered"];
-
-  if (row.courtFeeAmount) {
-    lines.push(`(Value = ${row.courtFeeAmount})`);
+const displayValue = (value: string | number | null | undefined): string => {
+  if (value === null || value === undefined) {
+    return "-";
   }
 
-  if (row.ecourtMessage) {
-    lines.push(`Status : ${row.ecourtMessage}`);
-  }
+  const text = String(value).trim();
 
-  if (row.courtFeeReason) {
-    lines.push(`Reason: ${row.courtFeeReason}`);
-  }
-
-  return lines.join("\n");
+  return text || "-";
 };
 
 const buildApplicationPDF = (row: ApplicationResponse) => {
-
   const doc = new jsPDF();
 
   doc.setFontSize(18);
@@ -43,14 +25,21 @@ const buildApplicationPDF = (row: ApplicationResponse) => {
     head: [["Field", "Value"]],
     body: [
       ["PWD Cat.", "N/A"],
-      ["Party-In-Person ID", row.username],
+      ["Party-In-Person ID", displayValue(row.username)],
+      ["Case Type", displayValue(row.casetype)],
+      ["Registration No.", displayValue(row.regNo)],
+      ["Registration Year", displayValue(row.regYr)],
       ["Reference No.", `${row.diaryNo}/${row.diaryYr}`],
-      ["Case No.", buildCaseNumber(row)],
-      ["Case Status", row.caseStatus],
-      ["Remarks", row.remarks || "-"],
+      ["Case No.", `${row.casetype}-${row.regNo}/${row.regYr}`],
+      ["Case Title", displayValue(row.caseTitle)],
+      ["Case Status", getStatusLabel(row.caseStatus)],
+      ["Remarks", displayValue(row.remarks)],
       ["Application Date", formatDate(row.appliedDate)],
-      ["Application Status", row.status],
-      ["Court Fee ID", buildCourtFeeDetails(row)],
+      ["Application Status", getStatusLabel(row.status)],
+      ["Court Fee ID", displayValue(row.ecourtFeeId) === "-" ? "Not Entered" : displayValue(row.ecourtFeeId)],
+      // ["Court Fee Amount", displayValue(row.courtFeeAmount)],
+      // ["eCourt Message", displayValue(row.ecourtMessage)],
+      // ["Court Fee Reason", displayValue(row.courtFeeReason)],
     ],
     styles: {
       fontSize: 11,
@@ -71,28 +60,20 @@ const buildApplicationPDF = (row: ApplicationResponse) => {
   return doc;
 };
 
-export const generateApplicationPDF = (
-  row: ApplicationResponse
-) => {
-
+export const generateApplicationPDF = (row: ApplicationResponse) => {
   const doc = buildApplicationPDF(row);
 
   doc.save(`Application_${row.username}.pdf`);
 };
 
-export const printApplication = (
-  row: ApplicationResponse
-) => {
-
+export const printApplication = (row: ApplicationResponse) => {
   const doc = buildApplicationPDF(row);
 
   doc.autoPrint();
 
   const blobUrl = doc.output("bloburl") as unknown as string;
 
-  const existing = document.getElementById(
-    "application-print-frame"
-  );
+  const existing = document.getElementById("application-print-frame");
 
   if (existing) {
     existing.remove();

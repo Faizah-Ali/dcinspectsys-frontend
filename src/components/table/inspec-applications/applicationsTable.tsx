@@ -39,6 +39,8 @@ import PaginationSection from "../../pagination";
 
 import StatusChip from "../../status-chip";
 
+import StatusFilter from "../../status-filter";
+
 import { VARIANTS } from "../../../common/constants";
 
 import type { AppDispatch } from "../../../redux/store";
@@ -79,6 +81,10 @@ const ApplicationsTable = () => {
   );
 
   const search = searchParams.get("search") ?? "";
+
+  const caseStatus = searchParams.get("caseStatus") ?? "";
+
+  const applicationStatus = searchParams.get("applicationStatus") ?? "";
 
   const [applications, setApplications] = useState<ApplicationResponse[]>([]);
 
@@ -126,7 +132,13 @@ const ApplicationsTable = () => {
   // call on cleanup so a stale in-flight request can never overwrite fresh data.
   useEffect(() => {
     const promise = dispatch(
-      getApplications({ page, size: limit, search })
+      getApplications({
+        page,
+        size: limit,
+        search,
+        caseStatus,
+        applicationStatus,
+      })
     );
 
     let isActive = true;
@@ -147,7 +159,7 @@ const ApplicationsTable = () => {
       isActive = false;
       promise.abort();
     };
-  }, [dispatch, page, limit, search]);
+  }, [dispatch, page, limit, search, caseStatus, applicationStatus]);
 
   const updateSearchParams = useCallback(
     (nextPage: number, nextLimit: number) => {
@@ -183,6 +195,37 @@ const ApplicationsTable = () => {
     setSearchInput(event.target.value);
   };
 
+  const updateStatusFilter = useCallback(
+    (param: "caseStatus" | "applicationStatus", value: string) => {
+      setSearchParams(
+        (prev) => {
+          const params = new URLSearchParams(prev);
+          params.set("page", String(DEFAULT_PAGE));
+
+          if (value) {
+            params.set(param, value);
+          } else {
+            params.delete(param);
+          }
+
+          return params;
+        },
+        { replace: true }
+      );
+    },
+    [setSearchParams]
+  );
+
+  const handleCaseStatusChange = (event: SelectChangeEvent<string>) => {
+    updateStatusFilter("caseStatus", event.target.value);
+  };
+
+  const handleApplicationStatusChange = (
+    event: SelectChangeEvent<string>
+  ) => {
+    updateStatusFilter("applicationStatus", event.target.value);
+  };
+
   return (
     <Box sx={styles.tableContainer}>
 
@@ -190,11 +233,29 @@ const ApplicationsTable = () => {
         E-Inspection Applications
       </Box>
 
-      <Search
-        value={searchInput}
-        onChange={handleSearchChange}
-        placeholder="Search by username, case no, diary no, case title..."
-      />
+      <Box sx={styles.toolbar}>
+        <Search
+          value={searchInput}
+          onChange={handleSearchChange}
+          placeholder="Search by username, case no, diary no, case title..."
+          containerSx={{ marginBottom: 0, justifyContent: "flex-start" }}
+        />
+
+        <Box sx={styles.filters}>
+          <StatusFilter
+            label="Case Status"
+            value={caseStatus}
+            onChange={handleCaseStatusChange}
+            sx={styles.statusFilter}
+          />
+          <StatusFilter
+            label="Application Status"
+            value={applicationStatus}
+            onChange={handleApplicationStatusChange}
+            sx={styles.statusFilter}
+          />
+        </Box>
+      </Box>
 
       <Box sx={styles.tableSection}>
 
@@ -375,11 +436,13 @@ const ApplicationsTable = () => {
 
                       <Box
                         component="button"
+                        type="button"
                         sx={styles.assignButton}
                         title="Download"
-                        onClick={() =>
-                          generateApplicationPDF(row)
-                        }
+                        onClick={(event) => {
+                          event.currentTarget.blur();
+                          generateApplicationPDF(row);
+                        }}
                       >
                         <IMAGES.DownloadIcon
                           sx={styles.actionIcon}
@@ -388,11 +451,13 @@ const ApplicationsTable = () => {
 
                       <Box
                         component="button"
+                        type="button"
                         sx={styles.printButton}
                         title="Print"
-                        onClick={() =>
-                          printApplication(row)
-                        }
+                        onClick={(event) => {
+                          event.currentTarget.blur();
+                          printApplication(row);
+                        }}
                       >
                         <IMAGES.PrintIcon
                           sx={styles.actionIcon}
@@ -401,8 +466,10 @@ const ApplicationsTable = () => {
 
                       <Box
                         component="button"
+                        type="button"
                         sx={styles.assignButton}
                         title="Assign"
+                        onClick={(event) => event.currentTarget.blur()}
                       >
                         <IMAGES.AssignmentIcon
                           sx={styles.actionIcon}

@@ -1,6 +1,7 @@
 import { Box, InputAdornment, TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import type { ChangeEvent } from "react";
+import type { SxProps, Theme } from "@mui/material/styles";
 
 import { searchStyles } from "./style";
 
@@ -9,6 +10,7 @@ interface SearchProps {
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   size?: "small" | "medium";
+  containerSx?: SxProps<Theme>;
 }
 
 const Search = ({
@@ -16,9 +18,10 @@ const Search = ({
   onChange,
   placeholder = "Search...",
   size = "small",
+  containerSx,
 }: SearchProps) => {
   return (
-    <Box sx={searchStyles.container}>
+    <Box sx={{ ...searchStyles.container, ...containerSx }}>
       <TextField
         value={value}
         onChange={onChange}

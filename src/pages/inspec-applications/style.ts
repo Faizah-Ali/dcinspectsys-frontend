@@ -15,7 +15,7 @@ export const styles = {
     fontSize: "28px",
     fontWeight: "bold",
     color: "#000",
-    marginBottom: "40px",
+    marginBottom: "25px",
     marginTop: "50px",
     textAlign: "left" as const,
   },
@@ -68,9 +68,22 @@ export const styles = {
     justifyContent: "center",
     minWidth: "36px",
     height: "36px",
+    outline: "none",
     "&:hover": {
       backgroundColor: "#0f1729",
       color: "#fff",
+      border: "none",
+    },
+    "&:focus": {
+      outline: "2px solid #0f1729",
+      outlineOffset: "2px",
+      border: "none",
+    },
+    "&:focus:not(:hover)": {
+      backgroundColor: "transparent",
+      color: "#0f1729",
+      boxShadow: "none",
+      outline: "none",
     },
   },
   assignButton: {
@@ -85,9 +98,22 @@ export const styles = {
     justifyContent: "center",
     minWidth: "36px",
     height: "36px",
+    outline: "none",
     "&:hover": {
       backgroundColor: "#d15b06",
       color: "#fff",
+      border: "none",
+    },
+    "&:focus": {
+      outline: "2px solid #d15b06",
+      outlineOffset: "2px",
+      border: "none",
+    },
+    "&:focus:not(:hover)": {
+      backgroundColor: "transparent",
+      color: "#d15b06",
+      boxShadow: "none",
+      outline: "none",
     },
   },
   tableSection: {
@@ -119,5 +145,30 @@ export const styles = {
   recordsSummary: {
     mt: 1,
     fontSize: "14px",
+  },
+  toolbar: {
+    display: "flex",
+    flexWrap: "wrap" as const,
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: "16px",
+    marginBottom: "16px",
+  },
+  filters: {
+    display: "flex",
+    flexWrap: "wrap" as const,
+    alignItems: "center",
+    justifyContent: "flex-end",
+    gap: "12px",
+    marginLeft: "auto",    
+  },
+  statusFilter: {
+    minWidth: { xs: "100%", sm: 220 },
+    "& .MuiOutlinedInput-root": {
+      borderRadius: "20px",
+      "& fieldset": {
+        borderRadius: "20px",
+      },
+    },
   },
 };

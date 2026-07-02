@@ -10,6 +10,9 @@ export const styles = {
   contentContainer: {
     width: "100%",
     padding: "20px",
+    display: "flex",
+    flexDirection: "column" as const,
+    alignItems: "flex-start",
   },
   heading: {
     fontSize: "28px",
@@ -20,15 +23,16 @@ export const styles = {
     textAlign: "left" as const,
     width: "100%",
     display: "block",
-    paddingLeft: 0,
-    alignSelf: "left",
   },
   formContainer: {
     display: "flex",
     flexDirection: "column" as const,
     gap: "20px",
+    width: "100%",
     maxWidth: "500px",
-    padding: "20px",
+    padding: 0,
+    marginTop: "20px",
+    marginInlineStart: "-25px",
   },
   inputField: {
     "& .MuiOutlinedInput-root": {
@@ -51,7 +55,6 @@ export const styles = {
     fontWeight: 600,
     textTransform: "none" as const,
     borderRadius: "10px",
-    width: "50%",
     alignSelf: "center",
     marginTop: "10px",
     "&:hover": {

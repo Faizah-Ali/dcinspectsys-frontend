@@ -6,7 +6,7 @@ export const styles = {
     position: "fixed" as const,
     height: "calc(100vh - 100px)",
     left: 0,
-    top: "100px", // Start below the header
+    top: "90px", // Start below the header
     zIndex: 100,
     overflow: "hidden" as const,
     backgroundColor: COLORS.sidebarBg,
@@ -15,18 +15,30 @@ export const styles = {
     flexDirection: "column" as const,
   },
   userInfoContainer: {
-    padding: "20px 16px",
+    display: "flex",
+    flexDirection: "column" as const,
+    justifyContent: "center",
+    alignItems: "center",
+    textAlign: "center" as const,
+    minHeight: "50px",
+    padding: "12px 16px",
     borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+    marginBottom: "2px",
+    marginTop: "5px",
   },
   userName: {
     fontSize: "14px",
     fontWeight: 600,
     color: COLORS.white,
-    marginBottom: "4px",
+    lineHeight: 1.4,
+    width: "100%",
   },
   loginTime: {
     fontSize: "12px",
     color: "rgba(255, 255, 255, 0.7)",
+    lineHeight: 1.4,
+    marginTop: "4px",
+    width: "100%",
   },
   itemList: {
     padding: "16px 0",
