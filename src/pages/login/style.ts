@@ -1,85 +1,308 @@
-import { COLORS } from "../../common/constants/colors";
 export const styles = {
-  container: {
-    height: "70vh",
-    width: "60vw",
-    display: "flex",
-    paddingTop: "10px", // Account for fixed header
-    backgroundColor: "#fff",
-  },
-  leftSection: {
-    flex: 0.7, // Narrower left section (40%)
-    position: "relative" as const,
-    overflow: "hidden" as const,
-  },
-  buildingImage: {
-    display: "flex",
-    width: "100%",
-    height: "100%",
-    objectFit: "cover" as const,
-    position: "absolute" as const,
-    top: 0,
-    left: 0,
-  },
-  rightSection: {
-    flex: 0.3, // Wider right section (60%)
-    backgroundColor: COLORS.sidebarBg,
-    display: "flex",
-    alignItems: "center" as const,
-    justifyContent: "center" as const,
-    padding: "30px 50px", // Reduced vertical padding, increased horizontal
-    position: "relative" as const,
-  },
-  formContainer: {
-    width: "100%",
-    maxWidth: "500px", // Increased width
-    zIndex: 1,
-    display: "flex",
-    flexDirection: "column" as const,
-    alignItems: "stretch" as const,
-  },
-  title: {
-    fontSize: "28px",
-    fontWeight: "bold",
-    color: "#fff",
-    marginBottom: "20px", // Reduced margin
-    textAlign: "center" as const,
-  },
-  inputField: {
-    width: "100%",
-    marginBottom: "15px", // Reduced margin
-    backgroundColor: "#fff",
-    borderRadius: "10px",
-    "& .MuiInputLabel-root.Mui-focused": {
-      color: COLORS.textPrimary,
-    },
-    "& .MuiOutlinedInput-root fieldset": {
-      borderColor: "#d0d0d0",
-    },
-    "& .MuiOutlinedInput-root.Mui-focused fieldset": {
-      borderColor: COLORS.primary,
-    },
-  },
-  loginButton: {
-    width: "50%",
-    padding: "10px", // Reduced padding
-    fontSize: "16px",
-    fontWeight: "bold",
-    textTransform: "none" as const,
-    marginTop: "5px", // Reduced margin
-    backgroundColor: COLORS.primary, // Reddish-brown button
+  loginPage: {
+    // Break out of #root max-width / padding from App.css
+    width: "100vw",
+    marginLeft: "calc(50% - 50vw)",
+    marginRight: "calc(50% - 50vw)",
+    minHeight: "95vh",
+    position: "relative",
+    overflow: "hidden",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    alignSelf: "center",
-    marginLeft: "auto",
-    marginRight: "auto",
-    "&:hover": {
-      backgroundColor: "#b34d05",
+    isolation: "isolate",
+    boxSizing: "border-box",
+    fontFamily: '"Arial", sans-serif',
+    color: "#1a1f31",
+    textAlign: "left",
+    // Only reset box-sizing — do NOT zero padding/margin on all descendants
+    "&, & *": {
+      boxSizing: "border-box",
     },
-    "&:disabled": {
-      backgroundColor: "#b34d05",
+    // Override global index.css button styles inside login page
+    "& button": {
+      fontFamily: '"Arial", sans-serif',
+      textTransform: "none",
+      boxShadow: "none",
+    },
+    // Override global heading sizes from index.css
+    "& h1, & h2, & h3": {
+      margin: 0,
+      lineHeight: 1.25,
+    },
+    "&::before": {
+      content: '""',
+      position: "absolute",
+      inset: 0,
+      background: "var(--login-bg) center / cover no-repeat",
+      zIndex: -2,
+    },
+    "&::after": {
+      content: '""',
+      position: "absolute",
+      inset: 0,
+      background: "rgba(255, 255, 255, 0.18)",
+      backdropFilter: "blur(18px) saturate(1.4)",
+      WebkitBackdropFilter: "blur(18px) saturate(1.4)",
+      zIndex: -1,
+    },
+    "@media (max-width: 900px)": {
+      padding: "30px 15px",
+      overflowY: "auto",
+    },
+  },
+  verticalText: {
+    position: "absolute",
+    left: "105px",
+    top: "250px",
+    zIndex: 2,
+    writingMode: "vertical-rl",
+    transform: "rotate(180deg)",
+    fontSize: "36px",
+    color: "#000",
+    letterSpacing: "1px",
+    margin: 0,
+    "@media (max-width: 1200px)": {
+      display: "none",
+    },
+  },
+  loginCard: {
+    width: "1100px",
+    height: "590px",
+    background: "#f0f1f6",
+    borderRadius: "12px",
+    position: "relative",
+    zIndex: 2,
+    display: "flex",
+    overflow: "hidden",
+    boxShadow: "0 25px 45px rgba(0, 0, 0, 0.15)",
+    "&::before": {
+      content: '""',
+      position: "absolute",
+      top: "50%",
+      left: "50%",
+      width: "52%",
+      height: "92%",
+      transform: "translate(-50%, -50%)",
+      backgroundImage: "var(--content-left-bg)",
+      backgroundRepeat: "no-repeat",
+      backgroundPosition: "center center",
+      backgroundSize: "contain",
+      zIndex: 0,
+      pointerEvents: "none",
+    },
+    "@media (max-width: 1200px)": {
+      width: "90%",
+    },
+    "@media (max-width: 900px)": {
+      height: "auto",
+      flexDirection: "column",
+    },
+  },
+  leftStrip: {
+    position: "relative",
+    zIndex: 1,
+    width: "10px",
+    height: "100%",
+    background: "#151b2c",
+    flexShrink: 0,
+  },
+  contentLeft: {
+    width: "62%",
+    padding: "70px 40px 40px 65px",
+    position: "relative",
+    zIndex: 1,
+    isolation: "isolate",
+    overflow: "hidden",
+    "&::after": {
+      content: '""',
+      position: "absolute",
+      inset: 0,
+      background: "rgba(255, 255, 255, 0.22)",
+      backdropFilter: "blur(3px) saturate(1.3)",
+      WebkitBackdropFilter: "blur(16px) saturate(1.3)",
+      zIndex: -1,
+    },
+    "@media (max-width: 900px)": {
+      width: "100%",
+      padding: "35px",
+    },
+  },
+  contentLeftHeading: {
+    position: "relative",
+    zIndex: 1,
+    fontSize: "28px",
+    lineHeight: 1.25,
+    color: "#071511",
+    fontWeight: 800,
+    marginBottom: "30px",
+    marginTop: 0,
+  },
+  loginImg: {
+    position: "relative",
+    zIndex: 1,
+    width: "530px",
+    maxWidth: "100%",
+    display: "block",
+    marginTop: "30px",
+  },
+  contentRight: {
+    position: "relative",
+    zIndex: 1,
+    width: "38%",
+    padding: "78px 95px 40px 35px",
+    background: "rgba(255, 255, 255, 0.22)",
+    backdropFilter: "blur(3px) saturate(1.3)",
+    WebkitBackdropFilter: "blur(16px) saturate(1.3)",
+    "@media (max-width: 900px)": {
+      width: "100%",
+      padding: "35px",
+    },
+  },
+  loginBox: {
+    width: "315px",
+    height: "310px",
+    background: "#1a1f31",
+    padding: "32px 28px",
+    "@media (max-width: 900px)": {
+      width: "100%",
+    },
+  },
+  loginBoxHeading: {
+    color: "#ffffff",
+    textAlign: "center",
+    fontSize: "15px",
+    fontWeight: 600,
+    marginBottom: "18px",
+  },
+  loginForm: {
+    margin: 0,
+    padding: 0,
+    display: "flex",
+    flexDirection: "column" as const,
+  },
+  inputStack: {
+    marginTop: "14px",
+  },
+  fieldWrap: {
+    display: "flex",
+    flexDirection: "column" as const,
+  },
+  errorSlot: {
+    minHeight: "16px",
+    fontSize: "11px",
+    color: "#d32f2f",
+    lineHeight: 1.3,
+    paddingTop: "2px",
+    paddingLeft: "2px",
+  },
+  inputGroup: {
+    height: "55px",
+    padding: "9px 10px",
+    border: "1px solid #d8d8df",
+  },
+  inputLabel: {
+    display: "block",
+    fontSize: "11px",
+    fontWeight: 800,
+    marginBottom: "3px",
+  },
+  inputField: {
+    width: "100%",
+    border: "none",
+    outline: "none",
+    background: "transparent",
+    fontSize: "13px",
+    padding: 0,
+    margin: 0,
+    fontFamily: "inherit",
+    "&::placeholder": {
+      color: "#8d93a1",
+      fontWeight: 600,
+    },
+  },
+  whiteInput: {
+    background: "#ffffff",
+    color: "#1a1f31",
+  },
+  whiteInputField: {
+    color: "#1a1f31",
+  },
+  darkInput: {
+    background: "#1a1f31",
+    color: "#ffffff",
+    borderTop: "1px solid #d8d8df",
+    marginTop: 0,
+  },
+  darkInputField: {
+    color: "#ffffff",
+  },
+  loginButton: {
+    width: "100%",
+    height: "48px",
+    marginTop: "15px",
+    backgroundColor: "#ffc21a !important",
+    border: "none !important",
+    borderRadius: "3px",
+    color: "#161616 !important",
+    fontSize: "15px",
+    fontWeight: 800,
+    cursor: "pointer",
+    padding: "0 !important",
+    boxShadow: "none !important",
+    "&:hover": {
+      backgroundColor: "#f5b900 !important",
+      border: "none !important",
+      boxShadow: "none !important",
+    },
+    "&.Mui-disabled": {
+      backgroundColor: "#ffc21a !important",
+      color: "#161616 !important",
       opacity: 0.7,
     },
+  },
+  copyright: {
+    marginTop: "50px",
+    fontSize: "11px",
+    color: "#1f2433",
+    textAlign: "left",
+    "@media (max-width: 900px)": {
+      marginTop: "25px",
+    },
+  },
+  copyrightSpan: {
+    color: "#006ee6",
+  },
+  bottomPanel: {
+    position: "absolute",
+    right: 0,
+    bottom: 0,
+    width: "56%",
+    height: "245px",
+    background: "#1a1f31",
+    zIndex: 1,
+    paddingTop: "102px",
+    paddingLeft: "100px",
+    textAlign: "left",
+    "@media (max-width: 900px)": {
+      display: "none",
+    },
+  },
+  bottomPanelHeading: {
+    color: "#ffffff",
+    fontSize: "36px",
+    fontWeight: 400,
+    letterSpacing: "2px",
+    margin: 0,
+    paddingTop: "12px",
+    display: "block",
+  },
+  yellowLine: {
+    width: "165px",
+    height: "16px",
+    background: "#ffc21a",
+    borderRadius: "3px",
+    marginTop: "30px",
+    marginLeft: "360px",
   },
 };

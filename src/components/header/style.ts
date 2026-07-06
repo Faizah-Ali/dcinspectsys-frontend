@@ -28,6 +28,7 @@ export const styles = {
   },
   centerContent: {
     display: "flex",
+    fontFamily: "system-ui, Avenir, Helvetica, Arial, sans-serif",
     flexDirection: "column" as const,
     alignItems: "center" as const,
     justifyContent: "center" as const,
