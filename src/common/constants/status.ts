@@ -27,7 +27,7 @@ export const STATUS_MAP: Record<StatusCode, StatusInfo> = {
   P: { label: "Pending For Approval", color: "#FF9800" },
   A: { label: "Approved By Approver", color: "#4CAF50" },
   R: { label: "Ready",                color: "#9C27B0" },
-  D: { label: "Delivered",            color: "#009688" },
+  D: { label: "Delivered",            color: "#2E7D32" },
   C: { label: "Reject",               color: "#F44336" },
   K: { label: "Reject By Approver",   color: "#B71C1C" },
   J: { label: "Rejected",             color: "#D32F2F" },

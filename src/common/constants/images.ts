@@ -1,5 +1,7 @@
 import LogoutIcon from '@mui/icons-material/Logout';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
+import AssignmentAddIcon from '@mui/icons-material/AssignmentAdd';
 import PrintIcon from '@mui/icons-material/Print';
 
 import DhcLogo from "../../assets/images/dhclogo.png";
@@ -13,6 +15,8 @@ export const IMAGES = {
     CourtBuilding,
     LogoutIcon,
     AssignmentIcon,
+    AssignmentTurnedInIcon,
+    AssignmentAddIcon,
     PrintIcon,
     DownloadIcon
 };
