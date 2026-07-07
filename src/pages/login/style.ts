@@ -1,3 +1,6 @@
+import { colors } from "@mui/material";
+import { COLORS } from "../../common/constants";
+
 export const styles = {
   loginPage: {
     // Break out of #root max-width / padding from App.css
@@ -13,7 +16,7 @@ export const styles = {
     isolation: "isolate",
     boxSizing: "border-box",
     fontFamily: '"Arial", sans-serif',
-    color: "#1a1f31",
+    color: COLORS.sidebarBg,
     textAlign: "left",
     // Only reset box-sizing — do NOT zero padding/margin on all descendants
     "&, & *": {
@@ -51,21 +54,7 @@ export const styles = {
       overflowY: "auto",
     },
   },
-  verticalText: {
-    position: "absolute",
-    left: "105px",
-    top: "250px",
-    zIndex: 2,
-    writingMode: "vertical-rl",
-    transform: "rotate(180deg)",
-    fontSize: "36px",
-    color: "#000",
-    letterSpacing: "1px",
-    margin: 0,
-    "@media (max-width: 1200px)": {
-      display: "none",
-    },
-  },
+
   loginCard: {
     width: "1100px",
     height: "590px",
@@ -162,7 +151,7 @@ export const styles = {
   loginBox: {
     width: "315px",
     height: "310px",
-    background: "#1a1f31",
+    background: COLORS.sidebarBg,
     padding: "32px 28px",
     "@media (max-width: 900px)": {
       width: "100%",
@@ -223,13 +212,13 @@ export const styles = {
   },
   whiteInput: {
     background: "#ffffff",
-    color: "#1a1f31",
+    color: COLORS.sidebarBg,
   },
   whiteInputField: {
-    color: "#1a1f31",
+    color: COLORS.sidebarBg,
   },
   darkInput: {
-    background: "#1a1f31",
+    background: COLORS.sidebarBg,
     color: "#ffffff",
     borderTop: "1px solid #d8d8df",
     marginTop: 0,
@@ -241,7 +230,7 @@ export const styles = {
     width: "100%",
     height: "48px",
     marginTop: "15px",
-    backgroundColor: "#ffc21a !important",
+    backgroundColor: COLORS.primary,
     border: "none !important",
     borderRadius: "3px",
     color: "#161616 !important",
@@ -251,13 +240,14 @@ export const styles = {
     padding: "0 !important",
     boxShadow: "none !important",
     "&:hover": {
-      backgroundColor: "#f5b900 !important",
+      backgroundColor: COLORS.sidebarHoverBg,
+      color: "#ffffff",
       border: "none !important",
       boxShadow: "none !important",
     },
     "&.Mui-disabled": {
-      backgroundColor: "#ffc21a !important",
-      color: "#161616 !important",
+      backgroundColor: COLORS.primary,
+      color: "#ffffff",
       opacity: 0.7,
     },
   },
@@ -279,7 +269,7 @@ export const styles = {
     bottom: 0,
     width: "56%",
     height: "245px",
-    background: "#1a1f31",
+    background: COLORS.sidebarBg,
     zIndex: 1,
     paddingTop: "102px",
     paddingLeft: "100px",
@@ -300,7 +290,7 @@ export const styles = {
   yellowLine: {
     width: "165px",
     height: "16px",
-    background: "#ffc21a",
+    background: COLORS.primary,
     borderRadius: "3px",
     marginTop: "30px",
     marginLeft: "360px",

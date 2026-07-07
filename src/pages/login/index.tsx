@@ -31,8 +31,6 @@ const Login = () => {
         "--login-bg": `url(${IMAGES.CourtBuilding})`,
       }}
     >
-      <Box sx={styles.verticalText}>Authorised Access</Box>
-
       <Box
         sx={{
           ...styles.loginCard,
