@@ -40,6 +40,9 @@ import PaginationSection from "../../pagination";
 import StatusChip from "../../status-chip";
 
 import StatusFilter from "../../status-filter";
+import Popup from "../../popup";
+import { showSuccessToast } from "../../toast/helper";
+import SelectStaff from "../../../pages/select-staff";
 
 import { VARIANTS } from "../../../common/constants";
 
@@ -93,6 +96,9 @@ const ApplicationsTable = () => {
   const [totalPages, setTotalPages] = useState(0);
 
   const [searchInput, setSearchInput] = useState(search);
+
+  const [selectedApplication, setSelectedApplication] =
+    useState<ApplicationResponse | null>(null);
 
   const debouncedSearch = useDebounce(searchInput.trim(), SEARCH_DEBOUNCE_MS);
 
@@ -193,6 +199,36 @@ const ApplicationsTable = () => {
     event: ChangeEvent<HTMLInputElement>
   ) => {
     setSearchInput(event.target.value);
+  };
+
+  const handleOpenAssignPopup = (application: ApplicationResponse) => {
+    setSelectedApplication(application);
+  };
+
+  const handleCloseAssignPopup = () => {
+    setSelectedApplication(null);
+  };
+
+  const handleAssignSubmit = ({
+    staffId,
+    remarks,
+  }: {
+    staffId: string;
+    remarks: string;
+  }) => {
+    if (!selectedApplication) {
+      return;
+    }
+
+    console.log("Assign application", {
+      diaryNo: selectedApplication.diaryNo,
+      diaryYr: selectedApplication.diaryYr,
+      staffId,
+      remarks,
+    });
+
+    handleCloseAssignPopup();
+    showSuccessToast("Application is Assigned successfully.");
   };
 
   const updateStatusFilter = useCallback(
@@ -469,7 +505,10 @@ const ApplicationsTable = () => {
                         type="button"
                         sx={styles.assignButton}
                         title="Assign"
-                        onClick={(event) => event.currentTarget.blur()}
+                        onClick={(event) => {
+                          event.currentTarget.blur();
+                          handleOpenAssignPopup(row);
+                        }}
                       >
                         <IMAGES.AssignmentIcon
                           sx={styles.actionIcon}
@@ -513,6 +552,21 @@ const ApplicationsTable = () => {
         {" | "}
         Total Pages: {totalPages}
       </Box>
+
+      <Popup
+        open={Boolean(selectedApplication)}
+        title="Select Staff"
+        onClose={handleCloseAssignPopup}
+        maxWidth="md"
+      >
+        {selectedApplication && (
+          <SelectStaff
+            diaryNo={selectedApplication.diaryNo}
+            diaryYr={selectedApplication.diaryYr}
+            onSubmit={handleAssignSubmit}
+          />
+        )}
+      </Popup>
 
     </Box>
   );

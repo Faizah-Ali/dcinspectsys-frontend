@@ -1,7 +1,7 @@
 // Auth helper functions for managing login state and user info
 
 import { USERNAME_KEY, LOGGED_IN_KEY, LOGIN_TIME_KEY } from "../common/constants/storageKeys";
-import { toast } from "react-toastify";
+import { showErrorToast } from "../components/toast/helper";
 import { store } from "../redux/store";
 import { clearAuth } from "../redux/auth.slice";
 
@@ -99,7 +99,7 @@ export const logout = (message?: string) => {
     store.dispatch(clearAuth());
 
     if (message) {
-      toast.error(message);
+      showErrorToast(message);
     }
 
     setTimeout(() => {

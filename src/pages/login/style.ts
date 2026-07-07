@@ -1,4 +1,3 @@
-import { colors } from "@mui/material";
 import { COLORS } from "../../common/constants";
 
 export const styles = {

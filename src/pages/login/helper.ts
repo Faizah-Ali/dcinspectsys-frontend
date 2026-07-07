@@ -1,5 +1,8 @@
-import { toast } from "react-toastify";
 import { loginSchema } from "../../common/constants/schema.ts";
+import {
+  showErrorToast,
+  showSuccessToast,
+} from "../../components/toast/helper";
 import { saveLoginState, saveUsername, saveLoginTime } from "../../utils/authSession.utils.ts";
 import { store } from "../../redux/store.ts";
 import { setAuth } from "../../redux/auth.slice.ts";
@@ -63,7 +66,7 @@ export const handleSubmit = (
   if (Object.keys(validationErrors).length > 0) {
     setErrors(validationErrors);
     setIsSubmitting(false);
-    toast.error("Please fix the form errors");
+    showErrorToast("Please fix the form errors");
     return;
   }
 
@@ -98,15 +101,15 @@ export const handleSubmit = (
       permissions: [],
     }));
 
-    toast.success("Login successful!");
+    showSuccessToast("Login successful!");
     onLoginSuccess();
 
   } else {
-    toast.error(data.message || "Login failed");
+    showErrorToast(data.message || "Login failed");
   }
     } catch (error) {
       console.error(error);
-      toast.error("Server error");
+      showErrorToast("Server error");
     }
 
     setIsSubmitting(false);

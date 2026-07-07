@@ -18,3 +18,7 @@ export const sendMailSchema = Yup.object().shape({
         .trim()
         .required("Message is required"),
 });
+
+export const selectStaffSchema = Yup.object().shape({
+    staffId: Yup.string().trim().required("Please select a staff member"),
+});

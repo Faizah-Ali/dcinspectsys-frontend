@@ -3,6 +3,8 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import AssignmentAddIcon from '@mui/icons-material/AssignmentAdd';
 import PrintIcon from '@mui/icons-material/Print';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import CloseIcon from '@mui/icons-material/Close';
 
 import DhcLogo from "../../assets/images/dhclogo.png";
 import Emblem from "../../assets/images/emblem.png";
@@ -18,5 +20,7 @@ export const IMAGES = {
     AssignmentTurnedInIcon,
     AssignmentAddIcon,
     PrintIcon,
-    DownloadIcon
+    DownloadIcon,
+    ArrowBackIcon,
+    CloseIcon,
 };
