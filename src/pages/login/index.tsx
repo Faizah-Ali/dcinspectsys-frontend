@@ -1,21 +1,29 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Button } from "@mui/material";import "react-toastify/dist/ReactToastify.css";
-import { styles } from "./style";
-import { handleChange, handleSubmit } from "./helper";
-import { IMAGES } from "../../common/constants/images";
+import { Box, Button } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import "react-toastify/dist/ReactToastify.css";
+
 import { Paths, VARIANTS } from "../../common/constants";
+import { IMAGES } from "../../common/constants/images";
+import type { AppDispatch, RootState } from "../../redux/store";
+
+import {
+  handleChange,
+  handleSubmit,
+  initialLoginForm,
+} from "./helper";
+import { styles } from "./style";
 import type { LoginFormData, LoginFormErrors } from "./type";
 
 const Login = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState<LoginFormData>({
-    username: "",
-    password: "",
-    showPassword: false,
-  });
+  const dispatch = useDispatch<AppDispatch>();
+
+  const isSubmitting = useSelector((state: RootState) => state.login.loading);
+
+  const [formData, setFormData] = useState<LoginFormData>(initialLoginForm);
   const [errors, setErrors] = useState<LoginFormErrors>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     window.history.pushState(null, "", window.location.href);
@@ -61,7 +69,12 @@ const Login = () => {
             <Box
               component="form"
               sx={styles.loginForm}
-              onSubmit={handleSubmit(formData, setErrors, setIsSubmitting, () => navigate(Paths.INSPECT_APPLICATIONS))}
+              onSubmit={handleSubmit(
+                formData,
+                setErrors,
+                dispatch,
+                () => navigate(Paths.INSPECT_APPLICATIONS)
+              )}
             >
               <Box sx={styles.inputStack}>
                 <Box sx={styles.fieldWrap}>
@@ -76,7 +89,12 @@ const Login = () => {
                       type="text"
                       placeholder="Enter your username"
                       value={formData.username}
-                      onChange={handleChange("username", setFormData, errors, setErrors)}
+                      onChange={handleChange(
+                        "username",
+                        setFormData,
+                        errors,
+                        setErrors
+                      )}
                       disabled={isSubmitting}
                       sx={{ ...styles.inputField, ...styles.whiteInputField }}
                     />
@@ -96,7 +114,12 @@ const Login = () => {
                       placeholder="Enter your password"
                       type="password"
                       value={formData.password}
-                      onChange={handleChange("password", setFormData, errors, setErrors)}
+                      onChange={handleChange(
+                        "password",
+                        setFormData,
+                        errors,
+                        setErrors
+                      )}
                       disabled={isSubmitting}
                       sx={{ ...styles.inputField, ...styles.darkInputField }}
                     />

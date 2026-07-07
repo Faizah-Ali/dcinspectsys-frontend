@@ -13,6 +13,18 @@ export const styles = {
     fontWeight: 600,
     textAlign: "center" as const,
   },
+  loadingWrap: {
+    display: "flex",
+    justifyContent: "center",
+    padding: "16px 0",
+  },
+  emptyText: {
+    margin: 0,
+    color: COLORS.textPrimary,
+    fontSize: "16px",
+    textAlign: "center" as const,
+    padding: "8px 0",
+  },
   staffGroup: {
     marginLeft: "8px",
     "& .MuiFormControlLabel-root": {

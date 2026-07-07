@@ -1,8 +1,3 @@
-export interface StaffOption {
-  id: string;
-  label: string;
-}
-
 export interface SelectStaffValues {
   staffId: string;
   remarks: string;
