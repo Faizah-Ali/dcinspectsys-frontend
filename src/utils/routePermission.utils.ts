@@ -3,6 +3,7 @@ import {Paths} from "../common/constants";
 export const ROUTE_TO_MODULE_MAP: Record<string, string> = {
     [Paths.INSPECT_APPLICATIONS]: "inspect_applications",
     [Paths.REASSIGN_APPLICATIONS]: "reassign_applications",
+    [Paths.APPLICATION_DETAILS]: "reassign_applications",
     [Paths.SEND_MAIL]: "send_mail",
 };
 

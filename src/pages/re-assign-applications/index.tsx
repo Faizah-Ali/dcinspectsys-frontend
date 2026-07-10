@@ -1,63 +1,95 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Box, TextField, Button } from "@mui/material";
+
+import { Paths, VARIANTS } from "../../common/constants";
+import { getDiarySearchParams } from "../application-details/helper";
+import { showErrorToast } from "../../components/toast/helper";
+
 import { styles } from "./style";
-import { VARIANTS } from "../../common/constants";
 
 const ReassignApplications = () => {
-  const [diaryNo, setDiaryNo] = useState("");
-  const [diaryYear, setDiaryYear] = useState("");
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const { diaryNo: initialDiaryNo, diaryYear: initialDiaryYear } =
+    getDiarySearchParams(searchParams);
 
-  // Handle input changes
-  const handleDiaryNoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDiaryNo(e.target.value);
+  const [diaryNo, setDiaryNo] = useState(initialDiaryNo);
+  const [diaryYear, setDiaryYear] = useState(initialDiaryYear);
+
+  useEffect(() => {
+    const { diaryNo: nextDiaryNo, diaryYear: nextDiaryYear } =
+      getDiarySearchParams(searchParams);
+
+    setDiaryNo(nextDiaryNo);
+    setDiaryYear(nextDiaryYear);
+  }, [searchParams]);
+
+  const handleDiaryNoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setDiaryNo(event.target.value);
   };
 
-  const handleDiaryYearChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDiaryYear(e.target.value);
+  const handleDiaryYearChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setDiaryYear(event.target.value);
   };
 
-  // Handle button click
-  const handleGetDetails = () => {
-    // You can add logic here later to fetch details
-    console.log("Diary No:", diaryNo);
-    console.log("Diary Year:", diaryYear);
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const trimmedDiaryNo = diaryNo.trim();
+    const trimmedDiaryYear = diaryYear.trim();
+
+    if (!trimmedDiaryNo || !trimmedDiaryYear) {
+      showErrorToast("Please enter diary number and diary year");
+      return;
+    }
+
+    const params = new URLSearchParams({
+      diaryNo: trimmedDiaryNo,
+      diaryYear: trimmedDiaryYear,
+    });
+
+    navigate(`${Paths.APPLICATION_DETAILS}?${params.toString()}`);
   };
 
   return (
     <Box sx={styles.mainContainer}>
       <Box sx={styles.contentContainer}>
-        <Box 
-          component="h2" 
-          sx={styles.heading}
-        >
+        <Box component="h2" sx={styles.heading}>
           Re-Assign Inspection Applications
         </Box>
-      
-      <Box sx={styles.formContainer}>
-        <TextField
-          label="Inspection Diary No."
-          value={diaryNo}
-          onChange={handleDiaryNoChange}
-          sx={styles.inputField}
-          fullWidth
-        />
-        
-        <TextField
-          label="Inspection Diary Year"
-          value={diaryYear}
-          onChange={handleDiaryYearChange}
-          sx={styles.inputField}
-          fullWidth
-        />
-        
-        <Button
-          variant={VARIANTS.CONTAINED}
-          onClick={handleGetDetails}
-          sx={styles.getDetailsButton}
+
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          sx={styles.formContainer}
         >
-          Get Details
-        </Button>
-      </Box>
+          <TextField
+            label="Inspection Diary No."
+            name="diaryNo"
+            value={diaryNo}
+            onChange={handleDiaryNoChange}
+            sx={styles.inputField}
+            fullWidth
+          />
+
+          <TextField
+            label="Inspection Diary Year"
+            name="diaryYear"
+            value={diaryYear}
+            onChange={handleDiaryYearChange}
+            sx={styles.inputField}
+            fullWidth
+          />
+
+          <Button
+            type="submit"
+            variant={VARIANTS.CONTAINED}
+            sx={styles.getDetailsButton}
+          >
+            Get Details
+          </Button>
+        </Box>
       </Box>
     </Box>
   );

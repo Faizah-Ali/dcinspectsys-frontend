@@ -1,7 +1,84 @@
 import { selectStaffSchema } from "../../common/constants";
 import { showErrorToast } from "../../components/toast/helper";
 
+import type { Approver } from "./services/select-staff.type";
 import type { SelectStaffValues } from "./type";
+
+export const getSelectStaffFormDefaults = (
+  assignedName?: string | null,
+  remarks?: string | null
+) => ({
+  assignedName: assignedName?.trim() ?? "",
+  remarks: remarks ?? "",
+});
+
+export const findApproverByName = (
+  approvers: Approver[],
+  assignedName?: string | null
+) => {
+  const normalizedAssignedName = assignedName?.trim().toLowerCase();
+
+  if (!normalizedAssignedName) {
+    return null;
+  }
+
+  return (
+    approvers.find(
+      (approver) =>
+        approver.fullname?.trim().toLowerCase() === normalizedAssignedName
+    ) ?? null
+  );
+};
+
+export const findApproverForApplication = (
+  approvers: Approver[],
+  assignedName?: string | null,
+  assignedId?: string | null
+) => {
+  const normalizedAssignedId = assignedId?.trim();
+
+  if (normalizedAssignedId) {
+    const approverById = approvers.find(
+      (approver) => approver.id === normalizedAssignedId
+    );
+
+    if (approverById) {
+      return approverById;
+    }
+  }
+
+  return findApproverByName(approvers, assignedName);
+};
+
+export const getInitialStaffId = (
+  approvers: Approver[],
+  assignedName?: string | null,
+  assignedId?: string | null
+) => {
+  const defaults = getSelectStaffFormDefaults(assignedName);
+
+  if (!defaults.assignedName) {
+    return "";
+  }
+
+  return (
+    findApproverForApplication(approvers, assignedName, assignedId)?.id ?? ""
+  );
+};
+
+export const hasSelectStaffFormChanges = ({
+  staffId,
+  remarks,
+  initialStaffId,
+  initialRemarks,
+}: {
+  staffId: string;
+  remarks: string;
+  initialStaffId: string;
+  initialRemarks: string;
+}) =>
+  staffId !== initialStaffId ||
+  remarks.trim() !== initialRemarks.trim();
 
 export const handleStaffIdChange =
   (setStaffId: React.Dispatch<React.SetStateAction<string>>) =>
@@ -19,8 +96,9 @@ export const handleSubmit =
   (
     staffId: string,
     remarks: string,
+    approvers: Approver[],
     setIsSubmitting: React.Dispatch<React.SetStateAction<boolean>>,
-    onSubmit: (values: SelectStaffValues) => void
+    onSubmit: (values: SelectStaffValues) => void | Promise<void>
   ) =>
   async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -29,12 +107,26 @@ export const handleSubmit =
     try {
       await selectStaffSchema.validate({ staffId }, { abortEarly: false });
 
-      onSubmit({
+      const selectedApprover = approvers.find(
+        (approver) => approver.id === staffId
+      );
+
+      if (!selectedApprover) {
+        showErrorToast("Please select a staff member");
+        setIsSubmitting(false);
+        return;
+      }
+
+      await onSubmit({
         staffId,
+        staffName: selectedApprover.fullname,
         remarks: remarks.trim(),
       });
     } catch (error: any) {
-      showErrorToast(error?.message || "Please select a staff member");
+      if (error?.name === "ValidationError") {
+        showErrorToast(error?.message || "Please select a staff member");
+      }
+
       setIsSubmitting(false);
     }
   };

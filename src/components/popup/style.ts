@@ -33,7 +33,8 @@ export const styles = {
     color: COLORS.sidebarBg,
     borderRadius: "50%",
     "&:hover": {
-      backgroundColor: "rgba(15, 23, 41, 0.08)",
+      backgroundColor: COLORS.primary,
+      color: "#ffffff",
     },
   },
   iconPlaceholder: {

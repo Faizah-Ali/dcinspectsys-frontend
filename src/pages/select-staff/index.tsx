@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Box,
   Button,
@@ -15,18 +15,24 @@ import { showErrorToast } from "../../components/toast/helper";
 import type { AppDispatch, RootState } from "../../redux/store";
 
 import {
+  findApproverForApplication,
+  getInitialStaffId,
+  getSelectStaffFormDefaults,
   handleRemarksChange,
   handleStaffIdChange,
   handleSubmit,
+  hasSelectStaffFormChanges,
 } from "./helper";
 import { getApproversList } from "./services/select-staff.action";
-import { resetSelectStaffState } from "./services/select-staff.slice";
 import { styles } from "./style";
 import type { SelectStaffProps } from "./type";
 
 const SelectStaff = ({
   diaryNo,
   diaryYr,
+  initialAssignedName = null,
+  initialAssignedId = null,
+  initialRemarks = null,
   onSubmit,
 }: SelectStaffProps) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -35,9 +41,83 @@ const SelectStaff = ({
     (state: RootState) => state.selectStaff
   );
 
+  const applicationDefaults = getSelectStaffFormDefaults(
+    initialAssignedName,
+    initialRemarks
+  );
+
   const [staffId, setStaffId] = useState("");
-  const [remarks, setRemarks] = useState("");
+  const [remarks, setRemarks] = useState(applicationDefaults.remarks);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const initialStaffId = useMemo(
+    () =>
+      isLoading
+        ? ""
+        : getInitialStaffId(
+            approvers,
+            initialAssignedName,
+            initialAssignedId
+          ),
+    [approvers, initialAssignedId, initialAssignedName, isLoading]
+  );
+
+  const initialRemarksValue = applicationDefaults.remarks;
+
+  const hasChanges = hasSelectStaffFormChanges({
+    staffId,
+    remarks,
+    initialStaffId,
+    initialRemarks: initialRemarksValue,
+  });
+
+  useEffect(() => {
+    const defaults = getSelectStaffFormDefaults(
+      initialAssignedName,
+      initialRemarks
+    );
+
+    setRemarks(defaults.remarks);
+    setStaffId("");
+    setIsSubmitting(false);
+  }, [
+    diaryNo,
+    diaryYr,
+    initialAssignedName,
+    initialAssignedId,
+    initialRemarks,
+  ]);
+
+  useEffect(() => {
+    if (isLoading) {
+      return;
+    }
+
+    const defaults = getSelectStaffFormDefaults(
+      initialAssignedName,
+      initialRemarks
+    );
+
+    if (!defaults.assignedName) {
+      setStaffId("");
+      return;
+    }
+
+    const matchedApprover = findApproverForApplication(
+      approvers,
+      initialAssignedName,
+      initialAssignedId
+    );
+
+    setStaffId(matchedApprover?.id ?? "");
+  }, [
+    approvers,
+    initialAssignedName,
+    initialAssignedId,
+    isLoading,
+    diaryNo,
+    diaryYr,
+  ]);
 
   useEffect(() => {
     const promise = dispatch(getApproversList());
@@ -52,14 +132,19 @@ const SelectStaff = ({
 
     return () => {
       promise.abort();
-      dispatch(resetSelectStaffState());
     };
   }, [dispatch]);
 
   return (
     <Box
       component="form"
-      onSubmit={handleSubmit(staffId, remarks, setIsSubmitting, onSubmit)}
+      onSubmit={handleSubmit(
+        staffId,
+        remarks,
+        approvers,
+        setIsSubmitting,
+        onSubmit
+      )}
       sx={styles.form}
     >
       <Box component="p" sx={styles.referenceText}>
@@ -108,7 +193,7 @@ const SelectStaff = ({
         <Button
           type="submit"
           variant={VARIANTS.CONTAINED}
-          disabled={isSubmitting || isLoading}
+          disabled={isSubmitting || isLoading || !hasChanges}
           sx={styles.submitButton}
         >
           {isSubmitting ? "Submitting..." : "Submit"}

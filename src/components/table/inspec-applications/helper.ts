@@ -1,5 +1,7 @@
 // Helper functions for the applications table
 
+import type { ApplicationResponse } from "../../../pages/inspec-applications/services/applications.type";
+
 // Format date for display
 export const formatDate = (dateString: string): string => {
   const date = new Date(dateString);
@@ -9,3 +11,6 @@ export const formatDate = (dateString: string): string => {
     year: "numeric",
   });
 };
+
+export const isApplicationAssigned = (row: ApplicationResponse) =>
+  Boolean(row.assigned?.trim() && row.assignedname?.trim());

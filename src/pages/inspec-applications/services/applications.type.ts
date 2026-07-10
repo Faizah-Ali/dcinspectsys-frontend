@@ -6,6 +6,8 @@ export interface ApplicationResponse {
   diaryNo: number;
   diaryYr: number;
   remarks: string | null;
+  assigned: string | null;
+  assignedname: string | null;
   ecourtFeeId: string;
   caseTitle: string;
   appliedDate: string;

@@ -22,7 +22,8 @@ import type { RootState } from "../../../redux/store";
 import { styles } from "../../../pages/inspec-applications/style";
 
 import {
-  formatDate
+  formatDate,
+  isApplicationAssigned,
 } from "./helper";
 
 import { IMAGES } from "../../../common/constants/images";
@@ -41,8 +42,10 @@ import StatusChip from "../../status-chip";
 
 import StatusFilter from "../../status-filter";
 import Popup from "../../popup";
-import { showSuccessToast } from "../../toast/helper";
 import SelectStaff from "../../../pages/select-staff";
+import type { SelectStaffValues } from "../../../pages/select-staff/type";
+import { handleAssignApplicationSubmit } from "../../../pages/select-staff/services/assign-application.helper";
+import { showErrorToast } from "../../toast/helper";
 
 import { VARIANTS } from "../../../common/constants";
 
@@ -209,26 +212,35 @@ const ApplicationsTable = () => {
     setSelectedApplication(null);
   };
 
-  const handleAssignSubmit = ({
-    staffId,
-    remarks,
-  }: {
-    staffId: string;
-    remarks: string;
-  }) => {
-    if (!selectedApplication) {
-      return;
+  const handleAssignSubmit = async (values: SelectStaffValues) => {
+    try {
+      await handleAssignApplicationSubmit({
+        application: selectedApplication,
+        values,
+        onClose: handleCloseAssignPopup,
+        onSuccess: (updatedFields) => {
+          if (!selectedApplication) {
+            return;
+          }
+
+          setApplications((prevApplications) =>
+            prevApplications.map((application) =>
+              application.diaryNo === selectedApplication.diaryNo &&
+              application.diaryYr === selectedApplication.diaryYr
+                ? { ...application, ...updatedFields }
+                : application
+            )
+          );
+        },
+      });
+    } catch (error) {
+      showErrorToast(
+        error instanceof Error
+          ? error.message
+          : "Failed to assign application"
+      );
+      throw error;
     }
-
-    console.log("Assign application", {
-      diaryNo: selectedApplication.diaryNo,
-      diaryYr: selectedApplication.diaryYr,
-      staffId,
-      remarks,
-    });
-
-    handleCloseAssignPopup();
-    showSuccessToast("Application is Assigned successfully.");
   };
 
   const updateStatusFilter = useCallback(
@@ -328,7 +340,7 @@ const ApplicationsTable = () => {
                 </TableCell>
 
                 <TableCell sx={styles.headerCell}>
-                  Remarks
+                  Assigned Staff
                 </TableCell>
 
                 <TableCell sx={styles.headerCell}>
@@ -410,15 +422,7 @@ const ApplicationsTable = () => {
                   </TableCell>
 
                   <TableCell sx={styles.dataCell}>
-                    {row.remarks ? (
-                      <Box
-                        component="span"
-                        sx={styles.remarksLink}
-                      >
-                      </Box>
-                    ) : (
-                      "-"
-                    )}
+                    {row.assignedname || "-"}
                   </TableCell>
 
                   <TableCell sx={styles.dataCell}>
@@ -504,15 +508,25 @@ const ApplicationsTable = () => {
                         component="button"
                         type="button"
                         sx={styles.assignButton}
-                        title="Assign"
+                        title={
+                          isApplicationAssigned(row)
+                            ? "Click here to Re-assign"
+                            : "Click here to assign"
+                        }
                         onClick={(event) => {
                           event.currentTarget.blur();
                           handleOpenAssignPopup(row);
                         }}
                       >
-                        <IMAGES.AssignmentIcon
-                          sx={styles.actionIcon}
-                        />
+                        {isApplicationAssigned(row) ? (
+                          <IMAGES.AssignmentTurnedInIcon
+                            sx={styles.actionIcon}
+                          />
+                        ) : (
+                          <IMAGES.AssignmentAddIcon
+                            sx={styles.actionIcon}
+                          />
+                        )}
                       </Box>
 
                     </Box>
@@ -561,8 +575,12 @@ const ApplicationsTable = () => {
       >
         {selectedApplication && (
           <SelectStaff
+            key={`${selectedApplication.diaryNo}-${selectedApplication.diaryYr}-${selectedApplication.assigned ?? ""}-${selectedApplication.assignedname ?? ""}-${selectedApplication.remarks ?? ""}`}
             diaryNo={selectedApplication.diaryNo}
             diaryYr={selectedApplication.diaryYr}
+            initialAssignedName={selectedApplication.assignedname}
+            initialAssignedId={selectedApplication.assigned}
+            initialRemarks={selectedApplication.remarks}
             onSubmit={handleAssignSubmit}
           />
         )}

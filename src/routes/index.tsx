@@ -7,6 +7,9 @@ import { createRoute } from "./routeFactory.tsx";
 const Login = lazy(() => import("../pages/login"));
 const InspectApplications = lazy(() => import("../pages/inspec-applications"));
 const ReassignApplications = lazy(() => import("../pages/re-assign-applications"));
+const ApplicationDetails = lazy(
+  () => import("../pages/application-details/index.tsx")
+);
 const SendMail = lazy(() => import("../pages/send-mail"));
 
 const router = createHashRouter([
@@ -28,6 +31,13 @@ const router = createHashRouter([
     path: Paths.REASSIGN_APPLICATIONS,
     element: createRoute({
       component: <ReassignApplications />,
+      type: "private"
+    }),
+  },
+  {
+    path: Paths.APPLICATION_DETAILS,
+    element: createRoute({
+      component: <ApplicationDetails />,
       type: "private"
     }),
   },
