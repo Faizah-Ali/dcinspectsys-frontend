@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import sha256 from "crypto-js/sha256";
+import sha1 from "crypto-js/sha1";
 
 import { ENDPOINTS } from "../../../common/constants/endpoint";
 import { BASE_URL } from "../../../config";
@@ -12,7 +12,8 @@ export const loginUser = createAsyncThunk<LoginResponse, LoginPayload>(
   async ({ username, password }, { rejectWithValue }) => {
     try {
       const salt = "123"; // TEMP (same as backend)
-      const hashedPassword = sha256(password + salt).toString();
+      const firstHash = sha1(password).toString();
+      const hashedPassword = sha1(firstHash + salt).toString();
 
       const response = await fetch(`${BASE_URL}${ENDPOINTS.LOGIN}`, {
         method: "POST",

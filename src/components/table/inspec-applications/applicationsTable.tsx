@@ -103,6 +103,8 @@ const ApplicationsTable = () => {
   const [selectedApplication, setSelectedApplication] =
     useState<ApplicationResponse | null>(null);
 
+  const [refreshKey, setRefreshKey] = useState(0);
+
   const debouncedSearch = useDebounce(searchInput.trim(), SEARCH_DEBOUNCE_MS);
 
   // Keep local input in sync if URL param changes externally (e.g. back/forward).
@@ -168,7 +170,7 @@ const ApplicationsTable = () => {
       isActive = false;
       promise.abort();
     };
-  }, [dispatch, page, limit, search, caseStatus, applicationStatus]);
+  }, [dispatch, page, limit, search, caseStatus, applicationStatus, refreshKey]);
 
   const updateSearchParams = useCallback(
     (nextPage: number, nextLimit: number) => {
@@ -218,19 +220,8 @@ const ApplicationsTable = () => {
         application: selectedApplication,
         values,
         onClose: handleCloseAssignPopup,
-        onSuccess: (updatedFields) => {
-          if (!selectedApplication) {
-            return;
-          }
-
-          setApplications((prevApplications) =>
-            prevApplications.map((application) =>
-              application.diaryNo === selectedApplication.diaryNo &&
-              application.diaryYr === selectedApplication.diaryYr
-                ? { ...application, ...updatedFields }
-                : application
-            )
-          );
+        onSuccess: () => {
+          setRefreshKey((prev) => prev + 1);
         },
       });
     } catch (error) {
@@ -340,7 +331,7 @@ const ApplicationsTable = () => {
                 </TableCell>
 
                 <TableCell sx={styles.headerCell}>
-                  Assigned Staff
+                  Remarks
                 </TableCell>
 
                 <TableCell sx={styles.headerCell}>
@@ -422,7 +413,7 @@ const ApplicationsTable = () => {
                   </TableCell>
 
                   <TableCell sx={styles.dataCell}>
-                    {row.assignedname || "-"}
+                    {row.remarks || "-"}
                   </TableCell>
 
                   <TableCell sx={styles.dataCell}>
