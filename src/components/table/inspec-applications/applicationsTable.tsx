@@ -65,6 +65,16 @@ const DEFAULT_LIMIT = 10;
 
 const SEARCH_DEBOUNCE_MS = 500;
 
+export type ApplicationsTableProps = {
+  title?: string;
+  /** When set, always sent as applicationStatus and the Application Status filter is hidden. */
+  fixedApplicationStatus?: string;
+  /** Applications API owner filter. Defaults to "A". */
+  owner?: string;
+  showAssignAction?: boolean;
+  showApproverActions?: boolean;
+};
+
 const parsePositiveInt = (value: string | null, fallback: number) => {
 
   const parsed = Number(value);
@@ -72,7 +82,13 @@ const parsePositiveInt = (value: string | null, fallback: number) => {
   return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
 };
 
-const ApplicationsTable = () => {
+const ApplicationsTable = ({
+  title = "E-Inspection Applications",
+  fixedApplicationStatus,
+  owner = "A",
+  showAssignAction = true,
+  showApproverActions = true,
+}: ApplicationsTableProps) => {
 
   const dispatch = useDispatch<AppDispatch>();
   const role = getRole();
@@ -97,7 +113,9 @@ const ApplicationsTable = () => {
 
   const caseStatus = searchParams.get("caseStatus") ?? "";
 
-  const applicationStatus = searchParams.get("applicationStatus") ?? "";
+  const applicationStatusFromUrl = searchParams.get("applicationStatus") ?? "";
+
+  const applicationStatus = fixedApplicationStatus ?? applicationStatusFromUrl;
 
   const [applications, setApplications] = useState<ApplicationResponse[]>([]);
 
@@ -161,6 +179,7 @@ const ApplicationsTable = () => {
         search,
         caseStatus,
         applicationStatus,
+        owner,
       })
     );
 
@@ -182,7 +201,7 @@ const ApplicationsTable = () => {
       isActive = false;
       promise.abort();
     };
-  }, [dispatch, page, limit, search, caseStatus, applicationStatus, refreshKey]);
+  }, [dispatch, page, limit, search, caseStatus, applicationStatus, owner, refreshKey]);
 
   const updateSearchParams = useCallback(
     (nextPage: number, nextLimit: number) => {
@@ -320,7 +339,7 @@ const ApplicationsTable = () => {
     <Box sx={styles.tableContainer}>
 
       <Box component="h2" sx={styles.tableHeading}>
-        E-Inspection Applications
+        {title}
       </Box>
 
       <Box sx={styles.toolbar}>
@@ -338,12 +357,14 @@ const ApplicationsTable = () => {
             onChange={handleCaseStatusChange}
             sx={styles.statusFilter}
           />
-          <StatusFilter
-            label="Application Status"
-            value={applicationStatus}
-            onChange={handleApplicationStatusChange}
-            sx={styles.statusFilter}
-          />
+          {!fixedApplicationStatus && (
+            <StatusFilter
+              label="Application Status"
+              value={applicationStatusFromUrl}
+              onChange={handleApplicationStatusChange}
+              sx={styles.statusFilter}
+            />
+          )}
         </Box>
       </Box>
 
@@ -546,32 +567,34 @@ const ApplicationsTable = () => {
                         />
                       </Box>
 
-                      <Box
-                        component="button"
-                        type="button"
-                        sx={styles.assignButton}
-                        title={
-                          isApplicationAssigned(row)
-                            ? "Re-assign"
-                            : "Assign"
-                        }
-                        onClick={(event) => {
-                          event.currentTarget.blur();
-                          handleOpenAssignPopup(row);
-                        }}
-                      >
-                        {isApplicationAssigned(row) ? (
-                          <IMAGES.AssignmentTurnedInIcon
-                            sx={styles.actionIcon}
-                          />
-                        ) : (
-                          <IMAGES.AssignmentAddIcon
-                            sx={styles.actionIcon}
-                          />
-                        )}
-                      </Box>
+                      {showAssignAction && (
+                        <Box
+                          component="button"
+                          type="button"
+                          sx={styles.assignButton}
+                          title={
+                            isApplicationAssigned(row)
+                              ? "Re-assign"
+                              : "Assign"
+                          }
+                          onClick={(event) => {
+                            event.currentTarget.blur();
+                            handleOpenAssignPopup(row);
+                          }}
+                        >
+                          {isApplicationAssigned(row) ? (
+                            <IMAGES.AssignmentTurnedInIcon
+                              sx={styles.actionIcon}
+                            />
+                          ) : (
+                            <IMAGES.AssignmentAddIcon
+                              sx={styles.actionIcon}
+                            />
+                          )}
+                        </Box>
+                      )}
 
-                      {role === "INSPECTIONAPPROVER" && (
+                      {showApproverActions && role === "INSPECTIONAPPROVER" && (
                         <>
                           <Box
                             component="button"

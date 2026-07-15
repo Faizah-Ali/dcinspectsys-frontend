@@ -11,6 +11,7 @@ export type GetApplicationsPayload = {
   search?: string;
   caseStatus?: string;
   applicationStatus?: string;
+  owner?: string;
 };
 
 export const getApplications = createAsyncThunk<
@@ -20,7 +21,7 @@ export const getApplications = createAsyncThunk<
   "applications/getApplications",
 
   async (
-    { page, size, search, caseStatus, applicationStatus },
+    { page, size, search, caseStatus, applicationStatus, owner = "A" },
     { signal, fulfillWithValue, rejectWithValue }
   ) => {
     try {
@@ -34,7 +35,7 @@ export const getApplications = createAsyncThunk<
       const applicationStatusQuery = `&applicationStatus=${encodeURIComponent(applicationStatus ?? "")}`;
 
       const response = await authFetch(
-        `/api/applications?owner=A&page=${page}&size=${size}${searchQuery}${caseStatusQuery}${applicationStatusQuery}`,
+        `/api/applications?owner=${encodeURIComponent(owner)}&page=${page}&size=${size}${searchQuery}${caseStatusQuery}${applicationStatusQuery}`,
         { signal }
       );
 
