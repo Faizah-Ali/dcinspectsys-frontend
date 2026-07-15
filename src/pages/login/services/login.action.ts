@@ -32,7 +32,8 @@ export const loginUser = createAsyncThunk<LoginResponse, LoginPayload>(
       if (data && data.token) {
         return {
           token: data.token,
-          username,
+          username: data.username ?? username,
+          role: data.role,
           message: data.message,
         };
       }

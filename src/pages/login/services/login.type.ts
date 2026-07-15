@@ -6,5 +6,6 @@ export interface LoginPayload {
 export interface LoginResponse {
   token: string;
   username: string;
+  role: string;
   message?: string;
 }

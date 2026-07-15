@@ -9,6 +9,7 @@ import {
   saveLoginState,
   saveLoginTime,
   saveUsername,
+  saveRole,
 } from "../../utils/authSession.utils";
 
 import { loginUser } from "./services/login.action";
@@ -95,11 +96,13 @@ export const handleSubmit =
 
       saveLoginState(true);
       saveUsername(data.username);
+      saveRole(data.role);
       saveLoginTime();
 
       dispatch(
         setAuth({
           username: data.username,
+          role: data.role,
           permissions: [],
         })
       );
