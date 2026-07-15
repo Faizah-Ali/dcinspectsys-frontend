@@ -42,10 +42,16 @@ import StatusChip from "../../status-chip";
 
 import StatusFilter from "../../status-filter";
 import Popup from "../../popup";
+import { ConfirmPopUp } from "../../popup/confimation";
 import SelectStaff from "../../../pages/select-staff";
 import type { SelectStaffValues } from "../../../pages/select-staff/type";
 import { handleAssignApplicationSubmit } from "../../../pages/select-staff/services/assign-application.helper";
-import { showErrorToast } from "../../toast/helper";
+import {
+  approveApplication,
+  rejectApplication,
+} from "../../../pages/inspec-applications/services/approver.action";
+import { showErrorToast, showSuccessToast } from "../../toast/helper";
+import { getRole } from "../../../utils/authSession.utils";
 
 import { VARIANTS } from "../../../common/constants";
 
@@ -69,6 +75,7 @@ const parsePositiveInt = (value: string | null, fallback: number) => {
 const ApplicationsTable = () => {
 
   const dispatch = useDispatch<AppDispatch>();
+  const role = getRole();
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -102,6 +109,11 @@ const ApplicationsTable = () => {
 
   const [selectedApplication, setSelectedApplication] =
     useState<ApplicationResponse | null>(null);
+
+  const [confirmAction, setConfirmAction] = useState<{
+    type: "approve" | "reject";
+    application: ApplicationResponse;
+  } | null>(null);
 
   const [refreshKey, setRefreshKey] = useState(0);
 
@@ -231,6 +243,45 @@ const ApplicationsTable = () => {
           : "Failed to assign application"
       );
       throw error;
+    }
+  };
+
+  const handleApprove = (row: ApplicationResponse) => {
+    setConfirmAction({ type: "approve", application: row });
+  };
+
+  const handleReject = (row: ApplicationResponse) => {
+    setConfirmAction({ type: "reject", application: row });
+  };
+
+  const handleCloseConfirm = () => {
+    setConfirmAction(null);
+  };
+
+  const handleConfirmYes = async () => {
+    if (!confirmAction) {
+      return;
+    }
+
+    const { type, application } = confirmAction;
+    setConfirmAction(null);
+
+    try {
+      const message =
+        type === "approve"
+          ? await approveApplication(application.diaryNo, application.diaryYr)
+          : await rejectApplication(application.diaryNo, application.diaryYr);
+
+      showSuccessToast(message);
+      setRefreshKey((prev) => prev + 1);
+    } catch (error) {
+      showErrorToast(
+        error instanceof Error
+          ? error.message
+          : type === "approve"
+            ? "Failed to approve application"
+            : "Failed to reject application"
+      );
     }
   };
 
@@ -501,8 +552,8 @@ const ApplicationsTable = () => {
                         sx={styles.assignButton}
                         title={
                           isApplicationAssigned(row)
-                            ? "Click here to Re-assign"
-                            : "Click here to assign"
+                            ? "Re-assign"
+                            : "Assign"
                         }
                         onClick={(event) => {
                           event.currentTarget.blur();
@@ -519,6 +570,36 @@ const ApplicationsTable = () => {
                           />
                         )}
                       </Box>
+
+                      {role === "INSPECTIONAPPROVER" && (
+                        <>
+                          <Box
+                            component="button"
+                            type="button"
+                            sx={styles.printButton}
+                            title="Approve"
+                            onClick={(event) => {
+                              event.currentTarget.blur();
+                              handleApprove(row);
+                            }}
+                          >
+                            <IMAGES.ApproveIcon sx={styles.actionIcon} />
+                          </Box>
+
+                          <Box
+                            component="button"
+                            type="button"
+                            sx={styles.assignButton}
+                            title="Reject"
+                            onClick={(event) => {
+                              event.currentTarget.blur();
+                              handleReject(row);
+                            }}
+                          >
+                            <IMAGES.RejectIcon sx={styles.actionIcon} />
+                          </Box>
+                        </>
+                      )}
 
                     </Box>
 
@@ -575,6 +656,23 @@ const ApplicationsTable = () => {
             onSubmit={handleAssignSubmit}
           />
         )}
+      </Popup>
+
+      <Popup
+        open={Boolean(confirmAction)}
+        onClose={handleCloseConfirm}
+        maxWidth="xs"
+        hideHeader
+      >
+        <ConfirmPopUp
+          message={
+            confirmAction?.type === "approve"
+              ? "Are you sure you want to approve this application?"
+              : "Are you sure you want to reject this application?"
+          }
+          handleNo={handleCloseConfirm}
+          handleYes={handleConfirmYes}
+        />
       </Popup>
 
     </Box>

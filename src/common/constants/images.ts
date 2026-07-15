@@ -5,6 +5,8 @@ import AssignmentAddIcon from '@mui/icons-material/AssignmentAdd';
 import PrintIcon from '@mui/icons-material/Print';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CloseIcon from '@mui/icons-material/Close';
+import RejectIcon from '@mui/icons-material/Cancel';
+import ApproveIcon from '@mui/icons-material/CheckCircle';
 
 import DhcLogo from "../../assets/images/dhclogo.png";
 import Emblem from "../../assets/images/emblem.png";
@@ -23,4 +25,6 @@ export const IMAGES = {
     DownloadIcon,
     ArrowBackIcon,
     CloseIcon,
+    RejectIcon,
+    ApproveIcon,
 };

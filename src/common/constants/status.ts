@@ -15,7 +15,8 @@ export type StatusCode =
   | "C"
   | "K"
   | "J"
-  | "Y";
+  | "Y"
+  | "T";
 
 export interface StatusInfo {
   label: string;
@@ -32,6 +33,7 @@ export const STATUS_MAP: Record<StatusCode, StatusInfo> = {
   K: { label: "Reject By Approver",   color: "#B71C1C" },
   J: { label: "Rejected",             color: "#D32F2F" },
   Y: { label: "Completed",            color: "#2E7D32" },
+  T: { label: "Pending Approval",     color: "#FFC107" },
 };
 
 export const UNKNOWN_STATUS_LABEL = "Unknown";

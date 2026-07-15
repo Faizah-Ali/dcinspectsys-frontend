@@ -309,8 +309,8 @@ const ApplicationDetailsTable = () => {
                           sx={styles.assignButton}
                           title={
                             isApplicationAssigned(row)
-                              ? "Click here to Reassign"
-                              : "Click here to assign"
+                              ? "Re-assign"
+                              : "Assign"
                           }
                           onClick={(event) => {
                             event.currentTarget.blur();

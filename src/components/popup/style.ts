@@ -45,4 +45,7 @@ export const styles = {
   content: {
     padding: "24px 28px 28px",
   },
+  contentNoHeader: {
+    padding: "28px 24px 24px",
+  },
 } as const;

@@ -11,6 +11,7 @@ const Popup = ({
   onClose,
   onBack,
   maxWidth = "sm",
+  hideHeader = false,
 }: PopupProps) => {
   const handleBack = onBack ?? onClose;
 
@@ -24,31 +25,35 @@ const Popup = ({
         sx: styles.dialogPaper,
       }}
     >
-      <Box sx={styles.header}>
-        <IconButton
-          aria-label="Go back"
-          onClick={handleBack}
-          sx={styles.iconButton}
-        >
-          <IMAGES.ArrowBackIcon />
-        </IconButton>
+      {!hideHeader && (
+        <Box sx={styles.header}>
+          <IconButton
+            aria-label="Go back"
+            onClick={handleBack}
+            sx={styles.iconButton}
+          >
+            <IMAGES.ArrowBackIcon />
+          </IconButton>
 
-        <Box sx={styles.titleWrap}>
-          <Box component="h2" sx={styles.title}>
-            {title}
+          <Box sx={styles.titleWrap}>
+            <Box component="h2" sx={styles.title}>
+              {title}
+            </Box>
           </Box>
+
+          <IconButton
+            aria-label="Close popup"
+            onClick={onClose}
+            sx={styles.iconButton}
+          >
+            <IMAGES.CloseIcon />
+          </IconButton>
         </Box>
+      )}
 
-        <IconButton
-          aria-label="Close popup"
-          onClick={onClose}
-          sx={styles.iconButton}
-        >
-          <IMAGES.CloseIcon />
-        </IconButton>
-      </Box>
-
-      <DialogContent sx={styles.content}>{children}</DialogContent>
+      <DialogContent sx={hideHeader ? styles.contentNoHeader : styles.content}>
+        {children}
+      </DialogContent>
     </Dialog>
   );
 };

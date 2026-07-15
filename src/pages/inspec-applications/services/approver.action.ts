@@ -1,0 +1,63 @@
+import { authFetch } from "../../../utils/api";
+
+interface ApproverActionResponse {
+  message: string;
+}
+
+export const approveApplication = async (
+  diaryNo: number,
+  diaryYr: number
+): Promise<string> => {
+  const response = await authFetch("/api/approve-application", {
+    method: "PATCH",
+    body: JSON.stringify({
+      diaryNo,
+      diaryYr,
+    }),
+  });
+
+  const data: ApproverActionResponse = await response
+    .json()
+    .catch(() => ({ message: "" }));
+
+  const message = data.message?.trim();
+
+  if (!response.ok) {
+    throw new Error(message || "Failed to approve application");
+  }
+
+  if (!message) {
+    throw new Error("Failed to approve application");
+  }
+
+  return message;
+};
+
+export const rejectApplication = async (
+  diaryNo: number,
+  diaryYr: number
+): Promise<string> => {
+  const response = await authFetch("/api/reject-application", {
+    method: "PATCH",
+    body: JSON.stringify({
+      diaryNo,
+      diaryYr,
+    }),
+  });
+
+  const data: ApproverActionResponse = await response
+    .json()
+    .catch(() => ({ message: "" }));
+
+  const message = data.message?.trim();
+
+  if (!response.ok) {
+    throw new Error(message || "Failed to reject application");
+  }
+
+  if (!message) {
+    throw new Error("Failed to reject application");
+  }
+
+  return message;
+};
