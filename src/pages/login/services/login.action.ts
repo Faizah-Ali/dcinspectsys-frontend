@@ -34,6 +34,7 @@ export const loginUser = createAsyncThunk<LoginResponse, LoginPayload>(
           token: data.token,
           username: data.username ?? username,
           role: data.role,
+          group: data.group,
           message: data.message,
         };
       }

@@ -7,5 +7,6 @@ export interface LoginResponse {
   token: string;
   username: string;
   role: string;
+  group: string;
   message?: string;
 }

@@ -1,3 +1,8 @@
+export interface SidebarItem {
+  text: string;
+  route: string;
+}
+
 export interface SidebarProps {
   userInfo?: {
     name: string;

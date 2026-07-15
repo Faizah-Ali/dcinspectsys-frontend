@@ -3,7 +3,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import type {
   PaginatedApplicationResponse,
 } from "./applications.type";
-import { BASE_URL } from "../../../config";
+import { authFetch } from "../../../utils/api";
 
 export type GetApplicationsPayload = {
   page: number;
@@ -33,8 +33,8 @@ export const getApplications = createAsyncThunk<
       const caseStatusQuery = `&caseStatus=${encodeURIComponent(caseStatus ?? "")}`;
       const applicationStatusQuery = `&applicationStatus=${encodeURIComponent(applicationStatus ?? "")}`;
 
-      const response = await fetch(
-        `${BASE_URL}/api/applications?owner=A&page=${page}&size=${size}${searchQuery}${caseStatusQuery}${applicationStatusQuery}`,
+      const response = await authFetch(
+        `/api/applications?owner=A&page=${page}&size=${size}${searchQuery}${caseStatusQuery}${applicationStatusQuery}`,
         { signal }
       );
 

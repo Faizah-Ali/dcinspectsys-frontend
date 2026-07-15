@@ -1,11 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { getLoginState, getUsername, getRole } from "../utils/authSession.utils";
+import {
+  getLoginState,
+  getUsername,
+  getRole,
+  getGroup,
+} from "../utils/authSession.utils";
 
 export interface AuthState {
   isAuthenticated: boolean;
   username: string | null;
   role: string | null;
+  group: string | null;
   permissions: string[];
 }
 
@@ -14,6 +20,7 @@ const initialState: AuthState = {
   isAuthenticated: getLoginState(),
   username: getLoginState() ? getUsername() : null,
   role: getLoginState() ? getRole() : null,
+  group: getLoginState() ? getGroup() : null,
   permissions: [],
 };
 
@@ -26,6 +33,7 @@ const authSlice = createSlice({
       action: PayloadAction<{
         username: string;
         role?: string | null;
+        group?: string | null;
         permissions?: string[];
       }>
     ) => {
@@ -34,12 +42,16 @@ const authSlice = createSlice({
       if (action.payload.role !== undefined) {
         state.role = action.payload.role;
       }
+      if (action.payload.group !== undefined) {
+        state.group = action.payload.group;
+      }
       state.permissions = action.payload.permissions || [];
     },
     clearAuth: (state) => {
       state.isAuthenticated = false;
       state.username = null;
       state.role = null;
+      state.group = null;
       state.permissions = [];
     },
     setUsername: (state, action: PayloadAction<string>) => {

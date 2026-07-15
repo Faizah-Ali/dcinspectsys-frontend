@@ -5,28 +5,46 @@ import {
   Assignment as AssignmentIcon,
   Mail as MailIcon,
   Logout as LogoutIcon,
+  CheckCircle as CheckCircleIcon,
+  Cancel as CancelIcon,
+  Description as DescriptionIcon,
 } from "@mui/icons-material";
 import { styles } from "./style";
-import { sidebarItems } from "./helper";
+import { getSidebarItems } from "./helper";
 import type { SidebarProps } from "./type";
-import { logout, getLoginTime } from "../../utils/authSession.utils.ts";
+import { logout, getLoginTime, getRole } from "../../utils/authSession.utils.ts";
 import { store } from "../../redux/store.ts";
 import { clearAuth } from "../../redux/auth.slice.ts";
+import { useAppSelector } from "../../hooks/useAppSelector.ts";
 
 const Sidebar = ({ userInfo, activeRoute, onItemClick }: SidebarProps) => {
   const navigate = useNavigate();
+  const reduxRole = useAppSelector((state) => state.auth.role);
+  const role = reduxRole || getRole();
+  const sidebarItems = getSidebarItems(role);
+
   // Icon mapping for sidebar items
   const getIcon = (text: string) => {
-    if (text === "Received Applications") {
+    if (text === "Admin Inbox" || text === "Approver Inbox" || text === "Pending Application") {
       return <InboxIcon sx={styles.itemIcon} />;
     }
-    if (text === "Re-Assign Applications") {
+    if (text === "Re-Assign Application") {
       return <AssignmentIcon sx={styles.itemIcon} />;
     }
-    if (text === "Send Mail") {
+    if (text === "Send Email") {
       return <MailIcon sx={styles.itemIcon} />;
     }
-    return null;
+    if (
+      text === "Processed (Application Side)" ||
+      text === "Processed (Original Side)" ||
+      text === "Processed (Copy Side)"
+    ) {
+      return <CheckCircleIcon sx={styles.itemIcon} />;
+    }
+    if (text === "Rejected Application") {
+      return <CancelIcon sx={styles.itemIcon} />;
+    }
+    return <DescriptionIcon sx={styles.itemIcon} />;
   };
 
   // Check if item is active

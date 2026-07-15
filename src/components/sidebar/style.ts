@@ -45,6 +45,14 @@ export const styles = {
     flex: 1,
     overflow: "auto" as const,
   },
+  sectionHeader: {
+    padding: "8px 16px 4px",
+    color: "rgba(255, 255, 255, 0.7)",
+    fontSize: "12px",
+    fontWeight: 600,
+    textTransform: "uppercase" as const,
+    letterSpacing: "0.5px",
+  },
   sidebarItem: {
     padding: "12px 16px",
     cursor: "pointer",

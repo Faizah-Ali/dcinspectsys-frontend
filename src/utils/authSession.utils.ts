@@ -1,6 +1,6 @@
 // Auth helper functions for managing login state and user info
 
-import { USERNAME_KEY, ROLE_KEY, LOGGED_IN_KEY, LOGIN_TIME_KEY } from "../common/constants/storageKeys";
+import { USERNAME_KEY, ROLE_KEY, GROUP_KEY, LOGGED_IN_KEY, LOGIN_TIME_KEY } from "../common/constants/storageKeys";
 import { showErrorToast } from "../components/toast/helper";
 import { store } from "../redux/store";
 import { clearAuth } from "../redux/auth.slice";
@@ -18,6 +18,11 @@ export const saveUsername = (username: string) => {
 // Save role to localStorage
 export const saveRole = (role: string) => {
   localStorage.setItem(ROLE_KEY, role);
+};
+
+// Save group to localStorage
+export const saveGroup = (group: string) => {
+  localStorage.setItem(GROUP_KEY, group);
 };
 
 // Save login time to localStorage
@@ -62,6 +67,21 @@ export const getRole = (): string => {
 // Remove role from localStorage
 export const removeRole = () => {
   localStorage.removeItem(ROLE_KEY);
+};
+
+// Get group from localStorage
+export const getGroup = (): string => {
+  try {
+    return localStorage.getItem(GROUP_KEY) || "";
+  } catch (error) {
+    console.error("Error reading group:", error);
+  }
+  return "";
+};
+
+// Remove group from localStorage
+export const removeGroup = () => {
+  localStorage.removeItem(GROUP_KEY);
 };
 
 // Get login time from localStorage and format it
