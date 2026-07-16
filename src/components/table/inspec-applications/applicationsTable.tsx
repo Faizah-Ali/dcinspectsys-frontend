@@ -41,16 +41,6 @@ import PaginationSection from "../../pagination";
 import StatusChip from "../../status-chip";
 
 import StatusFilter from "../../status-filter";
-import Popup from "../../popup";
-import { ConfirmPopUp } from "../../popup/confimation";
-import SelectStaff from "../../../pages/select-staff";
-import type { SelectStaffValues } from "../../../pages/select-staff/type";
-import { handleAssignApplicationSubmit } from "../../../pages/select-staff/services/assign-application.helper";
-import {
-  approveApplication,
-  rejectApplication,
-} from "../../../pages/inspec-applications/services/approver.action";
-import { showErrorToast, showSuccessToast } from "../../toast/helper";
 import { getRole } from "../../../utils/authSession.utils";
 
 import { VARIANTS } from "../../../common/constants";
@@ -58,6 +48,16 @@ import { VARIANTS } from "../../../common/constants";
 import type { AppDispatch } from "../../../redux/store";
 
 import { useDebounce } from "../../../hooks/useDebounce";
+import { useApplicationPopups } from "../../../hooks/useApplicationPopups";
+import {
+  ApproverProcessPopup,
+  AssignPopup,
+  CompletePopup,
+  RejectApplicationPopup,
+  SelectApproverPopup,
+  UploadFilePopup,
+  UploadHistoryPopup,
+} from "../../popup/application";
 
 const DEFAULT_PAGE = 1;
 
@@ -119,21 +119,50 @@ const ApplicationsTable = ({
 
   const [applications, setApplications] = useState<ApplicationResponse[]>([]);
 
+  const [displayApplications, setDisplayApplications] = useState<
+    ApplicationResponse[]
+  >([]);
+
   const [totalRecords, setTotalRecords] = useState(0);
 
   const [totalPages, setTotalPages] = useState(0);
 
   const [searchInput, setSearchInput] = useState(search);
 
-  const [selectedApplication, setSelectedApplication] =
-    useState<ApplicationResponse | null>(null);
-
-  const [confirmAction, setConfirmAction] = useState<{
-    type: "approve" | "reject";
-    application: ApplicationResponse;
-  } | null>(null);
-
   const [refreshKey, setRefreshKey] = useState(0);
+
+  const {
+    selectedApplication,
+    selectedApproverApplication,
+    selectedUploadApplication,
+    selectedHistoryApplication,
+    completeAction,
+    selectedRejectApplication,
+    selectedApproverProcessApplication,
+    handleOpenAssignPopup,
+    handleCloseAssignPopup,
+    handleAssignSubmit,
+    handleOpenSelectApprover,
+    handleCloseSelectApprover,
+    handleSendToApprover,
+    handleOpenUploadPopup,
+    handleCloseUploadPopup,
+    handleUploadSubmit,
+    handleOpenHistoryPopup,
+    handleCloseHistoryPopup,
+    handleComplete,
+    handleCloseComplete,
+    handleConfirmComplete,
+    handleOpenRejectPopup,
+    handleCloseRejectPopup,
+    handleRejectSubmit,
+    handleOpenApproverProcess,
+    handleCloseApproverProcess,
+    handleApproverProcessSubmit,
+  } = useApplicationPopups({
+    setDisplayApplications,
+    setRefreshKey,
+  });
 
   const debouncedSearch = useDebounce(searchInput.trim(), SEARCH_DEBOUNCE_MS);
 
@@ -203,6 +232,10 @@ const ApplicationsTable = ({
     };
   }, [dispatch, page, limit, search, caseStatus, applicationStatus, owner, refreshKey]);
 
+  useEffect(() => {
+    setDisplayApplications(applications);
+  }, [applications]);
+
   const updateSearchParams = useCallback(
     (nextPage: number, nextLimit: number) => {
       setSearchParams(
@@ -235,73 +268,6 @@ const ApplicationsTable = ({
     event: ChangeEvent<HTMLInputElement>
   ) => {
     setSearchInput(event.target.value);
-  };
-
-  const handleOpenAssignPopup = (application: ApplicationResponse) => {
-    setSelectedApplication(application);
-  };
-
-  const handleCloseAssignPopup = () => {
-    setSelectedApplication(null);
-  };
-
-  const handleAssignSubmit = async (values: SelectStaffValues) => {
-    try {
-      await handleAssignApplicationSubmit({
-        application: selectedApplication,
-        values,
-        onClose: handleCloseAssignPopup,
-        onSuccess: () => {
-          setRefreshKey((prev) => prev + 1);
-        },
-      });
-    } catch (error) {
-      showErrorToast(
-        error instanceof Error
-          ? error.message
-          : "Failed to assign application"
-      );
-      throw error;
-    }
-  };
-
-  const handleApprove = (row: ApplicationResponse) => {
-    setConfirmAction({ type: "approve", application: row });
-  };
-
-  const handleReject = (row: ApplicationResponse) => {
-    setConfirmAction({ type: "reject", application: row });
-  };
-
-  const handleCloseConfirm = () => {
-    setConfirmAction(null);
-  };
-
-  const handleConfirmYes = async () => {
-    if (!confirmAction) {
-      return;
-    }
-
-    const { type, application } = confirmAction;
-    setConfirmAction(null);
-
-    try {
-      const message =
-        type === "approve"
-          ? await approveApplication(application.diaryNo, application.diaryYr)
-          : await rejectApplication(application.diaryNo, application.diaryYr);
-
-      showSuccessToast(message);
-      setRefreshKey((prev) => prev + 1);
-    } catch (error) {
-      showErrorToast(
-        error instanceof Error
-          ? error.message
-          : type === "approve"
-            ? "Failed to approve application"
-            : "Failed to reject application"
-      );
-    }
   };
 
   const updateStatusFilter = useCallback(
@@ -428,7 +394,7 @@ const ApplicationsTable = ({
 
             <TableBody>
 
-              {loading && applications.length === 0 && (
+              {loading && displayApplications.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={11} sx={styles.placeholderCell}>
                     <CircularProgress size={28} />
@@ -436,7 +402,7 @@ const ApplicationsTable = ({
                 </TableRow>
               )}
 
-              {!loading && applications.length === 0 && (
+              {!loading && displayApplications.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={11} sx={styles.placeholderCell}>
                     No records found.
@@ -444,7 +410,7 @@ const ApplicationsTable = ({
                 </TableRow>
               )}
 
-              {applications.map((row, index) => (
+              {displayApplications.map((row, index) => (
 
                 <TableRow
                   key={`${row.diaryNo}-${index}`}
@@ -594,34 +560,100 @@ const ApplicationsTable = ({
                         </Box>
                       )}
 
-                      {showApproverActions && role === "INSPECTIONAPPROVER" && (
-                        <>
-                          <Box
-                            component="button"
-                            type="button"
-                            sx={styles.printButton}
-                            title="Approve"
-                            onClick={(event) => {
-                              event.currentTarget.blur();
-                              handleApprove(row);
-                            }}
-                          >
-                            <IMAGES.ApproveIcon sx={styles.actionIcon} />
-                          </Box>
+                      {role === "ONLINEINSPECTION" && row.status === "N" && (
+                        <Box
+                          component="button"
+                          type="button"
+                          sx={styles.assignButton}
+                          title="Send to Approver"
+                          onClick={(event) => {
+                            event.currentTarget.blur();
+                            handleOpenSelectApprover(row);
+                          }}
+                        >
+                          <IMAGES.AssignmentIcon sx={styles.actionIcon} />
+                        </Box>
+                      )}
 
-                          <Box
-                            component="button"
-                            type="button"
-                            sx={styles.assignButton}
-                            title="Reject"
-                            onClick={(event) => {
-                              event.currentTarget.blur();
-                              handleReject(row);
-                            }}
-                          >
-                            <IMAGES.RejectIcon sx={styles.actionIcon} />
-                          </Box>
-                        </>
+                      {role === "ONLINEINSPECTION" && row.status === "P" && (
+                        <Box
+                          component="button"
+                          type="button"
+                          sx={styles.assignButton}
+                          title="Upload File"
+                          onClick={(event) => {
+                            event.currentTarget.blur();
+                            handleOpenUploadPopup(row);
+                          }}
+                        >
+                          {/* TODO: Replace with dedicated upload icon when available */}
+                          <IMAGES.AssignmentIcon sx={styles.actionIcon} />
+                        </Box>
+                      )}
+
+                      {role === "ONLINEINSPECTION" && row.status === "P" && (
+                        <Box
+                          component="button"
+                          type="button"
+                          sx={styles.assignButton}
+                          title="Upload History"
+                          onClick={(event) => {
+                            event.currentTarget.blur();
+                            handleOpenHistoryPopup(row);
+                          }}
+                        >
+                          {/* TODO: Replace with dedicated history icon when available */}
+                          <IMAGES.AssignmentTurnedInIcon sx={styles.actionIcon} />
+                        </Box>
+                      )}
+
+                      {role === "ONLINEINSPECTION" && row.status === "P" && (
+                        <Box
+                          component="button"
+                          type="button"
+                          sx={styles.printButton}
+                          title="Complete Application"
+                          onClick={(event) => {
+                            event.currentTarget.blur();
+                            handleComplete(row);
+                          }}
+                        >
+                          <IMAGES.ApproveIcon sx={styles.actionIcon} />
+                        </Box>
+                      )}
+
+                      {role === "ONLINEINSPECTION" &&
+                        (row.status === "P" || row.status === "K") && (
+                        <Box
+                          component="button"
+                          type="button"
+                          sx={styles.assignButton}
+                          title="Reject Application"
+                          onClick={(event) => {
+                            event.currentTarget.blur();
+                            handleOpenRejectPopup(row);
+                          }}
+                        >
+                          <IMAGES.RejectIcon sx={styles.actionIcon} />
+                        </Box>
+                      )}
+
+                      {showApproverActions &&
+                        role === "INSPECTIONAPPROVER" &&
+                        row.status === "T" && (
+                        <Box
+                          component="button"
+                          type="button"
+                          sx={styles.assignButton}
+                          title="Process Application"
+                          onClick={(event) => {
+                            event.currentTarget.blur();
+                            handleOpenApproverProcess(row);
+                          }}
+                        >
+                          {/* TODO: Replace with dedicated process icon when available */}
+                          <IMAGES.AssignmentIcon sx={styles.actionIcon} />
+                        </Box>
                       )}
 
                     </Box>
@@ -638,7 +670,7 @@ const ApplicationsTable = ({
 
         </TableContainer>
 
-        {loading && applications.length > 0 && (
+        {loading && displayApplications.length > 0 && (
           <Box sx={styles.loadingOverlay}>
             <CircularProgress size={28} />
           </Box>
@@ -662,41 +694,46 @@ const ApplicationsTable = ({
         Total Pages: {totalPages}
       </Box>
 
-      <Popup
-        open={Boolean(selectedApplication)}
-        title="Select Staff"
+      <AssignPopup
+        application={selectedApplication}
         onClose={handleCloseAssignPopup}
-        maxWidth="md"
-      >
-        {selectedApplication && (
-          <SelectStaff
-            key={`${selectedApplication.diaryNo}-${selectedApplication.diaryYr}-${selectedApplication.assigned ?? ""}-${selectedApplication.assignedname ?? ""}-${selectedApplication.remarks ?? ""}`}
-            diaryNo={selectedApplication.diaryNo}
-            diaryYr={selectedApplication.diaryYr}
-            initialAssignedName={selectedApplication.assignedname}
-            initialAssignedId={selectedApplication.assigned}
-            initialRemarks={selectedApplication.remarks}
-            onSubmit={handleAssignSubmit}
-          />
-        )}
-      </Popup>
+        onSubmit={handleAssignSubmit}
+      />
 
-      <Popup
-        open={Boolean(confirmAction)}
-        onClose={handleCloseConfirm}
-        maxWidth="xs"
-        hideHeader
-      >
-        <ConfirmPopUp
-          message={
-            confirmAction?.type === "approve"
-              ? "Are you sure you want to approve this application?"
-              : "Are you sure you want to reject this application?"
-          }
-          handleNo={handleCloseConfirm}
-          handleYes={handleConfirmYes}
-        />
-      </Popup>
+      <SelectApproverPopup
+        application={selectedApproverApplication}
+        onClose={handleCloseSelectApprover}
+        onSubmit={handleSendToApprover}
+      />
+
+      <UploadFilePopup
+        application={selectedUploadApplication}
+        onClose={handleCloseUploadPopup}
+        onSubmit={handleUploadSubmit}
+      />
+
+      <UploadHistoryPopup
+        application={selectedHistoryApplication}
+        onClose={handleCloseHistoryPopup}
+      />
+
+      <CompletePopup
+        application={completeAction}
+        onClose={handleCloseComplete}
+        onConfirm={handleConfirmComplete}
+      />
+
+      <RejectApplicationPopup
+        application={selectedRejectApplication}
+        onClose={handleCloseRejectPopup}
+        onSubmit={handleRejectSubmit}
+      />
+
+      <ApproverProcessPopup
+        application={selectedApproverProcessApplication}
+        onClose={handleCloseApproverProcess}
+        onSubmit={handleApproverProcessSubmit}
+      />
 
     </Box>
   );
