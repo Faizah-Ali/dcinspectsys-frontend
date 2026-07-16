@@ -1,6 +1,10 @@
 import { useState } from "react";
 
 import type { ApplicationResponse } from "../pages/inspec-applications/services/applications.type";
+import {
+  approveApplication,
+  rejectApplication,
+} from "../pages/inspec-applications/services/approver.action";
 import type { ApproverProcessValues } from "../pages/approver-process/type";
 import type { RejectApplicationValues } from "../pages/reject-application/type";
 import { handleSendForApprovalSubmit } from "../pages/select-approver/services/send-for-approval.helper";
@@ -154,20 +158,46 @@ export const useApplicationPopups = ({
     setSelectedApproverProcessApplication(null);
   };
 
-  const handleApproverProcessSubmit = (values: ApproverProcessValues) => {
+  const handleApproverProcessSubmit = async (values: ApproverProcessValues) => {
+    if (values.action === "APPROVE" || values.action === "REJECT") {
+      try {
+        if (!selectedApproverProcessApplication) {
+          throw new Error("Please select an application");
+        }
+
+        const { diaryNo, diaryYr } = selectedApproverProcessApplication;
+
+        if (!diaryNo || !diaryYr) {
+          throw new Error("Application diary details are missing");
+        }
+
+        const message =
+          values.action === "APPROVE"
+            ? await approveApplication(diaryNo, diaryYr, values.remarks)
+            : await rejectApplication(diaryNo, diaryYr, values.remarks);
+
+        showSuccessToast(message);
+        handleCloseApproverProcess();
+        setRefreshKey((prev) => prev + 1);
+      } catch (error) {
+        showErrorToast(
+          error instanceof Error
+            ? error.message
+            : values.action === "APPROVE"
+              ? "Failed to approve application"
+              : "Failed to reject application"
+        );
+        throw error;
+      }
+
+      return;
+    }
+
     console.log("Approver Process");
     console.log(selectedApproverProcessApplication);
     console.log(values);
     handleCloseApproverProcess();
-
-    const toastMessage =
-      values.action === "APPROVE"
-        ? "Application approved (UI Demo)"
-        : values.action === "REJECT"
-          ? "Application rejected by approver (UI Demo)"
-          : "Application forwarded (UI Demo)";
-
-    showSuccessToast(toastMessage);
+    showSuccessToast("Application forwarded (UI Demo)");
   };
 
   return {

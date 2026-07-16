@@ -6,7 +6,7 @@ import type { ApproverProcessValues } from "../../../../pages/approver-process/t
 interface ApproverProcessPopupProps {
   application: ApplicationResponse | null;
   onClose: () => void;
-  onSubmit: (values: ApproverProcessValues) => void;
+  onSubmit: (values: ApproverProcessValues) => void | Promise<void>;
 }
 
 const ApproverProcessPopup = ({

@@ -6,13 +6,15 @@ interface ApproverActionResponse {
 
 export const approveApplication = async (
   diaryNo: number,
-  diaryYr: number
+  diaryYr: number,
+  remarks: string
 ): Promise<string> => {
   const response = await authFetch("/api/approve-application", {
     method: "PATCH",
     body: JSON.stringify({
       diaryNo,
       diaryYr,
+      remarks: remarks.trim(),
     }),
   });
 
@@ -35,13 +37,15 @@ export const approveApplication = async (
 
 export const rejectApplication = async (
   diaryNo: number,
-  diaryYr: number
+  diaryYr: number,
+  remarks: string
 ): Promise<string> => {
   const response = await authFetch("/api/reject-application", {
     method: "PATCH",
     body: JSON.stringify({
       diaryNo,
       diaryYr,
+      remarks: remarks.trim(),
     }),
   });
 

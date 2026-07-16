@@ -28,16 +28,23 @@ export const handleAction =
     action: ApproverProcessValues["action"],
     remarks: string,
     forwardTo: string,
-    onSubmit: (values: ApproverProcessValues) => void
+    setIsSubmitting: React.Dispatch<React.SetStateAction<boolean>>,
+    onSubmit: (values: ApproverProcessValues) => void | Promise<void>
   ) =>
-  () => {
+  async () => {
     if (action === "FORWARD" && !isForwardEnabled(forwardTo)) {
       return;
     }
 
-    onSubmit({
-      remarks: remarks.trim(),
-      forwardTo,
-      action,
-    });
+    setIsSubmitting(true);
+
+    try {
+      await onSubmit({
+        remarks: remarks.trim(),
+        forwardTo,
+        action,
+      });
+    } catch {
+      setIsSubmitting(false);
+    }
   };

@@ -7,7 +7,7 @@ export interface ApproverProcessValues {
 export interface ApproverProcessProps {
   diaryNo: number;
   diaryYr: number;
-  onSubmit: (values: ApproverProcessValues) => void;
+  onSubmit: (values: ApproverProcessValues) => void | Promise<void>;
   onCancel: () => void;
 }
 

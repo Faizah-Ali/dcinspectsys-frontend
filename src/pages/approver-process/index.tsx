@@ -28,6 +28,7 @@ const ApproverProcess = ({
 }: ApproverProcessProps) => {
   const [remarks, setRemarks] = useState("");
   const [forwardTo, setForwardTo] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const canForward = isForwardEnabled(forwardTo);
 
@@ -94,6 +95,7 @@ const ApproverProcess = ({
           type="button"
           variant={VARIANTS.OUTLINED}
           onClick={onCancel}
+          disabled={isSubmitting}
           sx={styles.cancelButton}
         >
           Cancel
@@ -103,16 +105,30 @@ const ApproverProcess = ({
           <Button
             type="button"
             variant={VARIANTS.CONTAINED}
-            onClick={handleAction("APPROVE", remarks, forwardTo, onSubmit)}
+            disabled={isSubmitting}
+            onClick={handleAction(
+              "APPROVE",
+              remarks,
+              forwardTo,
+              setIsSubmitting,
+              onSubmit
+            )}
             sx={styles.approveButton}
           >
-            Approve
+            {isSubmitting ? "Submitting..." : "Approve"}
           </Button>
 
           <Button
             type="button"
             variant={VARIANTS.CONTAINED}
-            onClick={handleAction("REJECT", remarks, forwardTo, onSubmit)}
+            disabled={isSubmitting}
+            onClick={handleAction(
+              "REJECT",
+              remarks,
+              forwardTo,
+              setIsSubmitting,
+              onSubmit
+            )}
             sx={styles.rejectButton}
           >
             Reject
@@ -121,8 +137,14 @@ const ApproverProcess = ({
           <Button
             type="button"
             variant={VARIANTS.CONTAINED}
-            disabled={!canForward}
-            onClick={handleAction("FORWARD", remarks, forwardTo, onSubmit)}
+            disabled={isSubmitting || !canForward}
+            onClick={handleAction(
+              "FORWARD",
+              remarks,
+              forwardTo,
+              setIsSubmitting,
+              onSubmit
+            )}
             sx={styles.forwardButton}
           >
             Forward
