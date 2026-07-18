@@ -65,3 +65,38 @@ export const rejectApplication = async (
 
   return message;
 };
+
+export const forwardApplication = async (
+  diaryNo: number,
+  diaryYr: number,
+  approverId: string,
+  approverName: string,
+  remarks: string
+): Promise<string> => {
+  const response = await authFetch("/api/forward-application", {
+    method: "PATCH",
+    body: JSON.stringify({
+      diaryNo,
+      diaryYr,
+      approverId,
+      approverName,
+      remarks: remarks.trim(),
+    }),
+  });
+
+  const data: ApproverActionResponse = await response
+    .json()
+    .catch(() => ({ message: "" }));
+
+  const message = data.message?.trim();
+
+  if (!response.ok) {
+    throw new Error(message || "Failed to forward application");
+  }
+
+  if (!message) {
+    throw new Error("Failed to forward application");
+  }
+
+  return message;
+};

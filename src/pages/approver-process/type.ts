@@ -1,6 +1,7 @@
 export interface ApproverProcessValues {
   remarks: string;
   forwardTo: string;
+  forwardToName: string;
   action: "APPROVE" | "REJECT" | "FORWARD";
 }
 

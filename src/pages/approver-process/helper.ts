@@ -1,13 +1,6 @@
 import type { SelectChangeEvent } from "@mui/material";
 
-import type { ApproverProcessValues, ForwardUser } from "./type";
-
-export const FORWARD_USERS: ForwardUser[] = [
-  { id: "1", name: "Rahul Sharma" },
-  { id: "2", name: "Amit Kumar" },
-  { id: "3", name: "Neha Gupta" },
-  { id: "4", name: "Vivek Singh" },
-];
+import type { ApproverProcessValues } from "./type";
 
 export const isForwardEnabled = (forwardTo: string) => Boolean(forwardTo);
 
@@ -28,6 +21,7 @@ export const handleAction =
     action: ApproverProcessValues["action"],
     remarks: string,
     forwardTo: string,
+    forwardToName: string,
     setIsSubmitting: React.Dispatch<React.SetStateAction<boolean>>,
     onSubmit: (values: ApproverProcessValues) => void | Promise<void>
   ) =>
@@ -42,6 +36,7 @@ export const handleAction =
       await onSubmit({
         remarks: remarks.trim(),
         forwardTo,
+        forwardToName,
         action,
       });
     } catch {

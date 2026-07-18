@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Button,
+  CircularProgress,
   FormControl,
   MenuItem,
   Select,
@@ -9,16 +10,17 @@ import {
 } from "@mui/material";
 
 import { VARIANTS } from "../../common/constants";
+import { showErrorToast } from "../../components/toast/helper";
 
 import {
-  FORWARD_USERS,
   handleAction,
   handleForwardChange,
   handleRemarksChange,
   isForwardEnabled,
 } from "./helper";
+import { getForwardApprovers } from "./services/forward-approvers.action";
 import { styles } from "./style";
-import type { ApproverProcessProps } from "./type";
+import type { ApproverProcessProps, ForwardUser } from "./type";
 
 const ApproverProcess = ({
   diaryNo,
@@ -28,9 +30,43 @@ const ApproverProcess = ({
 }: ApproverProcessProps) => {
   const [remarks, setRemarks] = useState("");
   const [forwardTo, setForwardTo] = useState("");
+  const [forwardUsers, setForwardUsers] = useState<ForwardUser[]>([]);
+  const [isLoadingApprovers, setIsLoadingApprovers] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const canForward = isForwardEnabled(forwardTo);
+  const forwardToName =
+    forwardUsers.find((user) => user.id === forwardTo)?.name ?? "";
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    setIsLoadingApprovers(true);
+
+    getForwardApprovers(controller.signal)
+      .then(setForwardUsers)
+      .catch((error) => {
+        if (controller.signal.aborted || error?.name === "AbortError") {
+          return;
+        }
+
+        setForwardUsers([]);
+        showErrorToast(
+          error instanceof Error
+            ? error.message
+            : "Failed to fetch approvers list"
+        );
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) {
+          setIsLoadingApprovers(false);
+        }
+      });
+
+    return () => {
+      controller.abort();
+    };
+  }, [diaryNo, diaryYr]);
 
   return (
     <Box sx={styles.form}>
@@ -63,6 +99,7 @@ const ApproverProcess = ({
             id="approver-forward-to"
             value={forwardTo}
             onChange={handleForwardChange(setForwardTo)}
+            disabled={isLoadingApprovers || isSubmitting}
             displayEmpty
             sx={styles.documentTypeSelect}
             renderValue={(selectedValue) => {
@@ -74,14 +111,20 @@ const ApproverProcess = ({
                 );
               }
 
-              const selectedUser = FORWARD_USERS.find(
+              const selectedUser = forwardUsers.find(
                 (user) => user.id === selectedValue
               );
 
               return selectedUser?.name ?? selectedValue;
             }}
           >
-            {FORWARD_USERS.map((user) => (
+            {isLoadingApprovers ? (
+              <MenuItem disabled>
+                <CircularProgress size={20} />
+              </MenuItem>
+            ) : forwardUsers.length === 0 ? (
+              <MenuItem disabled>No approvers found.</MenuItem>
+            ) : forwardUsers.map((user) => (
               <MenuItem key={user.id} value={user.id}>
                 {user.name}
               </MenuItem>
@@ -110,6 +153,7 @@ const ApproverProcess = ({
               "APPROVE",
               remarks,
               forwardTo,
+              forwardToName,
               setIsSubmitting,
               onSubmit
             )}
@@ -126,6 +170,7 @@ const ApproverProcess = ({
               "REJECT",
               remarks,
               forwardTo,
+              forwardToName,
               setIsSubmitting,
               onSubmit
             )}
@@ -137,11 +182,12 @@ const ApproverProcess = ({
           <Button
             type="button"
             variant={VARIANTS.CONTAINED}
-            disabled={isSubmitting || !canForward}
+            disabled={isSubmitting || isLoadingApprovers || !canForward}
             onClick={handleAction(
               "FORWARD",
               remarks,
               forwardTo,
+              forwardToName,
               setIsSubmitting,
               onSubmit
             )}

@@ -3,6 +3,7 @@ import { useState } from "react";
 import type { ApplicationResponse } from "../pages/inspec-applications/services/applications.type";
 import {
   approveApplication,
+  forwardApplication,
   rejectApplication,
 } from "../pages/inspec-applications/services/approver.action";
 import type { ApproverProcessValues } from "../pages/approver-process/type";
@@ -193,11 +194,40 @@ export const useApplicationPopups = ({
       return;
     }
 
-    console.log("Approver Process");
-    console.log(selectedApproverProcessApplication);
-    console.log(values);
-    handleCloseApproverProcess();
-    showSuccessToast("Application forwarded (UI Demo)");
+    try {
+      if (!selectedApproverProcessApplication) {
+        throw new Error("Please select an application");
+      }
+
+      const { diaryNo, diaryYr } = selectedApproverProcessApplication;
+
+      if (!diaryNo || !diaryYr) {
+        throw new Error("Application diary details are missing");
+      }
+
+      if (!values.forwardTo || !values.forwardToName) {
+        throw new Error("Please select an approver");
+      }
+
+      const message = await forwardApplication(
+        diaryNo,
+        diaryYr,
+        values.forwardTo,
+        values.forwardToName,
+        values.remarks
+      );
+
+      showSuccessToast(message);
+      handleCloseApproverProcess();
+      setRefreshKey((prev) => prev + 1);
+    } catch (error) {
+      showErrorToast(
+        error instanceof Error
+          ? error.message
+          : "Failed to forward application"
+      );
+      throw error;
+    }
   };
 
   return {
