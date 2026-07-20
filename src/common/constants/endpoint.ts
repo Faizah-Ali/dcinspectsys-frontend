@@ -5,4 +5,7 @@ export const ENDPOINTS = {
   ASSIGN_APPLICATION: "/api/assign-application",
   INSPECTION_APPROVERS: "/api/inspection-approvers",
   SEND_FOR_APPROVAL: "/api/send-for-approval",
+  UPLOAD_INSPECTION_FILE: "/api/upload-inspection-file",
+  UPLOAD_HISTORY: "/api/upload-history",
+  DOWNLOAD_INSPECTION_FILE: "/api/download-inspection-file",
 } as const;

@@ -2,19 +2,23 @@ import { useRef, useState } from "react";
 import {
   Box,
   Button,
+  CircularProgress,
   FormControl,
+  IconButton,
   MenuItem,
   Select,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 import { VARIANTS } from "../../common/constants";
 
 import {
   DOCUMENT_TYPE_OPTIONS,
-  getSelectedFileName,
+  getFileIdentity,
   handleChooseFileClick,
   handleDocumentTypeChange,
   handleFileChange,
+  handleRemoveFile,
   handleSubmit,
   isUploadEnabled,
 } from "./helper";
@@ -29,15 +33,15 @@ const UploadFile = ({
 }: UploadFileProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [documentType, setDocumentType] = useState("");
-  const [file, setFile] = useState<File | null>(null);
+  const [files, setFiles] = useState<File[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const selectedFileName = getSelectedFileName(file);
-  const canUpload = isUploadEnabled(documentType, file);
+  const canUpload = isUploadEnabled(documentType, files);
 
   return (
     <Box
       component="form"
-      onSubmit={handleSubmit(documentType, file, onSubmit)}
+      onSubmit={handleSubmit(documentType, files, setIsSubmitting, onSubmit)}
       sx={styles.form}
     >
       <Box component="p" sx={styles.referenceText}>
@@ -55,6 +59,7 @@ const UploadFile = ({
             value={documentType}
             onChange={handleDocumentTypeChange(setDocumentType)}
             displayEmpty
+            disabled={isSubmitting}
             sx={styles.documentTypeSelect}
             renderValue={(selectedValue) => {
               if (!selectedValue) {
@@ -86,8 +91,10 @@ const UploadFile = ({
           ref={fileInputRef}
           id="upload-pdf-file"
           type="file"
+          multiple
           accept=".pdf"
-          onChange={handleFileChange(setFile)}
+          onChange={handleFileChange(setFiles)}
+          disabled={isSubmitting}
           style={styles.hiddenFileInput}
         />
 
@@ -95,6 +102,7 @@ const UploadFile = ({
           type="button"
           variant={VARIANTS.OUTLINED}
           onClick={handleChooseFileClick(fileInputRef)}
+          disabled={isSubmitting}
           sx={styles.chooseFileButton}
         >
           Choose File
@@ -102,14 +110,39 @@ const UploadFile = ({
 
         <Box sx={styles.selectedFileWrap}>
           <Box component="span" sx={styles.selectedFileLabel}>
-            Selected File:
+            Selected File{files.length === 1 ? "" : "s"}:
           </Box>
-          <Box
-            component="span"
-            sx={file ? styles.selectedFileName : styles.emptyFileName}
-          >
-            {selectedFileName}
-          </Box>
+
+          {files.length === 0 ? (
+            <Box component="span" sx={styles.emptyFileName}>
+              No file selected
+            </Box>
+          ) : (
+            files.map((file) => (
+              <Box
+                key={getFileIdentity(file)}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                }}
+              >
+                <Box component="span" sx={styles.selectedFileName}>
+                  ✔ {file.name}
+                </Box>
+                <IconButton
+                  type="button"
+                  size="small"
+                  aria-label={`Remove ${file.name}`}
+                  disabled={isSubmitting}
+                  onClick={handleRemoveFile(file, setFiles)}
+                  sx={{ padding: "2px" }}
+                >
+                  <CloseIcon fontSize="small" />
+                </IconButton>
+              </Box>
+            ))
+          )}
         </Box>
       </Box>
 
@@ -118,6 +151,7 @@ const UploadFile = ({
           type="button"
           variant={VARIANTS.OUTLINED}
           onClick={onCancel}
+          disabled={isSubmitting}
           sx={styles.cancelButton}
         >
           Cancel
@@ -126,10 +160,14 @@ const UploadFile = ({
         <Button
           type="submit"
           variant={VARIANTS.CONTAINED}
-          disabled={!canUpload}
+          disabled={!canUpload || isSubmitting}
           sx={styles.submitButton}
         >
-          Upload
+          {isSubmitting ? (
+            <CircularProgress size={20} color="inherit" />
+          ) : (
+            "Upload"
+          )}
         </Button>
       </Box>
     </Box>

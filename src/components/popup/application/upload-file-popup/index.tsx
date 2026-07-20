@@ -6,7 +6,7 @@ import type { UploadFileValues } from "../../../../pages/upload-file/type";
 interface UploadFilePopupProps {
   application: ApplicationResponse | null;
   onClose: () => void;
-  onSubmit: (values: UploadFileValues) => void;
+  onSubmit: (values: UploadFileValues) => void | Promise<void>;
 }
 
 const UploadFilePopup = ({

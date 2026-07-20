@@ -1,12 +1,12 @@
 export interface UploadFileValues {
   documentType: string;
-  file: File | null;
+  files: File[];
 }
 
 export interface UploadFileProps {
   diaryNo: number;
   diaryYr: number;
-  onSubmit: (values: UploadFileValues) => void;
+  onSubmit: (values: UploadFileValues) => void | Promise<void>;
   onCancel: () => void;
 }
 

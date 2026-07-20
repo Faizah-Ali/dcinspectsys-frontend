@@ -12,6 +12,7 @@ import { handleSendForApprovalSubmit } from "../pages/select-approver/services/s
 import type { SelectApproverValues } from "../pages/select-approver/type";
 import { handleAssignApplicationSubmit } from "../pages/select-staff/services/assign-application.helper";
 import type { SelectStaffValues } from "../pages/select-staff/type";
+import { handleUploadInspectionFileSubmit } from "../pages/upload-file/services/upload-inspection-file.action";
 import type { UploadFileValues } from "../pages/upload-file/type";
 import { showErrorToast, showSuccessToast } from "../components/toast/helper";
 
@@ -102,11 +103,24 @@ export const useApplicationPopups = ({
     setSelectedUploadApplication(null);
   };
 
-  const handleUploadSubmit = (values: UploadFileValues) => {
-    console.log("Upload Application", selectedUploadApplication);
-    console.log(values);
-    handleCloseUploadPopup();
-    showSuccessToast("Document uploaded successfully (UI Demo)");
+  const handleUploadSubmit = async (values: UploadFileValues) => {
+    try {
+      await handleUploadInspectionFileSubmit({
+        application: selectedUploadApplication,
+        values,
+        onClose: handleCloseUploadPopup,
+        onSuccess: () => {
+          setRefreshKey((prev) => prev + 1);
+        },
+      });
+    } catch (error) {
+      showErrorToast(
+        error instanceof Error
+          ? error.message
+          : "Failed to upload inspection file"
+      );
+      throw error;
+    }
   };
 
   const handleOpenHistoryPopup = (application: ApplicationResponse) => {
