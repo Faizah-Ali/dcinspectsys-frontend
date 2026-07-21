@@ -17,6 +17,7 @@ import {
   getFileIdentity,
   handleChooseFileClick,
   handleDocumentTypeChange,
+  handleDocumentTypeToggle,
   handleFileChange,
   handleRemoveFile,
   handleSubmit,
@@ -74,7 +75,15 @@ const UploadFile = ({
             }}
           >
             {DOCUMENT_TYPE_OPTIONS.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
+              <MenuItem
+                key={option.value}
+                value={option.value}
+                onClick={handleDocumentTypeToggle(
+                  documentType,
+                  option.value,
+                  setDocumentType
+                )}
+              >
                 {option.label}
               </MenuItem>
             ))}

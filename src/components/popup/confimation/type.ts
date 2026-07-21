@@ -3,4 +3,5 @@ export type ConfirmProps = {
   handleNo: () => void;
   handleYes: () => void;
   logo?: string;
+  disabled?: boolean;
 };

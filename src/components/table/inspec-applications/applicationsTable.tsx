@@ -533,7 +533,7 @@ const ApplicationsTable = ({
                         />
                       </Box>
 
-                      {showAssignAction && (
+                      {showAssignAction && role === "INSPECTIONADMIN" && (
                         <Box
                           component="button"
                           type="button"
@@ -611,7 +611,7 @@ const ApplicationsTable = ({
                         <Box
                           component="button"
                           type="button"
-                          sx={styles.printButton}
+                          sx={styles.assignButton}
                           title="Complete Application"
                           onClick={(event) => {
                             event.currentTarget.blur();

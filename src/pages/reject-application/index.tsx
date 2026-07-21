@@ -12,6 +12,7 @@ import { VARIANTS } from "../../common/constants";
 
 import {
   handleReasonChange,
+  handleReasonToggle,
   handleRemarksChange,
   handleSubmit,
   isRejectEnabled,
@@ -68,7 +69,15 @@ const RejectApplication = ({
             }}
           >
             {REJECTION_REASONS.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
+              <MenuItem
+                key={option.value}
+                value={option.value}
+                onClick={handleReasonToggle(
+                  reason,
+                  option.value,
+                  setReason
+                )}
+              >
                 {option.label}
               </MenuItem>
             ))}

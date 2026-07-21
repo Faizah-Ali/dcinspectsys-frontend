@@ -86,6 +86,20 @@ export const handleStaffIdChange =
     setStaffId(event.target.value);
   };
 
+// Clicking the already selected radio clears the selection
+// (onChange does not fire in that case, so this runs on click).
+export const handleStaffIdToggle =
+  (
+    staffId: string,
+    optionId: string,
+    setStaffId: React.Dispatch<React.SetStateAction<string>>
+  ) =>
+  () => {
+    if (staffId === optionId) {
+      setStaffId("");
+    }
+  };
+
 export const handleRemarksChange =
   (setRemarks: React.Dispatch<React.SetStateAction<string>>) =>
   (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

@@ -34,6 +34,20 @@ export const handleReasonChange =
     setReason(event.target.value);
   };
 
+// MUI Select does not fire onChange when the selected item is clicked
+// again, so clearing is handled via MenuItem onClick.
+export const handleReasonToggle =
+  (
+    reason: string,
+    optionValue: string,
+    setReason: React.Dispatch<React.SetStateAction<string>>
+  ) =>
+  () => {
+    if (reason === optionValue) {
+      setReason("");
+    }
+  };
+
 export const handleRemarksChange =
   (setRemarks: React.Dispatch<React.SetStateAction<string>>) =>
   (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

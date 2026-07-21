@@ -7,6 +7,7 @@ import {
   rejectApplication,
 } from "../pages/inspec-applications/services/approver.action";
 import type { ApproverProcessValues } from "../pages/approver-process/type";
+import { completeApplication } from "../pages/complete-application/services/complete-application.action";
 import type { RejectApplicationValues } from "../pages/reject-application/type";
 import { handleSendForApprovalSubmit } from "../pages/select-approver/services/send-for-approval.helper";
 import type { SelectApproverValues } from "../pages/select-approver/type";
@@ -139,14 +140,31 @@ export const useApplicationPopups = ({
     setCompleteAction(null);
   };
 
-  const handleConfirmComplete = () => {
+  const handleConfirmComplete = async () => {
     if (!completeAction) {
       return;
     }
 
-    console.log("Complete Application", completeAction);
-    handleCloseComplete();
-    showSuccessToast("Application completed (UI Demo)");
+    try {
+      const { diaryNo, diaryYr } = completeAction;
+
+      if (!diaryNo || !diaryYr) {
+        throw new Error("Application diary details are missing");
+      }
+
+      const message = await completeApplication(diaryNo, diaryYr, "");
+
+      showSuccessToast(message);
+      handleCloseComplete();
+      setRefreshKey((prev) => prev + 1);
+    } catch (error) {
+      showErrorToast(
+        error instanceof Error
+          ? error.message
+          : "Failed to complete application"
+      );
+      handleCloseComplete();
+    }
   };
 
   const handleOpenRejectPopup = (application: ApplicationResponse) => {
@@ -157,12 +175,37 @@ export const useApplicationPopups = ({
     setSelectedRejectApplication(null);
   };
 
-  const handleRejectSubmit = (values: RejectApplicationValues) => {
-    console.log("Reject Application");
-    console.log(selectedRejectApplication);
-    console.log(values);
-    handleCloseRejectPopup();
-    showSuccessToast("Application rejected (UI Demo)");
+  const handleRejectSubmit = async (values: RejectApplicationValues) => {
+    if (!selectedRejectApplication) {
+      return;
+    }
+
+    try {
+      const { diaryNo, diaryYr } = selectedRejectApplication;
+
+      if (!diaryNo || !diaryYr) {
+        throw new Error("Application diary details are missing");
+      }
+
+      // The backend only accepts remarks, so prepend the selected reason.
+      const trimmedRemarks = values.remarks.trim();
+      const remarks = trimmedRemarks
+        ? `Reason: ${values.reason}\n${trimmedRemarks}`
+        : `Reason: ${values.reason}`;
+
+      const message = await rejectApplication(diaryNo, diaryYr, remarks);
+
+      showSuccessToast(message);
+      handleCloseRejectPopup();
+      setRefreshKey((prev) => prev + 1);
+    } catch (error) {
+      showErrorToast(
+        error instanceof Error
+          ? error.message
+          : "Failed to reject application"
+      );
+      handleCloseRejectPopup();
+    }
   };
 
   const handleOpenApproverProcess = (application: ApplicationResponse) => {

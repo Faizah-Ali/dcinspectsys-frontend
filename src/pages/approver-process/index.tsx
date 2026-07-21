@@ -15,6 +15,7 @@ import { showErrorToast } from "../../components/toast/helper";
 import {
   handleAction,
   handleForwardChange,
+  handleForwardToggle,
   handleRemarksChange,
   isForwardEnabled,
 } from "./helper";
@@ -125,7 +126,15 @@ const ApproverProcess = ({
             ) : forwardUsers.length === 0 ? (
               <MenuItem disabled>No approvers found.</MenuItem>
             ) : forwardUsers.map((user) => (
-              <MenuItem key={user.id} value={user.id}>
+              <MenuItem
+                key={user.id}
+                value={user.id}
+                onClick={handleForwardToggle(
+                  forwardTo,
+                  user.id,
+                  setForwardTo
+                )}
+              >
                 {user.name}
               </MenuItem>
             ))}

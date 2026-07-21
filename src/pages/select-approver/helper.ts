@@ -17,6 +17,22 @@ export const handleApproverIdChange =
     setApproverName(selected?.fullname ?? "");
   };
 
+// Clicking the already selected radio clears the selection
+// (onChange does not fire in that case, so this runs on click).
+export const handleApproverIdToggle =
+  (
+    approverId: string,
+    optionId: string,
+    setApproverId: React.Dispatch<React.SetStateAction<string>>,
+    setApproverName: React.Dispatch<React.SetStateAction<string>>
+  ) =>
+  () => {
+    if (approverId === optionId) {
+      setApproverId("");
+      setApproverName("");
+    }
+  };
+
 export const handleSubmit =
   (
     approverId: string,

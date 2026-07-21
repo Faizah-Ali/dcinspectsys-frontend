@@ -20,6 +20,7 @@ import {
   getSelectStaffFormDefaults,
   handleRemarksChange,
   handleStaffIdChange,
+  handleStaffIdToggle,
   handleSubmit,
   hasSelectStaffFormChanges,
 } from "./helper";
@@ -167,7 +168,15 @@ const SelectStaff = ({
             <FormControlLabel
               key={approver.id}
               value={approver.id}
-              control={<Radio />}
+              control={
+                <Radio
+                  onClick={handleStaffIdToggle(
+                    staffId,
+                    approver.id,
+                    setStaffId
+                  )}
+                />
+              }
               label={approver.fullname}
             />
           ))}

@@ -48,6 +48,20 @@ export const handleDocumentTypeChange =
     setDocumentType(event.target.value);
   };
 
+// MUI Select does not fire onChange when the selected item is clicked
+// again, so clearing is handled via MenuItem onClick.
+export const handleDocumentTypeToggle =
+  (
+    documentType: string,
+    optionValue: string,
+    setDocumentType: React.Dispatch<React.SetStateAction<string>>
+  ) =>
+  () => {
+    if (documentType === optionValue) {
+      setDocumentType("");
+    }
+  };
+
 export const handleFileChange =
   (setFiles: React.Dispatch<React.SetStateAction<File[]>>) =>
   (event: React.ChangeEvent<HTMLInputElement>) => {

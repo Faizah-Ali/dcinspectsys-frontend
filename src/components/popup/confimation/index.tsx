@@ -9,6 +9,7 @@ export const ConfirmPopUp = ({
   logo,
   handleNo,
   handleYes,
+  disabled = false,
 }: ConfirmProps) => {
   return (
     <Box sx={styles.popup}>
@@ -20,6 +21,7 @@ export const ConfirmPopUp = ({
         <Button
           variant={VARIANTS.CONTAINED}
           onClick={handleYes}
+          disabled={disabled}
           sx={styles.themeBtn}
         >
           Confirm
@@ -27,6 +29,7 @@ export const ConfirmPopUp = ({
         <Button
           variant={VARIANTS.OUTLINED}
           onClick={handleNo}
+          disabled={disabled}
           sx={styles.grayBtn}
         >
           Cancel

@@ -13,7 +13,11 @@ import { VARIANTS } from "../../common/constants";
 import { showErrorToast } from "../../components/toast/helper";
 import { handleRemarksChange } from "../select-staff/helper";
 
-import { handleApproverIdChange, handleSubmit } from "./helper";
+import {
+  handleApproverIdChange,
+  handleApproverIdToggle,
+  handleSubmit,
+} from "./helper";
 import { getInspectionApprovers } from "./services/inspection-approvers.action";
 import type { InspectionApprover } from "./services/inspection-approvers.type";
 import { styles } from "./style";
@@ -107,7 +111,16 @@ const SelectApprover = ({
             <FormControlLabel
               key={approver.id}
               value={approver.id}
-              control={<Radio />}
+              control={
+                <Radio
+                  onClick={handleApproverIdToggle(
+                    approverId,
+                    approver.id,
+                    setApproverId,
+                    setApproverName
+                  )}
+                />
+              }
               label={approver.fullname}
             />
           ))}
