@@ -8,3 +8,21 @@ export interface UploadHistoryItem {
   entryDate: string;
   entryBy: string;
 }
+
+export interface InspectionLogItem {
+  entryDate: string;
+  description: string;
+  actor: string;
+}
+
+export interface UserCommentItem {
+  content: string;
+  author: string;
+  commentDate: string;
+}
+
+export interface UploadHistoryResponse {
+  uploadedFiles: UploadHistoryItem[];
+  inspectionLogs: InspectionLogItem[];
+  userComments: UserCommentItem[];
+}

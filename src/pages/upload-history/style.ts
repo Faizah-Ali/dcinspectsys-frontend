@@ -48,6 +48,39 @@ export const styles = {
     fontWeight: 600,
     fontSize: "12px",
   },
+  accordionsWrap: {
+    display: "flex",
+    flexDirection: "column" as const,
+    gap: "12px",
+  },
+  accordion: {
+    border: "1px solid #e0e0e0",
+    borderRadius: "8px !important",
+    boxShadow: "none !important",
+    overflow: "hidden" as const,
+    "&::before": {
+      display: "none",
+    },
+  },
+  accordionSummary: {
+    fontWeight: 700,
+    fontSize: "15px",
+    color: COLORS.textPrimary,
+    backgroundColor: "#f5f5f5",
+    minHeight: "48px !important",
+    "& .MuiAccordionSummary-expandIconWrapper": {
+      color: COLORS.primary,
+    },
+  },
+  accordionDetails: {
+    padding: "14px 16px",
+  },
+  accordionEmptyText: {
+    margin: 0,
+    fontSize: "14px",
+    color: COLORS.textPrimary,
+    opacity: 0.7,
+  },
   viewButton: {
     minWidth: "72px",
     height: "32px",

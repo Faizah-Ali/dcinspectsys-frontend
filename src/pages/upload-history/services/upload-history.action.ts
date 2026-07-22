@@ -1,13 +1,19 @@
 import { ENDPOINTS } from "../../../common/constants/endpoint";
 import { authFetch } from "../../../utils/api";
 
-import type { UploadHistoryItem } from "./upload-history.type";
+import type { UploadHistoryResponse } from "./upload-history.type";
+
+const EMPTY_UPLOAD_HISTORY_RESPONSE: UploadHistoryResponse = {
+  uploadedFiles: [],
+  inspectionLogs: [],
+  userComments: [],
+};
 
 export const getUploadHistory = async (
   diaryNo: number,
   diaryYr: number,
   signal?: AbortSignal
-): Promise<UploadHistoryItem[]> => {
+): Promise<UploadHistoryResponse> => {
   const query = new URLSearchParams({
     diaryNo: String(diaryNo),
     diaryYr: String(diaryYr),
@@ -29,9 +35,21 @@ export const getUploadHistory = async (
     throw new Error(message || "Failed to fetch upload history");
   }
 
-  if (!Array.isArray(data)) {
-    return [];
+  if (!data || typeof data !== "object" || Array.isArray(data)) {
+    return EMPTY_UPLOAD_HISTORY_RESPONSE;
   }
 
-  return data as UploadHistoryItem[];
+  const uploadHistory = data as Partial<UploadHistoryResponse>;
+
+  return {
+    uploadedFiles: Array.isArray(uploadHistory.uploadedFiles)
+      ? uploadHistory.uploadedFiles
+      : [],
+    inspectionLogs: Array.isArray(uploadHistory.inspectionLogs)
+      ? uploadHistory.inspectionLogs
+      : [],
+    userComments: Array.isArray(uploadHistory.userComments)
+      ? uploadHistory.userComments
+      : [],
+  };
 };
