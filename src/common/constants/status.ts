@@ -1,12 +1,8 @@
-// Single source of truth for status codes used in both
-// `status` (Application Status) and `caseStatus` (Case Status).
-//
-// API returns one-letter codes (e.g. "N", "P", "A", ...). We map every code to
-// a human-friendly label and a brand color. The same map is used to derive the
-// color from a label so callers can reuse `getStatusLabel` and `getStatusColor`
-// without having to know the underlying mapping.
+// Application Status (`status`) and Case Status (`caseStatus`) use different
+// code spaces and must stay separate.
+// Example conflict: application `D` = Delivered, case `D` = Decided.
 
-export type StatusCode =
+export type ApplicationStatusCode =
   | "N"
   | "P"
   | "A"
@@ -18,63 +14,117 @@ export type StatusCode =
   | "Y"
   | "T";
 
+export type CaseStatusCode = "P" | "D";
+
+export type StatusKind = "application" | "case";
+
 export interface StatusInfo {
   label: string;
   color: string;
 }
 
-export const STATUS_MAP: Record<StatusCode, StatusInfo> = {
-  N: { label: "New Filing",           color: "#2196F3" },
-  P: { label: "Pending For Approval", color: "#FF9800" },
-  A: { label: "Approved By Approver", color: "#4CAF50" },
-  R: { label: "Ready",                color: "#9C27B0" },
-  D: { label: "Delivered",            color: "#2E7D32" },
-  C: { label: "Reject",               color: "#F44336" },
-  K: { label: "Reject By Approver",   color: "#B71C1C" },
-  J: { label: "Rejected",             color: "#D32F2F" },
-  Y: { label: "Completed",            color: "#2E7D32" },
-  T: { label: "Pending Approval",     color: "#FFC107" },
+export const APPLICATION_STATUS_MAP: Record<ApplicationStatusCode, StatusInfo> =
+  {
+    N: { label: "New Filing", color: "#2196F3" },
+    P: { label: "Pending For Approval", color: "#FF9800" },
+    A: { label: "Approved By Approver", color: "#4CAF50" },
+    R: { label: "Ready", color: "#9C27B0" },
+    D: { label: "Delivered", color: "#2E7D32" },
+    C: { label: "Reject", color: "#F44336" },
+    K: { label: "Reject By Approver", color: "#B71C1C" },
+    J: { label: "Rejected", color: "#D32F2F" },
+    Y: { label: "Completed", color: "#2E7D32" },
+    T: { label: "Pending Approval", color: "#FFC107" },
+  };
+
+// Legacy inbox: case_status === "D" → Decided; anything else → Pending.
+export const CASE_STATUS_MAP: Record<CaseStatusCode, StatusInfo> = {
+  P: { label: "Pending Approval", color: "#FF9800" },
+  D: { label: "Decided", color: "#2E7D32" },
 };
 
 export const UNKNOWN_STATUS_LABEL = "Unknown";
 export const UNKNOWN_STATUS_COLOR = "#9E9E9E";
 
-// Resolve a raw status code (e.g. "N") to its display label.
-// Falls back to "Unknown" for null / undefined / unmapped codes so the UI
-// never crashes on unexpected values.
-export const getStatusLabel = (statusCode?: string | null): string => {
-  if (!statusCode) return UNKNOWN_STATUS_LABEL;
+export const getApplicationStatusLabel = (
+  statusCode?: string | null
+): string => {
+  if (!statusCode?.trim()) return UNKNOWN_STATUS_LABEL;
 
-  const key = statusCode.trim().toUpperCase() as StatusCode;
+  const key = statusCode.trim().toUpperCase() as ApplicationStatusCode;
 
-  return STATUS_MAP[key]?.label ?? UNKNOWN_STATUS_LABEL;
+  return APPLICATION_STATUS_MAP[key]?.label ?? UNKNOWN_STATUS_LABEL;
 };
 
-// Resolve a display label (e.g. "New Filing") back to its brand color.
-// Reused by chips so they can derive color from label without re-mapping codes.
-export const getStatusColor = (statusLabel?: string | null): string => {
+export const getCaseStatusLabel = (statusCode?: string | null): string => {
+  if (!statusCode?.trim()) {
+    return CASE_STATUS_MAP.P.label;
+  }
+
+  const key = statusCode.trim().toUpperCase();
+
+  if (key === "D") {
+    return CASE_STATUS_MAP.D.label;
+  }
+
+  return CASE_STATUS_MAP.P.label;
+};
+
+export const getApplicationStatusColor = (
+  statusLabel?: string | null
+): string => {
   if (!statusLabel) return UNKNOWN_STATUS_COLOR;
 
-  const entry = Object.values(STATUS_MAP).find(
+  const entry = Object.values(APPLICATION_STATUS_MAP).find(
     (info) => info.label === statusLabel
   );
 
   return entry?.color ?? UNKNOWN_STATUS_COLOR;
 };
 
+export const getCaseStatusColor = (statusLabel?: string | null): string => {
+  if (!statusLabel) return UNKNOWN_STATUS_COLOR;
+
+  const entry = Object.values(CASE_STATUS_MAP).find(
+    (info) => info.label === statusLabel
+  );
+
+  return entry?.color ?? UNKNOWN_STATUS_COLOR;
+};
+
+export const getStatusLabel = (
+  statusCode?: string | null,
+  kind: StatusKind = "application"
+): string =>
+  kind === "case"
+    ? getCaseStatusLabel(statusCode)
+    : getApplicationStatusLabel(statusCode);
+
+export const getStatusColor = (
+  statusLabel?: string | null,
+  kind: StatusKind = "application"
+): string =>
+  kind === "case"
+    ? getCaseStatusColor(statusLabel)
+    : getApplicationStatusColor(statusLabel);
+
 export interface StatusFilterOption {
   value: string;
   label: string;
 }
 
-// Dropdown options for Case Status / Application Status filters.
-// Empty value means "All" (no filter applied).
-export const STATUS_FILTER_OPTIONS: StatusFilterOption[] = [
+const toFilterOptions = (
+  map: Record<string, StatusInfo>
+): StatusFilterOption[] => [
   { value: "", label: "All" },
-  ...(Object.entries(STATUS_MAP) as [StatusCode, StatusInfo][]).map(
-    ([code, info]) => ({
-      value: code,
-      label: info.label,
-    })
-  ),
+  ...Object.entries(map).map(([code, info]) => ({
+    value: code,
+    label: info.label,
+  })),
 ];
+
+export const APPLICATION_STATUS_FILTER_OPTIONS: StatusFilterOption[] =
+  toFilterOptions(APPLICATION_STATUS_MAP);
+
+export const CASE_STATUS_FILTER_OPTIONS: StatusFilterOption[] =
+  toFilterOptions(CASE_STATUS_MAP);

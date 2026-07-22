@@ -236,6 +236,7 @@ const ApplicationDetailsTable = () => {
                     <TableCell sx={styles.dataCell}>
                       <StatusChip
                         statusCode={row.caseStatus}
+                        kind="case"
                         variant={VARIANTS.FILLED}
                       />
                     </TableCell>
@@ -251,6 +252,7 @@ const ApplicationDetailsTable = () => {
                     <TableCell sx={styles.dataCell}>
                       <StatusChip
                         statusCode={row.status}
+                        kind="application"
                         variant={VARIANTS.OUTLINED}
                       />
                     </TableCell>

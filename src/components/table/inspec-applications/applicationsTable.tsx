@@ -319,6 +319,7 @@ const ApplicationsTable = ({
         <Box sx={styles.filters}>
           <StatusFilter
             label="Case Status"
+            kind="case"
             value={caseStatus}
             onChange={handleCaseStatusChange}
             sx={styles.statusFilter}
@@ -326,6 +327,7 @@ const ApplicationsTable = ({
           {!fixedApplicationStatus && (
             <StatusFilter
               label="Application Status"
+              kind="application"
               value={applicationStatusFromUrl}
               onChange={handleApplicationStatusChange}
               sx={styles.statusFilter}
@@ -446,6 +448,7 @@ const ApplicationsTable = ({
                   <TableCell sx={styles.dataCell}>
                     <StatusChip
                       statusCode={row.caseStatus}
+                      kind="case"
                       variant={VARIANTS.FILLED}
                     />
                   </TableCell>
@@ -461,6 +464,7 @@ const ApplicationsTable = ({
                   <TableCell sx={styles.dataCell}>
                     <StatusChip
                       statusCode={row.status}
+                      kind="application"
                       variant={VARIANTS.OUTLINED}
                     />
                   </TableCell>

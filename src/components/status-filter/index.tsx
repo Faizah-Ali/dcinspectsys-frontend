@@ -7,12 +7,19 @@ import {
 import type { SelectChangeEvent } from "@mui/material";
 import type { SxProps, Theme } from "@mui/material/styles";
 
-import { STATUS_FILTER_OPTIONS } from "../../common/constants/status";
+import {
+  APPLICATION_STATUS_FILTER_OPTIONS,
+  CASE_STATUS_FILTER_OPTIONS,
+  type StatusFilterOption,
+  type StatusKind,
+} from "../../common/constants/status";
 
 interface StatusFilterProps {
   label: string;
   value: string;
   onChange: (event: SelectChangeEvent<string>) => void;
+  kind?: StatusKind;
+  options?: StatusFilterOption[];
   sx?: SxProps<Theme>;
 }
 
@@ -20,8 +27,16 @@ const StatusFilter = ({
   label,
   value,
   onChange,
+  kind = "application",
+  options,
   sx,
 }: StatusFilterProps) => {
+  const filterOptions =
+    options ??
+    (kind === "case"
+      ? CASE_STATUS_FILTER_OPTIONS
+      : APPLICATION_STATUS_FILTER_OPTIONS);
+
   const handleClose = () => {
     requestAnimationFrame(() => {
       const active = document.activeElement;
@@ -45,14 +60,14 @@ const StatusFilter = ({
         onClose={handleClose}
         displayEmpty
         renderValue={(selectedValue) => {
-          const selectedOption = STATUS_FILTER_OPTIONS.find(
+          const selectedOption = filterOptions.find(
             (option) => option.value === selectedValue
           );
 
           return selectedOption?.label ?? "All";
         }}
       >
-        {STATUS_FILTER_OPTIONS.map((option) => (
+        {filterOptions.map((option) => (
           <MenuItem key={option.value || "all"} value={option.value}>
             {option.label}
           </MenuItem>
