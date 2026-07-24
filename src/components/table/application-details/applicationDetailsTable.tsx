@@ -1,4 +1,4 @@
-import {
+﻿import {
   Box,
   IconButton,
   Table,
@@ -282,20 +282,20 @@ const ApplicationDetailsTable = () => {
                         <Box
                           component="button"
                           type="button"
-                          sx={styles.assignButton}
-                          title="Download"
+                          sx={styles.orangeIcon}
+                          title="Download PDF"
                           onClick={(event) => {
                             event.currentTarget.blur();
                             generateApplicationPDF(row);
                           }}
                         >
-                          <IMAGES.DownloadIcon sx={styles.actionIcon} />
+                          <IMAGES.PictureAsPdfIcon sx={styles.actionIcon} />
                         </Box>
 
                         <Box
                           component="button"
                           type="button"
-                          sx={styles.printButton}
+                          sx={styles.blueIcon}
                           title="Print"
                           onClick={(event) => {
                             event.currentTarget.blur();
@@ -308,7 +308,7 @@ const ApplicationDetailsTable = () => {
                         <Box
                           component="button"
                           type="button"
-                          sx={styles.assignButton}
+                          sx={styles.orangeIcon}
                           title={
                             isApplicationAssigned(row)
                               ? "Re-assign"

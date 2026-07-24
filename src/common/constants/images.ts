@@ -7,11 +7,13 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CloseIcon from '@mui/icons-material/Close';
 import RejectIcon from '@mui/icons-material/Cancel';
 import ApproveIcon from '@mui/icons-material/CheckCircle';
+import HistoryIcon from '@mui/icons-material/History';
+import FileUploadIcon from '@mui/icons-material/FileUpload';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 
 import DhcLogo from "../../assets/images/dhclogo.png";
 import Emblem from "../../assets/images/emblem.png";
 import CourtBuilding from "../../assets/images/dhc3.jpg";
-import DownloadIcon from '@mui/icons-material/Download';
 
 export const IMAGES = {
     DhcLogo,
@@ -22,9 +24,11 @@ export const IMAGES = {
     AssignmentTurnedInIcon,
     AssignmentAddIcon,
     PrintIcon,
-    DownloadIcon,
     ArrowBackIcon,
     CloseIcon,
     RejectIcon,
     ApproveIcon,
+    HistoryIcon,
+    FileUploadIcon,
+    PictureAsPdfIcon,
 };

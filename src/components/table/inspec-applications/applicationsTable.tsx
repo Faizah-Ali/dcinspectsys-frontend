@@ -1,4 +1,4 @@
-import {
+﻿import {
   Box,
   Table,
   TableBody,
@@ -341,52 +341,57 @@ const ApplicationsTable = ({
         <TableContainer component={Paper} sx={styles.tableWrapper}>
 
           <Table sx={styles.table}>
+            <colgroup>
+              {styles.columnWidths.map((width, colIndex) => (
+                <col key={colIndex} style={{ width }} />
+              ))}
+            </colgroup>
 
             <TableHead>
 
               <TableRow sx={styles.headerRow}>
 
-                <TableCell sx={styles.headerCell}>
+                <TableCell align="left" sx={{ ...styles.headerCell, ...styles.srlNoCell }}>
                   SRL No.
                 </TableCell>
 
-                <TableCell sx={styles.headerCell}>
+                <TableCell align="left" sx={{ ...styles.headerCell, ...styles.pwdCatCell }}>
                   PWD Cat.
                 </TableCell>
 
-                <TableCell sx={styles.headerCell}>
+                <TableCell align="left" sx={{ ...styles.headerCell, ...styles.partyIdCell }}>
                   Party-In-Person ID
                 </TableCell>
 
-                <TableCell sx={styles.headerCell}>
+                <TableCell align="left" sx={{ ...styles.headerCell, ...styles.referenceNoCell }}>
                   Reference No.
                 </TableCell>
 
-                <TableCell sx={styles.headerCell}>
+                <TableCell align="left" sx={{ ...styles.headerCell, ...styles.caseNoCell }}>
                   Case No.
                 </TableCell>
 
-                <TableCell sx={styles.headerCell}>
+                <TableCell align="left" sx={{ ...styles.headerCell, ...styles.caseStatusCell }}>
                   Case Status
                 </TableCell>
 
-                <TableCell sx={styles.headerCell}>
+                <TableCell align="left" sx={{ ...styles.headerCell, ...styles.remarksCell }}>
                   Remarks
                 </TableCell>
 
-                <TableCell sx={styles.headerCell}>
+                <TableCell align="left" sx={{ ...styles.headerCell, ...styles.applicationDateCell }}>
                   Application Date 
                 </TableCell>
 
-                <TableCell sx={styles.headerCell}>
+                <TableCell align="left" sx={{ ...styles.headerCell, ...styles.applicationStatusCell }}>
                   Application Status
                 </TableCell>
 
-                <TableCell sx={styles.headerCell}>
+                <TableCell align="left" sx={{ ...styles.headerCell, ...styles.courtFeeCell }}>
                   Court Fee ID
                 </TableCell>
 
-                <TableCell sx={styles.headerCell}>
+                <TableCell align="left" sx={{ ...styles.headerCell, ...styles.actionsCell }}>
                   Actions
                 </TableCell>
 
@@ -419,23 +424,23 @@ const ApplicationsTable = ({
                   sx={styles.dataRow}
                 >
 
-                  <TableCell sx={styles.dataCell}>
+                  <TableCell align="left" sx={{ ...styles.dataCell, ...styles.srlNoCell }}>
                     {(page - 1) * limit + index + 1}
                   </TableCell>
 
-                  <TableCell sx={styles.dataCell}>
+                  <TableCell align="left" sx={{ ...styles.dataCell, ...styles.pwdCatCell }}>
                     N/A
                   </TableCell>
 
-                  <TableCell sx={styles.dataCell}>
+                  <TableCell align="left" sx={{ ...styles.dataCell, ...styles.partyIdCell }}>
                     {row.username}
                   </TableCell>
 
-                  <TableCell sx={styles.dataCell}>
+                  <TableCell align="left" sx={{ ...styles.dataCell, ...styles.referenceNoCell }}>
                     {row.diaryNo}/{row.diaryYr}
                   </TableCell>
 
-                  <TableCell sx={styles.dataCell}>
+                  <TableCell align="left" sx={{ ...styles.dataCell, ...styles.caseNoCell }}>
                     <Box>
                       <strong>
                         {row.casetype}-{row.regNo}/{row.regYr}
@@ -445,7 +450,7 @@ const ApplicationsTable = ({
                     </Box>
                   </TableCell>
 
-                  <TableCell sx={styles.dataCell}>
+                  <TableCell align="left" sx={{ ...styles.dataCell, ...styles.caseStatusCell }}>
                     <StatusChip
                       statusCode={row.caseStatus}
                       kind="case"
@@ -453,15 +458,15 @@ const ApplicationsTable = ({
                     />
                   </TableCell>
 
-                  <TableCell sx={styles.dataCell}>
+                  <TableCell align="left" sx={{ ...styles.dataCell, ...styles.remarksCell }}>
                     {row.remarks || "-"}
                   </TableCell>
 
-                  <TableCell sx={styles.dataCell}>
+                  <TableCell align="left" sx={{ ...styles.dataCell, ...styles.applicationDateCell }}>
                     {formatDate(row.appliedDate)}
                   </TableCell>
 
-                  <TableCell sx={styles.dataCell}>
+                  <TableCell align="left" sx={{ ...styles.dataCell, ...styles.applicationStatusCell }}>
                     <StatusChip
                       statusCode={row.status}
                       kind="application"
@@ -469,7 +474,7 @@ const ApplicationsTable = ({
                     />
                   </TableCell>
 
-                  <TableCell sx={styles.dataCell}>
+                  <TableCell align="left" sx={{ ...styles.dataCell, ...styles.courtFeeCell }}>
 
                     <Box>
 
@@ -503,21 +508,21 @@ const ApplicationsTable = ({
 
                   </TableCell>
 
-                  <TableCell sx={styles.dataCell}>
+                  <TableCell align="left" sx={{ ...styles.dataCell, ...styles.actionsCell }}>
 
                     <Box sx={styles.actionButtons}>
 
                       <Box
                         component="button"
                         type="button"
-                        sx={styles.assignButton}
-                        title="Download"
+                        sx={styles.orangeIcon}
+                        title="Download PDF"
                         onClick={(event) => {
                           event.currentTarget.blur();
                           generateApplicationPDF(row);
                         }}
                       >
-                        <IMAGES.DownloadIcon
+                        <IMAGES.PictureAsPdfIcon
                           sx={styles.actionIcon}
                         />
                       </Box>
@@ -525,7 +530,7 @@ const ApplicationsTable = ({
                       <Box
                         component="button"
                         type="button"
-                        sx={styles.printButton}
+                        sx={styles.blueIcon}
                         title="Print"
                         onClick={(event) => {
                           event.currentTarget.blur();
@@ -541,7 +546,7 @@ const ApplicationsTable = ({
                         <Box
                           component="button"
                           type="button"
-                          sx={styles.assignButton}
+                          sx={styles.orangeIcon}
                           title={
                             isApplicationAssigned(row)
                               ? "Re-assign"
@@ -568,7 +573,7 @@ const ApplicationsTable = ({
                         <Box
                           component="button"
                           type="button"
-                          sx={styles.assignButton}
+                          sx={styles.orangeIcon}
                           title="Send to Approver"
                           onClick={(event) => {
                             event.currentTarget.blur();
@@ -583,15 +588,14 @@ const ApplicationsTable = ({
                         <Box
                           component="button"
                           type="button"
-                          sx={styles.assignButton}
+                          sx={styles.orangeIcon}
                           title="Upload File"
                           onClick={(event) => {
                             event.currentTarget.blur();
                             handleOpenUploadPopup(row);
                           }}
                         >
-                          {/* TODO: Replace with dedicated upload icon when available */}
-                          <IMAGES.AssignmentIcon sx={styles.actionIcon} />
+                          <IMAGES.FileUploadIcon sx={styles.actionIcon} />
                         </Box>
                       )}
 
@@ -599,15 +603,14 @@ const ApplicationsTable = ({
                         <Box
                           component="button"
                           type="button"
-                          sx={styles.assignButton}
+                          sx={styles.blueIcon}
                           title="Upload History"
                           onClick={(event) => {
                             event.currentTarget.blur();
                             handleOpenHistoryPopup(row);
                           }}
                         >
-                          {/* TODO: Replace with dedicated history icon when available */}
-                          <IMAGES.AssignmentTurnedInIcon sx={styles.actionIcon} />
+                          <IMAGES.HistoryIcon sx={styles.actionIcon} />
                         </Box>
                       )}
 
@@ -615,7 +618,7 @@ const ApplicationsTable = ({
                         <Box
                           component="button"
                           type="button"
-                          sx={styles.assignButton}
+                          sx={styles.orangeIcon}
                           title="Complete Application"
                           onClick={(event) => {
                             event.currentTarget.blur();
@@ -631,7 +634,7 @@ const ApplicationsTable = ({
                         <Box
                           component="button"
                           type="button"
-                          sx={styles.assignButton}
+                          sx={styles.blueIcon}
                           title="Reject Application"
                           onClick={(event) => {
                             event.currentTarget.blur();
@@ -648,7 +651,7 @@ const ApplicationsTable = ({
                         <Box
                           component="button"
                           type="button"
-                          sx={styles.assignButton}
+                          sx={styles.orangeIcon}
                           title="Process Application"
                           onClick={(event) => {
                             event.currentTarget.blur();

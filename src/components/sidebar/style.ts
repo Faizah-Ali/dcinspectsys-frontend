@@ -13,6 +13,13 @@ export const styles = {
     boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15), 0 4px 16px rgba(0, 0, 0, 0.1)",
     display: "flex",
     flexDirection: "column" as const,
+    fontFamily: "system-ui, Avenir, Helvetica, Arial, sans-serif",
+    lineHeight: 1.5,
+    fontWeight: 400,
+    fontSynthesis: "none",
+    textRendering: "optimizeLegibility",
+    WebkitFontSmoothing: "antialiased",
+    MozOsxFontSmoothing: "grayscale",
   },
   userInfoContainer: {
     display: "flex",

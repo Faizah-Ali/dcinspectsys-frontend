@@ -39,7 +39,7 @@ export const APPLICATION_STATUS_MAP: Record<ApplicationStatusCode, StatusInfo> =
 
 // Legacy inbox: case_status === "D" → Decided; anything else → Pending.
 export const CASE_STATUS_MAP: Record<CaseStatusCode, StatusInfo> = {
-  P: { label: "Pending Approval", color: "#FF9800" },
+  P: { label: "Pending", color: "#FF9800" },
   D: { label: "Decided", color: "#2E7D32" },
 };
 

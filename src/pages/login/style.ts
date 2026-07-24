@@ -2,11 +2,8 @@ import { COLORS } from "../../common/constants";
 
 export const styles = {
   loginPage: {
-    // Break out of #root max-width / padding from App.css
-    width: "100vw",
-    marginLeft: "calc(50% - 50vw)",
-    marginRight: "calc(50% - 50vw)",
-    minHeight: "95vh",
+    width: "100%",
+    minHeight: "100vh",
     position: "relative",
     overflow: "hidden",
     display: "flex",
@@ -21,13 +18,12 @@ export const styles = {
     "&, & *": {
       boxSizing: "border-box",
     },
-    // Override global index.css button styles inside login page
+    // Keep login buttons consistent with page font
     "& button": {
       fontFamily: '"Arial", sans-serif',
       textTransform: "none",
       boxShadow: "none",
     },
-    // Override global heading sizes from index.css
     "& h1, & h2, & h3": {
       margin: 0,
       lineHeight: 1.25,

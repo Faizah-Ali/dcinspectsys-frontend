@@ -1,41 +1,59 @@
+import { COLORS } from "../../common/constants/colors";
+
 export const styles = {
   mainContainer: {
-    width: "100%",
+    width: "calc(100% - 350px)",
     minHeight: "100vh",
-    paddingTop: "20px", // Account for fixed header
-    marginLeft: "50px",
-    // padding: "20px",
-    // backgroundColor: "#f5f5f5",
+    // Clear fixed header (~100px)
+    paddingTop: "110px",
+    paddingLeft: "16px",
+    paddingRight: "16px",
+    paddingBottom: "24px",
+    marginLeft: "350px",
+    boxSizing: "border-box" as const,
+    textAlign: "left" as const,
+    overflowX: "hidden" as const,
   },
   tableContainer: {
-    width: "117%",
-    padding: "20px",
+    width: "100%",
+    maxWidth: "100%",
+    padding: "8px 0",
+    boxSizing: "border-box" as const,
   },
   tableHeading: {
     fontSize: "28px",
     fontWeight: "bold",
     color: "#000",
-    marginBottom: "25px",
-    marginTop: "50px",
+    marginBottom: "16px",
+    marginTop: "8px",
     textAlign: "left" as const,
   },
   tableWrapper: {
+    width: "100%",
     boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
     borderRadius: "8px",
     overflow: "hidden" as const,
+    maxWidth: "100%",
   },
   table: {
-    // minWidth: "100%",
+    width: "100%",
+    tableLayout: "fixed" as const,
   },
   headerRow: {
     backgroundColor: "#f5f5f5",
   },
+  // Identical padding/align on head + body keeps columns synced
   headerCell: {
     fontWeight: "bold",
-    fontSize: "14px",
+    fontSize: "13px",
     color: "#000",
     borderBottom: "2px solid #ddd",
-    padding: "12px 16px",
+    padding: "10px 8px !important",
+    overflow: "hidden" as const,
+    verticalAlign: "middle" as const,
+    textAlign: "left" as const,
+    boxSizing: "border-box" as const,
+    lineHeight: 1.4,
   },
   dataRow: {
     "&:nth-of-type(even)": {
@@ -44,20 +62,85 @@ export const styles = {
     "&:hover": {
       backgroundColor: "#f0f0f0",
     },
-    textAlign: "center" as const,
   },
   dataCell: {
-    fontSize: "14px",
+    fontSize: "13px",
     color: "#333",
-    padding: "12px 16px",
+    padding: "10px 8px !important",
     borderBottom: "1px solid #e0e0e0",
+    verticalAlign: "middle" as const,
+    overflow: "hidden" as const,
+    wordBreak: "break-word" as const,
+    textAlign: "left" as const,
+    boxSizing: "border-box" as const,
+    lineHeight: 1.4,
+  },
+  srlNoCell: {
+    width: "3%",
+  },
+  pwdCatCell: {
+    width: "3.5%",
+  },
+  partyIdCell: {
+    width: "5.5%",
+  },
+  referenceNoCell: {
+    width: "7.5%",
+    whiteSpace: "nowrap" as const,
+  },
+  caseNoCell: {
+    width: "14%",
+    whiteSpace: "normal" as const,
+    lineHeight: 1.4,
+  },
+  // Case Status + Application Status share the same column width
+  caseStatusCell: {
+    width: "13%",
+  },
+  remarksCell: {
+    width: "8%",
+    whiteSpace: "normal" as const,
+    lineHeight: 1.4,
+  },
+  applicationDateCell: {
+    width: "7%",
+  },
+  applicationStatusCell: {
+    width: "13%",
+  },
+  courtFeeCell: {
+    width: "10%",
+    whiteSpace: "normal" as const,
+    lineHeight: 1.4,
+  },
+  actionsCell: {
+    width: "15.5%",
+    whiteSpace: "nowrap" as const,
   },
   actionButtons: {
     display: "flex",
-    gap: "8px",
+    flexWrap: "nowrap" as const,
+    gap: "2px",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    whiteSpace: "nowrap" as const,
   },
-  printButton: {
-    padding: "8px",
+  // Must stay in sync with the *Cell width values above (sum = 100%)
+  columnWidths: [
+    "3%",
+    "3.5%",
+    "5.5%",
+    "7.5%",
+    "14%",
+    "13%",
+    "8%",
+    "7%",
+    "13%",
+    "10%",
+    "15.5%",
+  ] as const,
+  blueIcon: {
+    padding: "2px",
     color: "#0f1729",
     backgroundColor: "transparent",
     border: "none",
@@ -66,8 +149,10 @@ export const styles = {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    minWidth: "36px",
-    height: "36px",
+    minWidth: "24px",
+    width: "24px",
+    height: "24px",
+    flexShrink: 0,
     outline: "none",
     "&:hover": {
       backgroundColor: "#0f1729",
@@ -86,38 +171,41 @@ export const styles = {
       outline: "none",
     },
   },
-  assignButton: {
-    padding: "8px",
+  orangeIcon: {
+    padding: "2px",
     backgroundColor: "transparent",
-    color: "#d15b06",
+    color: COLORS.primary,
     border: "none",
     borderRadius: "4px",
     cursor: "pointer",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    minWidth: "36px",
-    height: "36px",
+    minWidth: "24px",
+    width: "24px",
+    height: "24px",
+    flexShrink: 0,
     outline: "none",
     "&:hover": {
-      backgroundColor: "#d15b06",
-      color: "#fff",
+      backgroundColor: "#b34d05",
+      color: COLORS.white,
       border: "none",
     },
     "&:focus": {
-      outline: "2px solid #d15b06",
+      outline: `2px solid ${COLORS.primary}`,
       outlineOffset: "2px",
       border: "none",
     },
     "&:focus:not(:hover)": {
       backgroundColor: "transparent",
-      color: "#d15b06",
+      color: COLORS.primary,
       boxShadow: "none",
       outline: "none",
     },
   },
   tableSection: {
     position: "relative" as const,
+    width: "100%",
   },
   placeholderCell: {
     textAlign: "center" as const,
@@ -129,7 +217,7 @@ export const styles = {
     textDecoration: "underline",
   },
   actionIcon: {
-    fontSize: "18px",
+    fontSize: "16px",
   },
   loadingOverlay: {
     position: "absolute" as const,
@@ -145,6 +233,8 @@ export const styles = {
   recordsSummary: {
     mt: 1,
     fontSize: "14px",
+    width: "100%",
+    textAlign: "center" as const,
   },
   toolbar: {
     display: "flex",
@@ -160,10 +250,10 @@ export const styles = {
     alignItems: "center",
     justifyContent: "flex-end",
     gap: "12px",
-    marginLeft: "auto",    
+    marginLeft: "auto",
   },
   statusFilter: {
-    minWidth: { xs: "100%", sm: 220 },
+    minWidth: { xs: "100%", sm: 200 },
     "& .MuiOutlinedInput-root": {
       borderRadius: "20px",
       "& fieldset": {

@@ -33,6 +33,7 @@ const StatusChip = ({
   return (
     <Chip
       label={label}
+      title={label}
       variant={variant}
       size={size}
       sx={chipSx}

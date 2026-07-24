@@ -58,8 +58,7 @@ export const styles = {
     boxShadow: "none !important",
     "&:hover": {
       backgroundColor: "rgba(209, 91, 6, 0.08)",
-      border: `1px solid ${COLORS.sidebarHoverBg} !important`,
-      color: `${COLORS.sidebarHoverBg} !important`,
+      color: COLORS.primary,
       boxShadow: "none !important",
     },
   },

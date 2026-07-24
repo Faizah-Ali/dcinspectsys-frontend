@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-import { VARIANTS } from "../../common/constants";
+import { IMAGES, VARIANTS } from "../../common/constants";
 import { showErrorToast } from "../../components/toast/helper";
 import { formatDate } from "../../components/table/inspec-applications/helper";
 
@@ -254,6 +254,8 @@ const UploadHistory = ({ diaryNo, diaryYr, onClose }: UploadHistoryProps) => {
                               <Button
                                 type="button"
                                 variant={VARIANTS.OUTLINED}
+                                title="Download PDF"
+                                aria-label="Download"
                                 disabled={
                                   !item.uniqueId ||
                                   Boolean(downloadingUniqueId)
@@ -272,7 +274,7 @@ const UploadHistory = ({ diaryNo, diaryYr, onClose }: UploadHistoryProps) => {
                                     color="inherit"
                                   />
                                 ) : (
-                                  "Download"
+                                  <IMAGES.PictureAsPdfIcon fontSize="small" />
                                 )}
                               </Button>
                             </TableCell>
