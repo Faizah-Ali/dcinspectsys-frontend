@@ -1,50 +1,52 @@
 import { useNavigate } from "react-router-dom";
 import { Box, List, ListItem } from "@mui/material";
-import {
-  Inbox as InboxIcon,
-  Assignment as AssignmentIcon,
-  Mail as MailIcon,
-  Logout as LogoutIcon,
-  CheckCircle as CheckCircleIcon,
-  Cancel as CancelIcon,
-  Description as DescriptionIcon,
-} from "@mui/icons-material";
 import { styles } from "./style";
 import { getSidebarItems } from "./helper";
 import type { SidebarProps } from "./type";
-import { logout, getLoginTime, getRole } from "../../utils/authSession.utils.ts";
+import { IMAGES } from "../../common/constants";
+import {
+  logout,
+  getGroup,
+  getLoginTime,
+  getRole,
+} from "../../utils/authSession.utils.ts";
 import { store } from "../../redux/store.ts";
 import { clearAuth } from "../../redux/auth.slice.ts";
 import { useAppSelector } from "../../hooks/useAppSelector.ts";
 
 const Sidebar = ({ userInfo, activeRoute, onItemClick }: SidebarProps) => {
   const navigate = useNavigate();
-  const reduxRole = useAppSelector((state) => state.auth.role);
+  const { role: reduxRole, group: reduxGroup } = useAppSelector(
+    (state) => state.auth
+  );
   const role = reduxRole || getRole();
-  const sidebarItems = getSidebarItems(role);
+  const group = getGroup() || reduxGroup || "";
+  const sidebarItems = getSidebarItems(role, group);
 
   // Icon mapping for sidebar items
   const getIcon = (text: string) => {
-    if (text === "Admin Inbox" || text === "Approver Inbox" || text === "Pending Application") {
-      return <InboxIcon sx={styles.itemIcon} />;
+    if (text === "Admin Inbox" || text === "Approver Inbox") {
+      return <IMAGES.InboxIcon sx={styles.itemIcon} />;
+    }
+    if (text === "Pending Application") {
+      return <IMAGES.PendingActionsIcon sx={styles.itemIcon} />;
     }
     if (text === "Re-Assign Application") {
-      return <AssignmentIcon sx={styles.itemIcon} />;
+      return <IMAGES.AssignmentIcon sx={styles.itemIcon} />;
     }
     if (text === "Send Email") {
-      return <MailIcon sx={styles.itemIcon} />;
+      return <IMAGES.MailIcon sx={styles.itemIcon} />;
     }
     if (
       text === "Processed (Application Side)" ||
-      text === "Processed (Original Side)" ||
-      text === "Processed (Copy Side)"
+      text === "Processed (Original Side)"
     ) {
-      return <CheckCircleIcon sx={styles.itemIcon} />;
+      return <IMAGES.TaskIcon sx={styles.itemIcon} />;
     }
     if (text === "Rejected Application") {
-      return <CancelIcon sx={styles.itemIcon} />;
+      return <IMAGES.RejectIcon sx={styles.itemIcon} />;
     }
-    return <DescriptionIcon sx={styles.itemIcon} />;
+    return <IMAGES.DescriptionIcon sx={styles.itemIcon} />;
   };
 
   // Check if item is active
@@ -100,7 +102,7 @@ const Sidebar = ({ userInfo, activeRoute, onItemClick }: SidebarProps) => {
 
       <Box sx={styles.logoutContainer}>
         <ListItem onClick={handleLogout} sx={styles.logoutButton}>
-          <LogoutIcon sx={styles.itemIcon} />
+          <IMAGES.LogoutIcon sx={styles.itemIcon} />
           Logout
         </ListItem>
       </Box>

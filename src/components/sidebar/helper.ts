@@ -21,28 +21,35 @@ const adminSidebarItems: SidebarItem[] = [
   },
 ];
 
-const officerSidebarItems: SidebarItem[] = [
-  {
-    text: "Pending Application",
-    route: Paths.INSPECT_APPLICATIONS,
-  },
-  {
-    text: "Processed (Application Side)",
-    route: Paths.PROCESSED_APPLICATION_SIDE,
-  },
-  {
-    text: "Processed (Original Side)",
-    route: Paths.PROCESSED_ORIGINAL_SIDE,
-  },
-  {
-    text: "Processed (Copy Side)",
-    route: Paths.PROCESSED_COPY_SIDE,
-  },
-  {
+const getOfficerSidebarItems = (
+  group: string | null | undefined
+): SidebarItem[] => {
+  const items: SidebarItem[] = [
+    {
+      text: "Pending Application",
+      route: Paths.INSPECT_APPLICATIONS,
+    },
+  ];
+
+  if (group === "A") {
+    items.push({
+      text: "Processed (Application Side)",
+      route: Paths.PROCESSED_APPLICATION_SIDE,
+    });
+  } else if (group === "O") {
+    items.push({
+      text: "Processed (Original Side)",
+      route: Paths.PROCESSED_ORIGINAL_SIDE,
+    });
+  }
+
+  items.push({
     text: "Rejected Application",
     route: Paths.REJECTED_APPLICATION,
-  },
-];
+  });
+
+  return items;
+};
 
 const approverSidebarItems: SidebarItem[] = [
   {
@@ -51,13 +58,16 @@ const approverSidebarItems: SidebarItem[] = [
   },
 ];
 
-export const getSidebarItems = (role: string | null | undefined): SidebarItem[] => {
+export const getSidebarItems = (
+  role: string | null | undefined,
+  group?: string | null
+): SidebarItem[] => {
   if (role === "INSPECTIONADMIN") {
     return adminSidebarItems;
   }
 
   if (role === "ONLINEINSPECTION") {
-    return officerSidebarItems;
+    return getOfficerSidebarItems(group);
   }
 
   if (role === "INSPECTIONAPPROVER") {

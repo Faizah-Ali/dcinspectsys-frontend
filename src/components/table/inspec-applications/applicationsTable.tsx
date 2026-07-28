@@ -312,7 +312,7 @@ const ApplicationsTable = ({
         <Search
           value={searchInput}
           onChange={handleSearchChange}
-          placeholder="Search by username, case no, diary no, case title..."
+          placeholder="Search by username, case no, diary no, case title, remarks..."
           containerSx={{ marginBottom: 0, justifyContent: "flex-start" }}
         />
 
@@ -340,7 +340,7 @@ const ApplicationsTable = ({
 
         <TableContainer component={Paper} sx={styles.tableWrapper}>
 
-          <Table sx={styles.table}>
+          <Table size="small" sx={styles.table}>
             <colgroup>
               {styles.columnWidths.map((width, colIndex) => (
                 <col key={colIndex} style={{ width }} />
@@ -351,43 +351,43 @@ const ApplicationsTable = ({
 
               <TableRow sx={styles.headerRow}>
 
-                <TableCell align="left" sx={{ ...styles.headerCell, ...styles.srlNoCell }}>
+                <TableCell align="center" sx={{ ...styles.headerCell, ...styles.srlNoCell }}>
                   SRL No.
                 </TableCell>
 
-                <TableCell align="left" sx={{ ...styles.headerCell, ...styles.pwdCatCell }}>
+                <TableCell align="center" sx={{ ...styles.headerCell, ...styles.pwdCatCell }}>
                   PWD Cat.
                 </TableCell>
 
-                <TableCell align="left" sx={{ ...styles.headerCell, ...styles.partyIdCell }}>
+                <TableCell align="center" sx={{ ...styles.headerCell, ...styles.partyIdCell }}>
                   Party-In-Person ID
                 </TableCell>
 
-                <TableCell align="left" sx={{ ...styles.headerCell, ...styles.referenceNoCell }}>
+                <TableCell align="center" sx={{ ...styles.headerCell, ...styles.referenceNoCell }}>
                   Reference No.
                 </TableCell>
 
-                <TableCell align="left" sx={{ ...styles.headerCell, ...styles.caseNoCell }}>
+                <TableCell align="center" sx={{ ...styles.headerCell, ...styles.caseNoCell }}>
                   Case No.
                 </TableCell>
 
-                <TableCell align="left" sx={{ ...styles.headerCell, ...styles.caseStatusCell }}>
+                <TableCell align="center" sx={{ ...styles.headerCell, ...styles.caseStatusCell }}>
                   Case Status
                 </TableCell>
 
-                <TableCell align="left" sx={{ ...styles.headerCell, ...styles.remarksCell }}>
+                <TableCell align="center" sx={{ ...styles.headerCell, ...styles.remarksCell }}>
                   Remarks
                 </TableCell>
 
-                <TableCell align="left" sx={{ ...styles.headerCell, ...styles.applicationDateCell }}>
+                <TableCell align="center" sx={{ ...styles.headerCell, ...styles.applicationDateCell }}>
                   Application Date 
                 </TableCell>
 
-                <TableCell align="left" sx={{ ...styles.headerCell, ...styles.applicationStatusCell }}>
+                <TableCell align="center" sx={{ ...styles.headerCell, ...styles.applicationStatusCell }}>
                   Application Status
                 </TableCell>
 
-                <TableCell align="left" sx={{ ...styles.headerCell, ...styles.courtFeeCell }}>
+                <TableCell align="center" sx={{ ...styles.headerCell, ...styles.courtFeeCell }}>
                   Court Fee ID
                 </TableCell>
 
@@ -424,23 +424,23 @@ const ApplicationsTable = ({
                   sx={styles.dataRow}
                 >
 
-                  <TableCell align="left" sx={{ ...styles.dataCell, ...styles.srlNoCell }}>
+                  <TableCell align="center" sx={{ ...styles.dataCell, ...styles.srlNoCell }}>
                     {(page - 1) * limit + index + 1}
                   </TableCell>
 
-                  <TableCell align="left" sx={{ ...styles.dataCell, ...styles.pwdCatCell }}>
+                  <TableCell align="center" sx={{ ...styles.dataCell, ...styles.pwdCatCell }}>
                     N/A
                   </TableCell>
 
-                  <TableCell align="left" sx={{ ...styles.dataCell, ...styles.partyIdCell }}>
+                  <TableCell align="center" sx={{ ...styles.dataCell, ...styles.partyIdCell }}>
                     {row.username}
                   </TableCell>
 
-                  <TableCell align="left" sx={{ ...styles.dataCell, ...styles.referenceNoCell }}>
+                  <TableCell align="center" sx={{ ...styles.dataCell, ...styles.referenceNoCell }}>
                     {row.diaryNo}/{row.diaryYr}
                   </TableCell>
 
-                  <TableCell align="left" sx={{ ...styles.dataCell, ...styles.caseNoCell }}>
+                  <TableCell align="center" sx={{ ...styles.dataCell, ...styles.caseNoCell }}>
                     <Box>
                       <strong>
                         {row.casetype}-{row.regNo}/{row.regYr}
@@ -450,7 +450,7 @@ const ApplicationsTable = ({
                     </Box>
                   </TableCell>
 
-                  <TableCell align="left" sx={{ ...styles.dataCell, ...styles.caseStatusCell }}>
+                  <TableCell align="center" sx={{ ...styles.dataCell, ...styles.caseStatusCell }}>
                     <StatusChip
                       statusCode={row.caseStatus}
                       kind="case"
@@ -458,15 +458,15 @@ const ApplicationsTable = ({
                     />
                   </TableCell>
 
-                  <TableCell align="left" sx={{ ...styles.dataCell, ...styles.remarksCell }}>
+                  <TableCell align="center" sx={{ ...styles.dataCell, ...styles.remarksCell }}>
                     {row.remarks || "-"}
                   </TableCell>
 
-                  <TableCell align="left" sx={{ ...styles.dataCell, ...styles.applicationDateCell }}>
+                  <TableCell align="center" sx={{ ...styles.dataCell, ...styles.applicationDateCell }}>
                     {formatDate(row.appliedDate)}
                   </TableCell>
 
-                  <TableCell align="left" sx={{ ...styles.dataCell, ...styles.applicationStatusCell }}>
+                  <TableCell align="center" sx={{ ...styles.dataCell, ...styles.applicationStatusCell }}>
                     <StatusChip
                       statusCode={row.status}
                       kind="application"
@@ -474,7 +474,7 @@ const ApplicationsTable = ({
                     />
                   </TableCell>
 
-                  <TableCell align="left" sx={{ ...styles.dataCell, ...styles.courtFeeCell }}>
+                  <TableCell align="center" sx={{ ...styles.dataCell, ...styles.courtFeeCell }}>
 
                     <Box>
 
@@ -595,7 +595,7 @@ const ApplicationsTable = ({
                             handleOpenUploadPopup(row);
                           }}
                         >
-                          <IMAGES.FileUploadIcon sx={styles.actionIcon} />
+                          <IMAGES.UploadFileSharpIcon sx={styles.actionIcon} />
                         </Box>
                       )}
 
@@ -610,7 +610,7 @@ const ApplicationsTable = ({
                             handleOpenHistoryPopup(row);
                           }}
                         >
-                          <IMAGES.HistoryIcon sx={styles.actionIcon} />
+                          <IMAGES.WorkHistorySharpIcon sx={styles.actionIcon} />
                         </Box>
                       )}
 

@@ -205,18 +205,49 @@ const UploadHistory = ({ diaryNo, diaryYr, onClose }: UploadHistoryProps) => {
               ) : (
                 <TableContainer component={Paper} sx={styles.tableWrapper}>
                   <Table sx={styles.table}>
+                    <colgroup>
+                      {styles.uploadedFilesColumnWidths.map((width, colIndex) => (
+                        <col key={colIndex} style={{ width }} />
+                      ))}
+                    </colgroup>
                     <TableHead>
                       <TableRow sx={styles.headerRow}>
-                        <TableCell sx={styles.headerCell}>File Name</TableCell>
-                        <TableCell sx={styles.headerCell}>Email</TableCell>
-                        <TableCell sx={styles.headerCell}>Mobile</TableCell>
-                        <TableCell sx={styles.headerCell}>
+                        <TableCell
+                          align="left"
+                          sx={{ ...styles.headerCell, ...styles.fileNameCell }}
+                        >
+                          File Name
+                        </TableCell>
+                        <TableCell
+                          align="left"
+                          sx={{ ...styles.headerCell, ...styles.emailCell }}
+                        >
+                          Email
+                        </TableCell>
+                        <TableCell
+                          align="left"
+                          sx={{ ...styles.headerCell, ...styles.mobileCell }}
+                        >
+                          Mobile
+                        </TableCell>
+                        <TableCell
+                          align="left"
+                          sx={{ ...styles.headerCell, ...styles.uploadedByCell }}
+                        >
                           Uploaded By
                         </TableCell>
-                        <TableCell sx={styles.headerCell}>
+                        <TableCell
+                          align="left"
+                          sx={{ ...styles.headerCell, ...styles.uploadedOnCell }}
+                        >
                           Uploaded On
                         </TableCell>
-                        <TableCell sx={styles.headerCell}>Action</TableCell>
+                        <TableCell
+                          align="left"
+                          sx={{ ...styles.headerCell, ...styles.actionCell }}
+                        >
+                          Action
+                        </TableCell>
                       </TableRow>
                     </TableHead>
 
@@ -235,22 +266,40 @@ const UploadHistory = ({ diaryNo, diaryYr, onClose }: UploadHistoryProps) => {
                             )}
                             sx={styles.dataRow}
                           >
-                            <TableCell sx={styles.dataCell}>
+                            <TableCell
+                              align="left"
+                              sx={{ ...styles.dataCell, ...styles.fileNameCell }}
+                            >
                               {item.fileName}
                             </TableCell>
-                            <TableCell sx={styles.dataCell}>
+                            <TableCell
+                              align="left"
+                              sx={{ ...styles.dataCell, ...styles.emailCell }}
+                            >
                               {item.emailId}
                             </TableCell>
-                            <TableCell sx={styles.dataCell}>
+                            <TableCell
+                              align="left"
+                              sx={{ ...styles.dataCell, ...styles.mobileCell }}
+                            >
                               {item.mobileNo}
                             </TableCell>
-                            <TableCell sx={styles.dataCell}>
+                            <TableCell
+                              align="left"
+                              sx={{ ...styles.dataCell, ...styles.uploadedByCell }}
+                            >
                               {item.entryBy}
                             </TableCell>
-                            <TableCell sx={styles.dataCell}>
+                            <TableCell
+                              align="left"
+                              sx={{ ...styles.dataCell, ...styles.uploadedOnCell }}
+                            >
                               {formatDate(item.entryDate)}
                             </TableCell>
-                            <TableCell sx={styles.dataCell}>
+                            <TableCell
+                              align="left"
+                              sx={{ ...styles.dataCell, ...styles.actionCell }}
+                            >
                               <Button
                                 type="button"
                                 variant={VARIANTS.OUTLINED}

@@ -17,9 +17,6 @@ const ProcessedApplicationSide = lazy(
 const ProcessedOriginalSide = lazy(
   () => import("../pages/processed-original-side")
 );
-const ProcessedCopySide = lazy(
-  () => import("../pages/processed-copy-side")
-);
 const RejectedApplication = lazy(
   () => import("../pages/rejected-application")
 );
@@ -71,13 +68,6 @@ const router = createHashRouter([
     path: Paths.PROCESSED_ORIGINAL_SIDE,
     element: createRoute({
       component: <ProcessedOriginalSide />,
-      type: "private"
-    }),
-  },
-  {
-    path: Paths.PROCESSED_COPY_SIDE,
-    element: createRoute({
-      component: <ProcessedCopySide />,
       type: "private"
     }),
   },

@@ -7,8 +7,15 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CloseIcon from '@mui/icons-material/Close';
 import RejectIcon from '@mui/icons-material/Cancel';
 import ApproveIcon from '@mui/icons-material/CheckCircle';
-import HistoryIcon from '@mui/icons-material/History';
-import FileUploadIcon from '@mui/icons-material/FileUpload';
+import InboxIcon from '@mui/icons-material/Inbox';
+import MailIcon from '@mui/icons-material/Mail';
+import DescriptionIcon from '@mui/icons-material/Description';
+import TaskIcon from '@mui/icons-material/Task';
+import PendingActionsIcon from '@mui/icons-material/PendingActions';
+// import HistoryIcon from '@mui/icons-material/History';
+// import FileUploadIcon from '@mui/icons-material/FileUpload';
+import UploadFileSharpIcon from '@mui/icons-material/UploadFileSharp';
+import WorkHistorySharpIcon from '@mui/icons-material/WorkHistorySharp';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 
 import DhcLogo from "../../assets/images/dhclogo.png";
@@ -28,7 +35,12 @@ export const IMAGES = {
     CloseIcon,
     RejectIcon,
     ApproveIcon,
-    HistoryIcon,
-    FileUploadIcon,
+    InboxIcon,
+    MailIcon,
+    PendingActionsIcon,
+    DescriptionIcon,
+    TaskIcon,
+    WorkHistorySharpIcon,
+    UploadFileSharpIcon,
     PictureAsPdfIcon,
 };

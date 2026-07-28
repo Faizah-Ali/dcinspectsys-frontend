@@ -9,12 +9,16 @@ export const styles = {
     gap: "22px",
   },
   tableWrapper: {
+    width: "100%",
+    maxWidth: "100%",
     boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
     borderRadius: "8px",
-    overflow: "hidden" as const,
+    overflowX: "auto" as const,
+    overflowY: "hidden" as const,
   },
   table: {
-    minWidth: "100%",
+    width: "100%",
+    tableLayout: "fixed" as const,
   },
   headerRow: {
     backgroundColor: "#f5f5f5",
@@ -24,8 +28,12 @@ export const styles = {
     fontSize: "14px",
     color: COLORS.textPrimary,
     borderBottom: "2px solid #ddd",
-    padding: "12px 16px",
+    padding: "10px 12px !important",
     whiteSpace: "nowrap" as const,
+    textAlign: "left" as const,
+    verticalAlign: "middle" as const,
+    boxSizing: "border-box" as const,
+    overflow: "hidden" as const,
   },
   dataRow: {
     "&:nth-of-type(even)": {
@@ -38,9 +46,43 @@ export const styles = {
   dataCell: {
     fontSize: "14px",
     color: COLORS.textPrimary,
-    padding: "12px 16px",
+    padding: "10px 12px !important",
     borderBottom: "1px solid #e0e0e0",
+    textAlign: "left" as const,
     verticalAlign: "middle" as const,
+    boxSizing: "border-box" as const,
+    overflow: "hidden" as const,
+    wordBreak: "break-word" as const,
+  },
+  // Summary of Uploaded Files — keep header/body columns synced
+  uploadedFilesColumnWidths: [
+    "22%",
+    "24%",
+    "14%",
+    "15%",
+    "15%",
+    "10%",
+  ] as const,
+  fileNameCell: {
+    width: "22%",
+  },
+  emailCell: {
+    width: "24%",
+  },
+  mobileCell: {
+    width: "14%",
+  },
+  uploadedByCell: {
+    width: "15%",
+    whiteSpace: "nowrap" as const,
+  },
+  uploadedOnCell: {
+    width: "15%",
+    whiteSpace: "nowrap" as const,
+  },
+  actionCell: {
+    width: "10%",
+    whiteSpace: "nowrap" as const,
   },
   statusChip: {
     backgroundColor: "rgba(76, 175, 80, 0.12)",
@@ -85,8 +127,8 @@ export const styles = {
     minWidth: "36px",
     width: "36px",
     height: "32px",
-    backgroundColor: COLORS.white,
-    border: `1px solid ${COLORS.primary} !important`,
+    backgroundColor: "transparent",
+    border: "none !important",
     borderRadius: "3px",
     color: `${COLORS.primary} !important`,
     fontSize: "13px",

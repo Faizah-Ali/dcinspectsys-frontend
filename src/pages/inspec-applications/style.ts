@@ -30,14 +30,27 @@ export const styles = {
   },
   tableWrapper: {
     width: "100%",
+    maxWidth: "100%",
     boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
     borderRadius: "8px",
     overflow: "hidden" as const,
-    maxWidth: "100%",
   },
   table: {
     width: "100%",
     tableLayout: "fixed" as const,
+    borderCollapse: "collapse" as const,
+    // Force identical padding on every head + body cell so columns stay synced
+    "& .MuiTableCell-root": {
+      padding: "10px 8px !important",
+      verticalAlign: "middle",
+      boxSizing: "border-box",
+    },
+    "& .MuiTableCell-head": {
+      padding: "10px 8px !important",
+    },
+    "& .MuiTableCell-body": {
+      padding: "10px 8px !important",
+    },
   },
   headerRow: {
     backgroundColor: "#f5f5f5",
@@ -51,7 +64,7 @@ export const styles = {
     padding: "10px 8px !important",
     overflow: "hidden" as const,
     verticalAlign: "middle" as const,
-    textAlign: "left" as const,
+    textAlign: "center" as const,
     boxSizing: "border-box" as const,
     lineHeight: 1.4,
   },
@@ -71,7 +84,7 @@ export const styles = {
     verticalAlign: "middle" as const,
     overflow: "hidden" as const,
     wordBreak: "break-word" as const,
-    textAlign: "left" as const,
+    textAlign: "center" as const,
     boxSizing: "border-box" as const,
     lineHeight: 1.4,
   },
@@ -82,20 +95,20 @@ export const styles = {
     width: "3.5%",
   },
   partyIdCell: {
-    width: "5.5%",
+    width: "8%",
   },
   referenceNoCell: {
     width: "7.5%",
     whiteSpace: "nowrap" as const,
   },
   caseNoCell: {
-    width: "14%",
+    width: "13.5%",
     whiteSpace: "normal" as const,
     lineHeight: 1.4,
   },
   // Case Status + Application Status share the same column width
   caseStatusCell: {
-    width: "13%",
+    width: "12.5%",
   },
   remarksCell: {
     width: "8%",
@@ -106,7 +119,7 @@ export const styles = {
     width: "7%",
   },
   applicationStatusCell: {
-    width: "13%",
+    width: "12.5%",
   },
   courtFeeCell: {
     width: "10%",
@@ -114,8 +127,9 @@ export const styles = {
     lineHeight: 1.4,
   },
   actionsCell: {
-    width: "15.5%",
+    width: "14.5%",
     whiteSpace: "nowrap" as const,
+    textAlign: "left" as const,
   },
   actionButtons: {
     display: "flex",
@@ -129,15 +143,15 @@ export const styles = {
   columnWidths: [
     "3%",
     "3.5%",
-    "5.5%",
+    "8%",
     "7.5%",
-    "14%",
-    "13%",
+    "13.5%",
+    "12.5%",
     "8%",
     "7%",
-    "13%",
+    "12.5%",
     "10%",
-    "15.5%",
+    "14.5%",
   ] as const,
   blueIcon: {
     padding: "2px",
@@ -149,9 +163,9 @@ export const styles = {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    minWidth: "24px",
-    width: "24px",
-    height: "24px",
+    minWidth: "32px",
+    width: "32px",
+    height: "32px",
     flexShrink: 0,
     outline: "none",
     "&:hover": {
@@ -181,9 +195,9 @@ export const styles = {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    minWidth: "24px",
-    width: "24px",
-    height: "24px",
+    minWidth: "32px",
+    width: "32px",
+    height: "32px",
     flexShrink: 0,
     outline: "none",
     "&:hover": {
@@ -217,7 +231,7 @@ export const styles = {
     textDecoration: "underline",
   },
   actionIcon: {
-    fontSize: "16px",
+    fontSize: "22px",
   },
   loadingOverlay: {
     position: "absolute" as const,

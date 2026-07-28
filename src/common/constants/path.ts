@@ -6,6 +6,5 @@ export const Paths = {
   SEND_MAIL: "/send-mail",
   PROCESSED_APPLICATION_SIDE: "/processed-application-side",
   PROCESSED_ORIGINAL_SIDE: "/processed-original-side",
-  PROCESSED_COPY_SIDE: "/processed-copy-side",
   REJECTED_APPLICATION: "/rejected-application",
 };
