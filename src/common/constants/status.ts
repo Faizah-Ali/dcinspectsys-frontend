@@ -31,8 +31,8 @@ export const APPLICATION_STATUS_MAP: Record<ApplicationStatusCode, StatusInfo> =
     R: { label: "Ready", color: "#9C27B0" },
     D: { label: "Delivered", color: "#2E7D32" },
     C: { label: "Reject", color: "#F44336" },
-    K: { label: "Reject By Approver", color: "#B71C1C" },
-    J: { label: "Rejected", color: "#D32F2F" },
+    K: { label: "Reject By Approver", color: "#db1a1a" },
+    J: { label: "Rejected", color: "#ea0b0b" },
     Y: { label: "Completed", color: "#2E7D32" },
     T: { label: "Pending Approval", color: "#FFC107" },
   };

@@ -174,20 +174,48 @@ const ApplicationDetailsTable = () => {
 
       <Box sx={styles.tableSection}>
         <TableContainer component={Paper} sx={styles.tableWrapper}>
-          <Table sx={styles.table}>
+          <Table size="small" sx={styles.table}>
+            <colgroup>
+              {styles.columnWidths.map((width, colIndex) => (
+                <col key={colIndex} style={{ width }} />
+              ))}
+            </colgroup>
+
             <TableHead>
               <TableRow sx={styles.headerRow}>
-                <TableCell sx={styles.headerCell}>SRL No.</TableCell>
-                <TableCell sx={styles.headerCell}>PWD Cat.</TableCell>
-                <TableCell sx={styles.headerCell}>Party-In-Person ID</TableCell>
-                <TableCell sx={styles.headerCell}>Reference No.</TableCell>
-                <TableCell sx={styles.headerCell}>Case No.</TableCell>
-                <TableCell sx={styles.headerCell}>Case Status</TableCell>
-                <TableCell sx={styles.headerCell}>Assigned Staff</TableCell>
-                <TableCell sx={styles.headerCell}>Application Date</TableCell>
-                <TableCell sx={styles.headerCell}>Application Status</TableCell>
-                <TableCell sx={styles.headerCell}>Court Fee ID</TableCell>
-                <TableCell sx={styles.headerCell}>Actions</TableCell>
+                <TableCell align="center" sx={{ ...styles.headerCell, ...styles.srlNoCell }}>
+                  SRL No.
+                </TableCell>
+                <TableCell align="center" sx={{ ...styles.headerCell, ...styles.pwdCatCell }}>
+                  PWD Cat.
+                </TableCell>
+                <TableCell align="center" sx={{ ...styles.headerCell, ...styles.partyIdCell }}>
+                  Party-In-Person ID
+                </TableCell>
+                <TableCell align="center" sx={{ ...styles.headerCell, ...styles.referenceNoCell }}>
+                  Reference No.
+                </TableCell>
+                <TableCell align="center" sx={{ ...styles.headerCell, ...styles.caseNoCell }}>
+                  Case No.
+                </TableCell>
+                <TableCell align="center" sx={{ ...styles.headerCell, ...styles.caseStatusCell }}>
+                  Case Status
+                </TableCell>
+                <TableCell align="center" sx={{ ...styles.headerCell, ...styles.assignedStaffCell }}>
+                  Assigned Staff
+                </TableCell>
+                <TableCell align="center" sx={{ ...styles.headerCell, ...styles.applicationDateCell }}>
+                  Application Date
+                </TableCell>
+                <TableCell align="center" sx={{ ...styles.headerCell, ...styles.applicationStatusCell }}>
+                  Application Status
+                </TableCell>
+                <TableCell align="center" sx={{ ...styles.headerCell, ...styles.courtFeeCell }}>
+                  Court Fee ID
+                </TableCell>
+                <TableCell align="center" sx={{ ...styles.headerCell, ...styles.actionsCell }}>
+                  Actions
+                </TableCell>
               </TableRow>
             </TableHead>
 
@@ -213,17 +241,23 @@ const ApplicationDetailsTable = () => {
               ) : (
                 applications.map((row, index) => (
                   <TableRow key={`${row.diaryNo}-${index}`} sx={styles.dataRow}>
-                    <TableCell sx={styles.dataCell}>{index + 1}</TableCell>
+                    <TableCell align="center" sx={{ ...styles.dataCell, ...styles.srlNoCell }}>
+                      {index + 1}
+                    </TableCell>
 
-                    <TableCell sx={styles.dataCell}>N/A</TableCell>
+                    <TableCell align="center" sx={{ ...styles.dataCell, ...styles.pwdCatCell }}>
+                      N/A
+                    </TableCell>
 
-                    <TableCell sx={styles.dataCell}>{row.username}</TableCell>
+                    <TableCell align="center" sx={{ ...styles.dataCell, ...styles.partyIdCell }}>
+                      {row.username}
+                    </TableCell>
 
-                    <TableCell sx={styles.dataCell}>
+                    <TableCell align="center" sx={{ ...styles.dataCell, ...styles.referenceNoCell }}>
                       {row.diaryNo}/{row.diaryYr}
                     </TableCell>
 
-                    <TableCell sx={styles.dataCell}>
+                    <TableCell align="center" sx={{ ...styles.dataCell, ...styles.caseNoCell }}>
                       <Box>
                         <strong>
                           {row.casetype}-{row.regNo}/{row.regYr}
@@ -233,7 +267,7 @@ const ApplicationDetailsTable = () => {
                       </Box>
                     </TableCell>
 
-                    <TableCell sx={styles.dataCell}>
+                    <TableCell align="center" sx={{ ...styles.dataCell, ...styles.caseStatusCell }}>
                       <StatusChip
                         statusCode={row.caseStatus}
                         kind="case"
@@ -241,15 +275,15 @@ const ApplicationDetailsTable = () => {
                       />
                     </TableCell>
 
-                    <TableCell sx={styles.dataCell}>
+                    <TableCell align="center" sx={{ ...styles.dataCell, ...styles.assignedStaffCell }}>
                       {row.assignedname || "-"}
                     </TableCell>
 
-                    <TableCell sx={styles.dataCell}>
+                    <TableCell align="center" sx={{ ...styles.dataCell, ...styles.applicationDateCell }}>
                       {formatDate(row.appliedDate)}
                     </TableCell>
 
-                    <TableCell sx={styles.dataCell}>
+                    <TableCell align="center" sx={{ ...styles.dataCell, ...styles.applicationStatusCell }}>
                       <StatusChip
                         statusCode={row.status}
                         kind="application"
@@ -257,7 +291,7 @@ const ApplicationDetailsTable = () => {
                       />
                     </TableCell>
 
-                    <TableCell sx={styles.dataCell}>
+                    <TableCell align="center" sx={{ ...styles.dataCell, ...styles.courtFeeCell }}>
                       <Box>
                         <strong>{row.ecourtFeeId || "Not Entered"}</strong>
                         <br />
@@ -277,7 +311,7 @@ const ApplicationDetailsTable = () => {
                       </Box>
                     </TableCell>
 
-                    <TableCell sx={styles.dataCell}>
+                    <TableCell align="center" sx={{ ...styles.dataCell, ...styles.actionsCell }}>
                       <Box sx={styles.actionButtons}>
                         <Box
                           component="button"

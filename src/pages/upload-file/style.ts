@@ -62,10 +62,32 @@ export const styles = {
       boxShadow: "none !important",
     },
   },
+  fileListsRow: {
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: "16px",
+    alignItems: "start",
+    width: "100%",
+    "@media (max-width: 600px)": {
+      gridTemplateColumns: "1fr",
+    },
+  },
+  uploadedFilesSection: {
+    display: "flex",
+    flexDirection: "column" as const,
+    gap: "4px",
+    minWidth: 0,
+  },
   selectedFileWrap: {
     display: "flex",
     flexDirection: "column" as const,
     gap: "4px",
+    minWidth: 0,
+  },
+  selectedFileRow: {
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
   },
   selectedFileLabel: {
     color: COLORS.textPrimary,

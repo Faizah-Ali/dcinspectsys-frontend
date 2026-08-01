@@ -129,13 +129,13 @@ export const styles = {
   actionsCell: {
     width: "14.5%",
     whiteSpace: "nowrap" as const,
-    textAlign: "left" as const,
+    textAlign: "center" as const,
   },
   actionButtons: {
     display: "flex",
     flexWrap: "nowrap" as const,
     gap: "2px",
-    justifyContent: "flex-start",
+    justifyContent: "center",
     alignItems: "center",
     whiteSpace: "nowrap" as const,
   },
@@ -201,7 +201,7 @@ export const styles = {
     flexShrink: 0,
     outline: "none",
     "&:hover": {
-      backgroundColor: "#b34d05",
+      backgroundColor: COLORS.primary,
       color: COLORS.white,
       border: "none",
     },

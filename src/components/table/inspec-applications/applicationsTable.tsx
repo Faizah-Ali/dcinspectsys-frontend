@@ -391,7 +391,7 @@ const ApplicationsTable = ({
                   Court Fee ID
                 </TableCell>
 
-                <TableCell align="left" sx={{ ...styles.headerCell, ...styles.actionsCell }}>
+                <TableCell align="center" sx={{ ...styles.headerCell, ...styles.actionsCell }}>
                   Actions
                 </TableCell>
 
@@ -508,7 +508,7 @@ const ApplicationsTable = ({
 
                   </TableCell>
 
-                  <TableCell align="left" sx={{ ...styles.dataCell, ...styles.actionsCell }}>
+                  <TableCell align="center" sx={{ ...styles.dataCell, ...styles.actionsCell }}>
 
                     <Box sx={styles.actionButtons}>
 

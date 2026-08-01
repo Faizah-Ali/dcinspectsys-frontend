@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Box,
   Button,
@@ -11,6 +11,8 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 
 import { VARIANTS } from "../../common/constants";
+import { getUploadHistory } from "../upload-history/services/upload-history.action";
+import type { UploadHistoryItem } from "../upload-history/services/upload-history.type";
 
 import {
   DOCUMENT_TYPE_OPTIONS,
@@ -36,8 +38,38 @@ const UploadFile = ({
   const [documentType, setDocumentType] = useState("");
   const [files, setFiles] = useState<File[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState<UploadHistoryItem[]>([]);
+  const [isLoadingUploadedFiles, setIsLoadingUploadedFiles] = useState(true);
 
   const canUpload = isUploadEnabled(documentType, files);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    setIsLoadingUploadedFiles(true);
+    setUploadedFiles([]);
+
+    getUploadHistory(diaryNo, diaryYr, controller.signal)
+      .then((data) => {
+        setUploadedFiles(data.uploadedFiles);
+      })
+      .catch((error) => {
+        if (controller.signal.aborted || error?.name === "AbortError") {
+          return;
+        }
+
+        setUploadedFiles([]);
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) {
+          setIsLoadingUploadedFiles(false);
+        }
+      });
+
+    return () => {
+      controller.abort();
+    };
+  }, [diaryNo, diaryYr]);
 
   return (
     <Box
@@ -117,41 +149,63 @@ const UploadFile = ({
           Choose File
         </Button>
 
-        <Box sx={styles.selectedFileWrap}>
-          <Box component="span" sx={styles.selectedFileLabel}>
-            Selected File{files.length === 1 ? "" : "s"}:
+        <Box sx={styles.fileListsRow}>
+          <Box sx={styles.selectedFileWrap}>
+            <Box component="span" sx={styles.selectedFileLabel}>
+              Selected File{files.length === 1 ? "" : "s"}:
+            </Box>
+
+            {files.length === 0 ? (
+              <Box component="span" sx={styles.emptyFileName}>
+                No file selected
+              </Box>
+            ) : (
+              files.map((file) => (
+                <Box
+                  key={getFileIdentity(file)}
+                  sx={styles.selectedFileRow}
+                >
+                  <Box component="span" sx={styles.selectedFileName}>
+                    ✔ {file.name}
+                  </Box>
+                  <IconButton
+                    type="button"
+                    size="small"
+                    aria-label={`Remove ${file.name}`}
+                    disabled={isSubmitting}
+                    onClick={handleRemoveFile(file, setFiles)}
+                    sx={{ padding: "2px" }}
+                  >
+                    <CloseIcon fontSize="small" />
+                  </IconButton>
+                </Box>
+              ))
+            )}
           </Box>
 
-          {files.length === 0 ? (
-            <Box component="span" sx={styles.emptyFileName}>
-              No file selected
+          <Box sx={styles.uploadedFilesSection}>
+            <Box component="span" sx={styles.selectedFileLabel}>
+              Uploaded File{uploadedFiles.length === 1 ? "" : "s"}:
             </Box>
-          ) : (
-            files.map((file) => (
-              <Box
-                key={getFileIdentity(file)}
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                }}
-              >
-                <Box component="span" sx={styles.selectedFileName}>
-                  ✔ {file.name}
-                </Box>
-                <IconButton
-                  type="button"
-                  size="small"
-                  aria-label={`Remove ${file.name}`}
-                  disabled={isSubmitting}
-                  onClick={handleRemoveFile(file, setFiles)}
-                  sx={{ padding: "2px" }}
-                >
-                  <CloseIcon fontSize="small" />
-                </IconButton>
+
+            {isLoadingUploadedFiles ? (
+              <CircularProgress size={18} />
+            ) : uploadedFiles.length === 0 ? (
+              <Box component="span" sx={styles.emptyFileName}>
+                No files uploaded yet
               </Box>
-            ))
-          )}
+            ) : (
+              uploadedFiles.map((item, index) => (
+                <Box
+                  key={`${item.uniqueId || item.fileName}-${index}`}
+                  component="span"
+                  sx={styles.selectedFileName}
+                >
+                  ✔ {item.fileName}
+                </Box>
+              ))
+            )}
+          </Box>
         </Box>
       </Box>
 
