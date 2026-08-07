@@ -26,7 +26,7 @@ export interface StatusInfo {
 export const APPLICATION_STATUS_MAP: Record<ApplicationStatusCode, StatusInfo> =
   {
     N: { label: "New Filing", color: "#2196F3" },
-    P: { label: "Pending For Approval", color: "#FF9800" },
+    P: { label: "Pending Processing", color: "#FF9800" },
     A: { label: "Approved By Approver", color: "#4CAF50" },
     R: { label: "Ready", color: "#9C27B0" },
     D: { label: "Delivered", color: "#2E7D32" },

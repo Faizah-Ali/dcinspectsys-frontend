@@ -599,7 +599,7 @@ const ApplicationsTable = ({
                         </Box>
                       )}
 
-                      {role === "ONLINEINSPECTION" && row.status === "P" && (
+                      {role === "ONLINEINSPECTION" && (
                         <Box
                           component="button"
                           type="button"
