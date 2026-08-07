@@ -15,10 +15,10 @@ const adminSidebarItems: SidebarItem[] = [
     text: "Re-Assign Application",
     route: Paths.REASSIGN_APPLICATIONS,
   },
-  {
-    text: "Send Email",
-    route: Paths.SEND_MAIL,
-  },
+  // {
+  //   text: "Send Email",
+  //   route: Paths.SEND_MAIL,
+  // },
 ];
 
 const getOfficerSidebarItems = (
@@ -40,6 +40,11 @@ const getOfficerSidebarItems = (
     items.push({
       text: "Processed (Original Side)",
       route: Paths.PROCESSED_ORIGINAL_SIDE,
+    });
+  } else if (group === "C") {
+    items.push({
+      text: "Processed Application (Comp Side)",
+      route: Paths.PROCESSED_COMP_SIDE,
     });
   }
 

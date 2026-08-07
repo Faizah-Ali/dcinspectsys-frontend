@@ -4,7 +4,7 @@ export const ROUTE_TO_MODULE_MAP: Record<string, string> = {
     [Paths.INSPECT_APPLICATIONS]: "inspect_applications",
     [Paths.REASSIGN_APPLICATIONS]: "reassign_applications",
     [Paths.APPLICATION_DETAILS]: "reassign_applications",
-    [Paths.SEND_MAIL]: "send_mail",
+    // [Paths.SEND_MAIL]: "send_mail",
 };
 
 export const getRequiredModuleForRoute = (pathname: string):string | null => {
@@ -26,7 +26,7 @@ export const getRequiredModuleForRoute = (pathname: string):string | null => {
 export const MODULE_TO_ROUTE_MAP: Record<string, string> = {
     inspect_applications: Paths.INSPECT_APPLICATIONS,
     reassign_applications: Paths.REASSIGN_APPLICATIONS,
-    send_mail: Paths.SEND_MAIL,
+    // send_mail: Paths.SEND_MAIL,
 };
 
 export const getRouteForModule = (moduleKey: string):string | null => {

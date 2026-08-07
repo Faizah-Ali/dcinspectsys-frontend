@@ -34,12 +34,13 @@ const Sidebar = ({ userInfo, activeRoute, onItemClick }: SidebarProps) => {
     if (text === "Re-Assign Application") {
       return <IMAGES.AssignmentIcon sx={styles.itemIcon} />;
     }
-    if (text === "Send Email") {
-      return <IMAGES.MailIcon sx={styles.itemIcon} />;
-    }
+    // if (text === "Send Email") {
+    //   return <IMAGES.MailIcon sx={styles.itemIcon} />;
+    // }
     if (
       text === "Processed (Application Side)" ||
-      text === "Processed (Original Side)"
+      text === "Processed (Original Side)" ||
+      text === "Processed Application (Comp Side)"
     ) {
       return <IMAGES.TaskIcon sx={styles.itemIcon} />;
     }

@@ -8,7 +8,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import RejectIcon from '@mui/icons-material/Cancel';
 import ApproveIcon from '@mui/icons-material/CheckCircle';
 import InboxIcon from '@mui/icons-material/Inbox';
-import MailIcon from '@mui/icons-material/Mail';
+// import MailIcon from '@mui/icons-material/Mail';
 import DescriptionIcon from '@mui/icons-material/Description';
 import TaskIcon from '@mui/icons-material/Task';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
@@ -36,7 +36,7 @@ export const IMAGES = {
     RejectIcon,
     ApproveIcon,
     InboxIcon,
-    MailIcon,
+    // MailIcon,
     PendingActionsIcon,
     DescriptionIcon,
     TaskIcon,

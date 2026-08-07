@@ -10,13 +10,14 @@ const ReassignApplications = lazy(() => import("../pages/re-assign-applications"
 const ApplicationDetails = lazy(
   () => import("../pages/application-details/index.tsx")
 );
-const SendMail = lazy(() => import("../pages/send-mail"));
+// const SendMail = lazy(() => import("../pages/send-mail"));
 const ProcessedApplicationSide = lazy(
   () => import("../pages/processed-application-side")
 );
 const ProcessedOriginalSide = lazy(
   () => import("../pages/processed-original-side")
 );
+const ProcessedCompSide = lazy(() => import("../pages/processed-comp-side"));
 const RejectedApplication = lazy(
   () => import("../pages/rejected-application")
 );
@@ -50,13 +51,13 @@ const router = createHashRouter([
       type: "private"
     }),
   },
-  {
-    path: Paths.SEND_MAIL,
-    element: createRoute({
-      component: <SendMail />,
-      type: "private"
-    }),
-  },
+  // {
+  //   path: Paths.SEND_MAIL,
+  //   element: createRoute({
+  //     component: <SendMail />,
+  //     type: "private"
+  //   }),
+  // },
   {
     path: Paths.PROCESSED_APPLICATION_SIDE,
     element: createRoute({
@@ -68,6 +69,13 @@ const router = createHashRouter([
     path: Paths.PROCESSED_ORIGINAL_SIDE,
     element: createRoute({
       component: <ProcessedOriginalSide />,
+      type: "private"
+    }),
+  },
+  {
+    path: Paths.PROCESSED_COMP_SIDE,
+    element: createRoute({
+      component: <ProcessedCompSide />,
       type: "private"
     }),
   },
