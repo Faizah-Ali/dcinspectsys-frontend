@@ -7,6 +7,7 @@ export interface UploadHistoryItem {
   mobileNo: string;
   entryDate: string;
   entryBy: string;
+  fileUploadFlag?: string;
 }
 
 export interface InspectionLogItem {

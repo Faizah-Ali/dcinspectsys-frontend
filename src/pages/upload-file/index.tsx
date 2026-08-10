@@ -195,15 +195,32 @@ const UploadFile = ({
                 No files uploaded yet
               </Box>
             ) : (
-              uploadedFiles.map((item, index) => (
-                <Box
-                  key={`${item.uniqueId || item.fileName}-${index}`}
-                  component="span"
-                  sx={styles.selectedFileName}
-                >
-                  ✔ {item.fileName}
-                </Box>
-              ))
+              uploadedFiles.map((item, index) => {
+                const isDeleted = item.fileUploadFlag === "D";
+
+                return (
+                  <Box
+                    key={`${item.uniqueId || item.fileName}-${index}`}
+                    component="span"
+                    sx={
+                      isDeleted
+                        ? styles.deletedUploadedFileName
+                        : styles.selectedFileName
+                    }
+                  >
+                    {isDeleted ? (
+                      <>
+                        ✕ {item.fileName} -{" "}
+                        <Box component="span" sx={styles.deletedLabel}>
+                          Deleted
+                        </Box>
+                      </>
+                    ) : (
+                      <>✔ {item.fileName}</>
+                    )}
+                  </Box>
+                );
+              })
             )}
           </Box>
         </Box>

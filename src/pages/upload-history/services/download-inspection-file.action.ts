@@ -25,16 +25,15 @@ const getErrorMessage = async (response: Response): Promise<string> => {
   return "Unable to download document.";
 };
 
-export const downloadInspectionFile = async ({
-  uniqueId,
-  fileName,
-}: DownloadInspectionFileParams): Promise<void> => {
-  if (!uniqueId?.trim()) {
+const fetchInspectionFileBlob = async (uniqueId: string): Promise<Blob> => {
+  const trimmedUniqueId = uniqueId.trim();
+
+  if (!trimmedUniqueId) {
     throw new Error("File not found.");
   }
 
   const query = new URLSearchParams({
-    uniqueId: uniqueId.trim(),
+    uniqueId: trimmedUniqueId,
   });
 
   const response = await authFetch(
@@ -46,6 +45,20 @@ export const downloadInspectionFile = async ({
   }
 
   const blob = await response.blob();
+
+  if (blob.type === "application/pdf") {
+    return blob;
+  }
+
+  return new Blob([blob], { type: "application/pdf" });
+};
+
+/** Force-download the PDF using the existing download endpoint. */
+export const downloadInspectionFile = async ({
+  uniqueId,
+  fileName,
+}: DownloadInspectionFileParams): Promise<void> => {
+  const blob = await fetchInspectionFileBlob(uniqueId);
   const objectUrl = URL.createObjectURL(blob);
 
   try {
@@ -57,5 +70,30 @@ export const downloadInspectionFile = async ({
     link.remove();
   } finally {
     URL.revokeObjectURL(objectUrl);
+  }
+};
+
+/** Open the PDF in a new tab for native browser print/preview. */
+export const previewInspectionFile = async ({
+  uniqueId,
+  previewWindow,
+}: Pick<DownloadInspectionFileParams, "uniqueId"> & {
+  previewWindow: Window;
+}): Promise<void> => {
+  try {
+    const blob = await fetchInspectionFileBlob(uniqueId);
+    const objectUrl = URL.createObjectURL(blob);
+
+    // Navigate the already-opened tab (opened during the click gesture)
+    // so browsers do not treat this as a blocked popup.
+    previewWindow.location.href = objectUrl;
+
+    // Keep the blob URL alive long enough for the new tab to load the PDF.
+    window.setTimeout(() => {
+      URL.revokeObjectURL(objectUrl);
+    }, 60_000);
+  } catch (error) {
+    previewWindow.close();
+    throw error;
   }
 };

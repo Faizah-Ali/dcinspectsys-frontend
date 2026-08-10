@@ -1,12 +1,44 @@
 import { ENDPOINTS } from "../../../common/constants/endpoint";
 import { authFetch } from "../../../utils/api";
 
-import type { UploadHistoryResponse } from "./upload-history.type";
+import type {
+  UploadHistoryItem,
+  UploadHistoryResponse,
+} from "./upload-history.type";
 
 const EMPTY_UPLOAD_HISTORY_RESPONSE: UploadHistoryResponse = {
   uploadedFiles: [],
   inspectionLogs: [],
   userComments: [],
+};
+
+const normalizeUploadHistoryItem = (item: unknown): UploadHistoryItem | null => {
+  if (!item || typeof item !== "object") {
+    return null;
+  }
+
+  const raw = item as Record<string, unknown>;
+  const fileUploadFlag =
+    typeof raw.fileUploadFlag === "string"
+      ? raw.fileUploadFlag
+      : typeof raw.file_upload_flag === "string"
+        ? raw.file_upload_flag
+        : undefined;
+
+  return {
+    ...(raw as unknown as UploadHistoryItem),
+    fileUploadFlag,
+  };
+};
+
+const normalizeUploadedFiles = (uploadedFiles: unknown): UploadHistoryItem[] => {
+  if (!Array.isArray(uploadedFiles)) {
+    return [];
+  }
+
+  return uploadedFiles
+    .map(normalizeUploadHistoryItem)
+    .filter((item): item is UploadHistoryItem => item !== null);
 };
 
 export const getUploadHistory = async (
@@ -42,9 +74,7 @@ export const getUploadHistory = async (
   const uploadHistory = data as Partial<UploadHistoryResponse>;
 
   return {
-    uploadedFiles: Array.isArray(uploadHistory.uploadedFiles)
-      ? uploadHistory.uploadedFiles
-      : [],
+    uploadedFiles: normalizeUploadedFiles(uploadHistory.uploadedFiles),
     inspectionLogs: Array.isArray(uploadHistory.inspectionLogs)
       ? uploadHistory.inspectionLogs
       : [],

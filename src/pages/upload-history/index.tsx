@@ -15,14 +15,19 @@ import {
   TableRow,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 import { IMAGES, VARIANTS } from "../../common/constants";
 import { showErrorToast } from "../../components/toast/helper";
 import { formatDate } from "../../components/table/inspec-applications/helper";
+import { styles as applicationDetailsStyles } from "../application-details/style";
 
 import {
   getUploadHistoryRowKey,
+  handleDeleteInspectionFile,
   handleDownloadInspectionFile,
+  handlePreviewInspectionFile,
+  isDeletedUploadFile,
 } from "./helper";
 import { getUploadHistory } from "./services/upload-history.action";
 import type {
@@ -33,14 +38,23 @@ import type {
 import { styles } from "./style";
 import type { UploadHistoryProps } from "./type";
 
-const UploadHistory = ({ diaryNo, diaryYr, onClose }: UploadHistoryProps) => {
+const UploadHistory = ({
+  diaryNo,
+  diaryYr,
+  applicationStatus,
+  onClose,
+}: UploadHistoryProps) => {
   const [uploadedFiles, setUploadedFiles] = useState<UploadHistoryItem[]>([]);
   const [inspectionLogs, setInspectionLogs] = useState<InspectionLogItem[]>([]);
   const [userComments, setUserComments] = useState<UserCommentItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [previewingUniqueId, setPreviewingUniqueId] = useState<string | null>(
+    null
+  );
   const [downloadingUniqueId, setDownloadingUniqueId] = useState<string | null>(
     null
   );
+  const [deletingUniqueId, setDeletingUniqueId] = useState<string | null>(null);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -111,9 +125,9 @@ const UploadHistory = ({ diaryNo, diaryYr, onClose }: UploadHistoryProps) => {
                   <Table sx={styles.table}>
                     <TableHead>
                       <TableRow sx={styles.headerRow}>
-                        <TableCell sx={styles.headerCell}>Date</TableCell>
-                        <TableCell sx={styles.headerCell}>Author</TableCell>
-                        <TableCell sx={styles.headerCell}>Comment</TableCell>
+                        <TableCell align="center" sx={styles.headerCell}>Date</TableCell>
+                        <TableCell align="center" sx={styles.headerCell}>Author</TableCell>
+                        <TableCell align="center" sx={styles.headerCell}>Comment</TableCell>
                       </TableRow>
                     </TableHead>
 
@@ -123,13 +137,13 @@ const UploadHistory = ({ diaryNo, diaryYr, onClose }: UploadHistoryProps) => {
                           key={`${comment.author}-${comment.commentDate}-${index}`}
                           sx={styles.dataRow}
                         >
-                          <TableCell sx={styles.dataCell}>
+                          <TableCell align="center" sx={styles.dataCell}>
                             {formatDate(comment.commentDate)}
                           </TableCell>
-                          <TableCell sx={styles.dataCell}>
+                          <TableCell align="center" sx={styles.dataCell}>
                             {comment.author}
                           </TableCell>
-                          <TableCell sx={styles.dataCell}>
+                          <TableCell align="center" sx={styles.dataCell}>
                             {comment.content}
                           </TableCell>
                         </TableRow>
@@ -158,11 +172,11 @@ const UploadHistory = ({ diaryNo, diaryYr, onClose }: UploadHistoryProps) => {
                   <Table sx={styles.table}>
                     <TableHead>
                       <TableRow sx={styles.headerRow}>
-                        <TableCell sx={styles.headerCell}>Date</TableCell>
-                        <TableCell sx={styles.headerCell}>
+                        <TableCell align="center" sx={styles.headerCell}>Date</TableCell>
+                        <TableCell align="center" sx={styles.headerCell}>
                           Description
                         </TableCell>
-                        <TableCell sx={styles.headerCell}>Actor</TableCell>
+                        <TableCell align="center" sx={styles.headerCell}>Actor</TableCell>
                       </TableRow>
                     </TableHead>
 
@@ -172,13 +186,13 @@ const UploadHistory = ({ diaryNo, diaryYr, onClose }: UploadHistoryProps) => {
                           key={`${log.entryDate}-${log.actor}-${index}`}
                           sx={styles.dataRow}
                         >
-                          <TableCell sx={styles.dataCell}>
+                          <TableCell align="center" sx={styles.dataCell}>
                             {formatDate(log.entryDate)}
                           </TableCell>
-                          <TableCell sx={styles.dataCell}>
+                          <TableCell align="center" sx={styles.dataCell}>
                             {log.description}
                           </TableCell>
-                          <TableCell sx={styles.dataCell}>
+                          <TableCell align="center" sx={styles.dataCell}>
                             {log.actor}
                           </TableCell>
                         </TableRow>
@@ -213,48 +227,55 @@ const UploadHistory = ({ diaryNo, diaryYr, onClose }: UploadHistoryProps) => {
                     <TableHead>
                       <TableRow sx={styles.headerRow}>
                         <TableCell
-                          align="left"
+                          align="center"
                           sx={{ ...styles.headerCell, ...styles.fileNameCell }}
                         >
                           File Name
                         </TableCell>
                         <TableCell
-                          align="left"
+                          align="center"
                           sx={{ ...styles.headerCell, ...styles.emailCell }}
                         >
                           Email
                         </TableCell>
                         <TableCell
-                          align="left"
+                          align="center"
                           sx={{ ...styles.headerCell, ...styles.mobileCell }}
                         >
                           Mobile
                         </TableCell>
                         <TableCell
-                          align="left"
+                          align="center"
                           sx={{ ...styles.headerCell, ...styles.uploadedByCell }}
                         >
                           Uploaded By
                         </TableCell>
                         <TableCell
-                          align="left"
+                          align="center"
                           sx={{ ...styles.headerCell, ...styles.uploadedOnCell }}
                         >
                           Uploaded On
                         </TableCell>
                         <TableCell
-                          align="left"
+                          align="center"
                           sx={{ ...styles.headerCell, ...styles.actionCell }}
                         >
-                          Action
+                          Actions
                         </TableCell>
                       </TableRow>
                     </TableHead>
 
                     <TableBody>
                       {uploadedFiles.map((item, index) => {
-                        const isDownloading =
-                          downloadingUniqueId === item.uniqueId;
+                        const uniqueId = item.uniqueId?.trim() ?? "";
+                        const isDeleted = isDeletedUploadFile(item);
+                        const isPreviewing = previewingUniqueId === uniqueId;
+                        const isDownloading = downloadingUniqueId === uniqueId;
+                        const isDeleting = deletingUniqueId === uniqueId;
+                        const canAccessFile = Boolean(uniqueId);
+                        const canDeleteByStatus = applicationStatus === "P";
+                        const canDelete =
+                          canAccessFile && !isDeleted && canDeleteByStatus;
 
                         return (
                           <TableRow
@@ -264,68 +285,178 @@ const UploadHistory = ({ diaryNo, diaryYr, onClose }: UploadHistoryProps) => {
                               item.entryDate,
                               index
                             )}
-                            sx={styles.dataRow}
+                            sx={
+                              isDeleted ? styles.deletedDataRow : styles.dataRow
+                            }
                           >
                             <TableCell
-                              align="left"
+                              align="center"
                               sx={{ ...styles.dataCell, ...styles.fileNameCell }}
                             >
                               {item.fileName}
                             </TableCell>
                             <TableCell
-                              align="left"
+                              align="center"
                               sx={{ ...styles.dataCell, ...styles.emailCell }}
                             >
                               {item.emailId}
                             </TableCell>
                             <TableCell
-                              align="left"
+                              align="center"
                               sx={{ ...styles.dataCell, ...styles.mobileCell }}
                             >
                               {item.mobileNo}
                             </TableCell>
                             <TableCell
-                              align="left"
+                              align="center"
                               sx={{ ...styles.dataCell, ...styles.uploadedByCell }}
                             >
                               {item.entryBy}
                             </TableCell>
                             <TableCell
-                              align="left"
+                              align="center"
                               sx={{ ...styles.dataCell, ...styles.uploadedOnCell }}
                             >
                               {formatDate(item.entryDate)}
                             </TableCell>
                             <TableCell
-                              align="left"
+                              align="center"
                               sx={{ ...styles.dataCell, ...styles.actionCell }}
                             >
-                              <Button
-                                type="button"
-                                variant={VARIANTS.OUTLINED}
-                                title="Download PDF"
-                                aria-label="Download"
-                                disabled={
-                                  !item.uniqueId ||
-                                  Boolean(downloadingUniqueId)
-                                }
-                                onClick={handleDownloadInspectionFile(
-                                  item.uniqueId,
-                                  item.fileName,
-                                  downloadingUniqueId,
-                                  setDownloadingUniqueId
-                                )}
-                                sx={styles.viewButton}
-                              >
-                                {isDownloading ? (
-                                  <CircularProgress
-                                    size={16}
-                                    color="inherit"
-                                  />
+                              <Box sx={styles.actionButtonsWrap}>
+                                <Box
+                                  component="button"
+                                  type="button"
+                                  title="Download PDF"
+                                  aria-label="Download PDF"
+                                  disabled={
+                                    !canAccessFile ||
+                                    Boolean(downloadingUniqueId)
+                                  }
+                                  onClick={(event) => {
+                                    event.currentTarget.blur();
+                                    void handleDownloadInspectionFile(
+                                      uniqueId,
+                                      item.fileName,
+                                      downloadingUniqueId,
+                                      setDownloadingUniqueId
+                                    )();
+                                  }}
+                                  sx={{
+                                    ...applicationDetailsStyles.orangeIcon,
+                                    ...((!canAccessFile ||
+                                      Boolean(downloadingUniqueId)) && {
+                                      opacity: 0.4,
+                                      pointerEvents: "none",
+                                    }),
+                                  }}
+                                >
+                                  {isDownloading ? (
+                                    <CircularProgress
+                                      size={16}
+                                      color="inherit"
+                                    />
+                                  ) : (
+                                    <IMAGES.PictureAsPdfIcon
+                                      sx={applicationDetailsStyles.actionIcon}
+                                    />
+                                  )}
+                                </Box>
+
+                                <Box
+                                  component="button"
+                                  type="button"
+                                  title="Print Preview"
+                                  aria-label="Print Preview"
+                                  disabled={
+                                    !canAccessFile || Boolean(previewingUniqueId)
+                                  }
+                                  onClick={(event) => {
+                                    event.currentTarget.blur();
+                                    void handlePreviewInspectionFile(
+                                      uniqueId,
+                                      previewingUniqueId,
+                                      setPreviewingUniqueId
+                                    )();
+                                  }}
+                                  sx={{
+                                    ...applicationDetailsStyles.blueIcon,
+                                    ...((!canAccessFile ||
+                                      Boolean(previewingUniqueId)) && {
+                                      opacity: 0.4,
+                                      pointerEvents: "none",
+                                    }),
+                                  }}
+                                >
+                                  {isPreviewing ? (
+                                    <CircularProgress
+                                      size={16}
+                                      color="inherit"
+                                    />
+                                  ) : (
+                                    <IMAGES.PrintIcon
+                                      sx={applicationDetailsStyles.actionIcon}
+                                    />
+                                  )}
+                                </Box>
+
+                                {isDeleted ? (
+                                  <Box sx={styles.actionDeletedSlot}>
+                                    <Box
+                                      component="span"
+                                      sx={styles.deletedChip}
+                                    >
+                                      Deleted
+                                    </Box>
+                                  </Box>
                                 ) : (
-                                  <IMAGES.PictureAsPdfIcon fontSize="small" />
+                                  <Box sx={styles.actionDeleteSlot}>
+                                    <Box
+                                      component="button"
+                                      type="button"
+                                      title={
+                                        canDeleteByStatus
+                                          ? "Delete file"
+                                          : "Delete is only available when application status is Pending"
+                                      }
+                                      aria-label="Delete"
+                                      disabled={
+                                        !canDelete || Boolean(deletingUniqueId)
+                                      }
+                                      onClick={(event) => {
+                                        event.currentTarget.blur();
+                                        void handleDeleteInspectionFile(
+                                          uniqueId,
+                                          diaryNo,
+                                          diaryYr,
+                                          deletingUniqueId,
+                                          setDeletingUniqueId,
+                                          setUploadedFiles
+                                        )();
+                                      }}
+                                      sx={{
+                                        ...applicationDetailsStyles.orangeIcon,
+                                        ...((!canDelete ||
+                                          Boolean(deletingUniqueId)) && {
+                                          opacity: 0.4,
+                                          pointerEvents: "none",
+                                        }),
+                                      }}
+                                    >
+                                      {isDeleting ? (
+                                        <CircularProgress
+                                          size={16}
+                                          color="inherit"
+                                        />
+                                      ) : (
+                                        <DeleteIcon
+                                          sx={applicationDetailsStyles.actionIcon}
+                                        />
+                                      )}
+                                    </Box>
+                                  </Box>
                                 )}
-                              </Button>
+                              </Box>
                             </TableCell>
                           </TableRow>
                         );

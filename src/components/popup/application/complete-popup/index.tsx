@@ -45,7 +45,7 @@ const CompletePopup = ({
       hideHeader
     >
       <ConfirmPopUp
-        message="Are you sure you want to complete this application?"
+        message="Are you sure you want to complete this application ?"
         handleNo={onClose}
         handleYes={handleConfirm}
         disabled={isSubmitting}

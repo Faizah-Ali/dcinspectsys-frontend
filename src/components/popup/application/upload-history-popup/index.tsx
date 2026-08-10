@@ -22,6 +22,7 @@ const UploadHistoryPopup = ({
         <UploadHistory
           diaryNo={application.diaryNo}
           diaryYr={application.diaryYr}
+          applicationStatus={application.status}
           onClose={onClose}
         />
       )}

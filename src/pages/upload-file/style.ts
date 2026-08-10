@@ -99,6 +99,14 @@ export const styles = {
     fontSize: "14px",
     wordBreak: "break-word" as const,
   },
+  deletedUploadedFileName: {
+    color: "#9e9e9e",
+    fontSize: "14px",
+    wordBreak: "break-word" as const,
+  },
+  deletedLabel: {
+    fontStyle: "italic" as const,
+  },
   emptyFileName: {
     color: "rgba(51, 51, 51, 0.6)",
     fontStyle: "italic" as const,
