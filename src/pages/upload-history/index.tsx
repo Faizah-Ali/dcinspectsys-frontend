@@ -27,6 +27,7 @@ import {
   handleDeleteInspectionFile,
   handleDownloadInspectionFile,
   handlePreviewInspectionFile,
+  isCurrentCycleActiveFile,
   isDeletedUploadFile,
 } from "./helper";
 import { getUploadHistory } from "./services/upload-history.action";
@@ -269,10 +270,12 @@ const UploadHistory = ({
                       {uploadedFiles.map((item, index) => {
                         const uniqueId = item.uniqueId?.trim() ?? "";
                         const isDeleted = isDeletedUploadFile(item);
+                        const isCurrent = isCurrentCycleActiveFile(item);
                         const isPreviewing = previewingUniqueId === uniqueId;
                         const isDownloading = downloadingUniqueId === uniqueId;
                         const isDeleting = deletingUniqueId === uniqueId;
                         const canAccessFile = Boolean(uniqueId);
+                        const canPreviewOrDownload = canAccessFile && !isDeleted;
                         const canDeleteByStatus = applicationStatus === "P";
                         const canDelete =
                           canAccessFile && !isDeleted && canDeleteByStatus;
@@ -293,7 +296,26 @@ const UploadHistory = ({
                               align="center"
                               sx={{ ...styles.dataCell, ...styles.fileNameCell }}
                             >
-                              {item.fileName}
+                              <Box sx={styles.fileNameWithBadge}>
+                                <Box component="span">{item.fileName}</Box>
+                                {!isDeleted &&
+                                  (isCurrent ? (
+                                    <Box
+                                      component="span"
+                                      sx={styles.currentCycleChip}
+                                    >
+                                      Current
+                                    </Box>
+                                  ) : (
+                                    <Box
+                                      component="span"
+                                      sx={styles.historicalCycleChip}
+                                    >
+                                      {/* Historical */}
+                                      Old
+                                    </Box>
+                                  ))}
+                              </Box>
                             </TableCell>
                             <TableCell
                               align="center"
@@ -323,94 +345,94 @@ const UploadHistory = ({
                               align="center"
                               sx={{ ...styles.dataCell, ...styles.actionCell }}
                             >
-                              <Box sx={styles.actionButtonsWrap}>
-                                <Box
-                                  component="button"
-                                  type="button"
-                                  title="Download PDF"
-                                  aria-label="Download PDF"
-                                  disabled={
-                                    !canAccessFile ||
-                                    Boolean(downloadingUniqueId)
-                                  }
-                                  onClick={(event) => {
-                                    event.currentTarget.blur();
-                                    void handleDownloadInspectionFile(
-                                      uniqueId,
-                                      item.fileName,
-                                      downloadingUniqueId,
-                                      setDownloadingUniqueId
-                                    )();
-                                  }}
-                                  sx={{
-                                    ...applicationDetailsStyles.orangeIcon,
-                                    ...((!canAccessFile ||
-                                      Boolean(downloadingUniqueId)) && {
-                                      opacity: 0.4,
-                                      pointerEvents: "none",
-                                    }),
-                                  }}
-                                >
-                                  {isDownloading ? (
-                                    <CircularProgress
-                                      size={16}
-                                      color="inherit"
-                                    />
-                                  ) : (
-                                    <IMAGES.PictureAsPdfIcon
-                                      sx={applicationDetailsStyles.actionIcon}
-                                    />
-                                  )}
-                                </Box>
-
-                                <Box
-                                  component="button"
-                                  type="button"
-                                  title="Print Preview"
-                                  aria-label="Print Preview"
-                                  disabled={
-                                    !canAccessFile || Boolean(previewingUniqueId)
-                                  }
-                                  onClick={(event) => {
-                                    event.currentTarget.blur();
-                                    void handlePreviewInspectionFile(
-                                      uniqueId,
-                                      previewingUniqueId,
-                                      setPreviewingUniqueId
-                                    )();
-                                  }}
-                                  sx={{
-                                    ...applicationDetailsStyles.blueIcon,
-                                    ...((!canAccessFile ||
-                                      Boolean(previewingUniqueId)) && {
-                                      opacity: 0.4,
-                                      pointerEvents: "none",
-                                    }),
-                                  }}
-                                >
-                                  {isPreviewing ? (
-                                    <CircularProgress
-                                      size={16}
-                                      color="inherit"
-                                    />
-                                  ) : (
-                                    <IMAGES.PrintIcon
-                                      sx={applicationDetailsStyles.actionIcon}
-                                    />
-                                  )}
-                                </Box>
-
-                                {isDeleted ? (
-                                  <Box sx={styles.actionDeletedSlot}>
-                                    <Box
-                                      component="span"
-                                      sx={styles.deletedChip}
-                                    >
-                                      Deleted
-                                    </Box>
+                              {isDeleted ? (
+                                <Box sx={styles.deletedActionWrap}>
+                                  <Box
+                                    component="span"
+                                    sx={styles.deletedChip}
+                                  >
+                                    Deleted
                                   </Box>
-                                ) : (
-                                  <Box sx={styles.actionDeleteSlot}>
+                                </Box>
+                              ) : (
+                              <Box sx={styles.actionButtonsWrap}>
+                                    <Box
+                                      component="button"
+                                      type="button"
+                                      title="Download PDF"
+                                      aria-label="Download PDF"
+                                      disabled={
+                                        !canPreviewOrDownload ||
+                                        Boolean(downloadingUniqueId)
+                                      }
+                                      onClick={(event) => {
+                                        event.currentTarget.blur();
+                                        void handleDownloadInspectionFile(
+                                          uniqueId,
+                                          item.fileName,
+                                          downloadingUniqueId,
+                                          setDownloadingUniqueId
+                                        )();
+                                      }}
+                                      sx={{
+                                        ...applicationDetailsStyles.orangeIcon,
+                                        ...((!canPreviewOrDownload ||
+                                          Boolean(downloadingUniqueId)) && {
+                                          opacity: 0.4,
+                                          pointerEvents: "none",
+                                        }),
+                                      }}
+                                    >
+                                      {isDownloading ? (
+                                        <CircularProgress
+                                          size={16}
+                                          color="inherit"
+                                        />
+                                      ) : (
+                                        <IMAGES.PictureAsPdfIcon
+                                          sx={applicationDetailsStyles.actionIcon}
+                                        />
+                                      )}
+                                    </Box>
+
+                                    <Box
+                                      component="button"
+                                      type="button"
+                                      title="Print Preview"
+                                      aria-label="Print Preview"
+                                      disabled={
+                                        !canPreviewOrDownload ||
+                                        Boolean(previewingUniqueId)
+                                      }
+                                      onClick={(event) => {
+                                        event.currentTarget.blur();
+                                        void handlePreviewInspectionFile(
+                                          uniqueId,
+                                          previewingUniqueId,
+                                          setPreviewingUniqueId
+                                        )();
+                                      }}
+                                      sx={{
+                                        ...applicationDetailsStyles.blueIcon,
+                                        ...((!canPreviewOrDownload ||
+                                          Boolean(previewingUniqueId)) && {
+                                          opacity: 0.4,
+                                          pointerEvents: "none",
+                                        }),
+                                      }}
+                                    >
+                                      {isPreviewing ? (
+                                        <CircularProgress
+                                          size={16}
+                                          color="inherit"
+                                        />
+                                      ) : (
+                                        <IMAGES.PrintIcon
+                                          sx={applicationDetailsStyles.actionIcon}
+                                        />
+                                      )}
+                                    </Box>
+
                                     <Box
                                       component="button"
                                       type="button"
@@ -454,9 +476,8 @@ const UploadHistory = ({
                                         />
                                       )}
                                     </Box>
-                                  </Box>
-                                )}
                               </Box>
+                              )}
                             </TableCell>
                           </TableRow>
                         );

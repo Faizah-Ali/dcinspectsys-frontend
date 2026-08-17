@@ -25,7 +25,7 @@ const getErrorMessage = async (response: Response): Promise<string> => {
   return "Unable to download document.";
 };
 
-const fetchInspectionFileBlob = async (uniqueId: string): Promise<Blob> => {
+const fetchHistoryFileBlob = async (uniqueId: string): Promise<Blob> => {
   const trimmedUniqueId = uniqueId.trim();
 
   if (!trimmedUniqueId) {
@@ -37,7 +37,7 @@ const fetchInspectionFileBlob = async (uniqueId: string): Promise<Blob> => {
   });
 
   const response = await authFetch(
-    `${ENDPOINTS.DOWNLOAD_INSPECTION_FILE}?${query.toString()}`
+    `${ENDPOINTS.DOWNLOAD_HISTORY_FILE}?${query.toString()}`
   );
 
   if (!response.ok) {
@@ -53,12 +53,12 @@ const fetchInspectionFileBlob = async (uniqueId: string): Promise<Blob> => {
   return new Blob([blob], { type: "application/pdf" });
 };
 
-/** Force-download the PDF using the existing download endpoint. */
+/** Force-download the PDF using the staff Upload History endpoint. */
 export const downloadInspectionFile = async ({
   uniqueId,
   fileName,
 }: DownloadInspectionFileParams): Promise<void> => {
-  const blob = await fetchInspectionFileBlob(uniqueId);
+  const blob = await fetchHistoryFileBlob(uniqueId);
   const objectUrl = URL.createObjectURL(blob);
 
   try {
@@ -81,7 +81,7 @@ export const previewInspectionFile = async ({
   previewWindow: Window;
 }): Promise<void> => {
   try {
-    const blob = await fetchInspectionFileBlob(uniqueId);
+    const blob = await fetchHistoryFileBlob(uniqueId);
     const objectUrl = URL.createObjectURL(blob);
 
     // Navigate the already-opened tab (opened during the click gesture)

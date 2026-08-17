@@ -271,7 +271,7 @@ const ApplicationDetailsTable = () => {
                       <StatusChip
                         statusCode={row.caseStatus}
                         kind="case"
-                        variant={VARIANTS.FILLED}
+                        variant={VARIANTS.OUTLINED}
                       />
                     </TableCell>
 

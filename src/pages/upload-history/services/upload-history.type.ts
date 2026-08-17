@@ -8,6 +8,8 @@ export interface UploadHistoryItem {
   entryDate: string;
   entryBy: string;
   fileUploadFlag?: string;
+  /** True when the file belongs to the current assignment/upload cycle. */
+  currentCycle?: boolean;
 }
 
 export interface InspectionLogItem {

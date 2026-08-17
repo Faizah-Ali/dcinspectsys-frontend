@@ -13,6 +13,11 @@ import CloseIcon from "@mui/icons-material/Close";
 import { VARIANTS } from "../../common/constants";
 import { getUploadHistory } from "../upload-history/services/upload-history.action";
 import type { UploadHistoryItem } from "../upload-history/services/upload-history.type";
+import {
+  hasCurrentCycleActivePdf,
+  isCurrentCycleActiveFile,
+  isDeletedUploadFile,
+} from "../upload-history/helper";
 
 import {
   DOCUMENT_TYPE_OPTIONS,
@@ -42,6 +47,7 @@ const UploadFile = ({
   const [isLoadingUploadedFiles, setIsLoadingUploadedFiles] = useState(true);
 
   const canUpload = isUploadEnabled(documentType, files);
+  const hasCurrentPdf = hasCurrentCycleActivePdf(uploadedFiles);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -195,32 +201,49 @@ const UploadFile = ({
                 No files uploaded yet
               </Box>
             ) : (
-              uploadedFiles.map((item, index) => {
-                const isDeleted = item.fileUploadFlag === "D";
-
-                return (
-                  <Box
-                    key={`${item.uniqueId || item.fileName}-${index}`}
-                    component="span"
-                    sx={
-                      isDeleted
-                        ? styles.deletedUploadedFileName
-                        : styles.selectedFileName
-                    }
-                  >
-                    {isDeleted ? (
-                      <>
-                        ✕ {item.fileName} -{" "}
-                        <Box component="span" sx={styles.deletedLabel}>
-                          Deleted
-                        </Box>
-                      </>
-                    ) : (
-                      <>✔ {item.fileName}</>
-                    )}
+              <>
+                {!hasCurrentPdf && (
+                  <Box component="span" sx={styles.emptyFileName}>
+                    No current PDF uploaded
                   </Box>
-                );
-              })
+                )}
+
+                {uploadedFiles.map((item, index) => {
+                  const isDeleted = isDeletedUploadFile(item);
+                  const isCurrent = isCurrentCycleActiveFile(item);
+
+                  return (
+                    <Box
+                      key={`${item.uniqueId || item.fileName}-${index}`}
+                      component="span"
+                      sx={
+                        isDeleted || !isCurrent
+                          ? styles.deletedUploadedFileName
+                          : styles.selectedFileName
+                      }
+                    >
+                      {isDeleted ? (
+                        <>
+                          ✕ {item.fileName} -{" "}
+                          <Box component="span" sx={styles.deletedLabel}>
+                            Deleted
+                          </Box>
+                        </>
+                      ) : isCurrent ? (
+                        <>✔ {item.fileName}</>
+                      ) : (
+                        <>
+                          {item.fileName} -{" "}
+                          <Box component="span" sx={styles.deletedLabel}>
+                            {/* Historical */}
+                            Old
+                          </Box>
+                        </>
+                      )}
+                    </Box>
+                  );
+                })}
+              </>
             )}
           </Box>
         </Box>

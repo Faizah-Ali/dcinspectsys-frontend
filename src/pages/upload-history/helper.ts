@@ -17,6 +17,31 @@ export const getUploadHistoryRowKey = (
 export const isDeletedUploadFile = (file: UploadHistoryItem): boolean =>
   file.fileUploadFlag === "D";
 
+/**
+ * Current PDF for this assignment cycle only.
+ * Historical files (currentCycle !== true) must not count as uploaded.
+ */
+export const isCurrentCycleActiveFile = (file: UploadHistoryItem): boolean => {
+  if (file.currentCycle !== true) {
+    return false;
+  }
+
+  if (file.fileUploadFlag === "D") {
+    return false;
+  }
+
+  // When flag is present, require active ('A'). Missing flag + currentCycle stays current.
+  if (typeof file.fileUploadFlag === "string" && file.fileUploadFlag.length > 0) {
+    return file.fileUploadFlag === "A";
+  }
+
+  return true;
+};
+
+export const hasCurrentCycleActivePdf = (
+  uploadedFiles: UploadHistoryItem[]
+): boolean => uploadedFiles.some(isCurrentCycleActiveFile);
+
 export const handlePreviewInspectionFile =
   (
     uniqueId: string,

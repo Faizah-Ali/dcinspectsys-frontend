@@ -8,6 +8,7 @@ export const ENDPOINTS = {
   UPLOAD_INSPECTION_FILE: "/api/upload-inspection-file",
   UPLOAD_HISTORY: "/api/upload-history",
   DOWNLOAD_INSPECTION_FILE: "/api/download-inspection-file",
+  DOWNLOAD_HISTORY_FILE: "/api/download-history-file",
   DELETE_INSPECTION_FILE: "/api/delete-inspection-file",
   COMPLETE_APPLICATION: "/api/complete-application",
 } as const;

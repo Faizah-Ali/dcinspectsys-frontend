@@ -25,12 +25,19 @@ const normalizeUploadHistoryItem = (item: unknown): UploadHistoryItem | null => 
         ? raw.file_upload_flag
         : undefined;
 
+  const currentCycle =
+    typeof raw.currentCycle === "boolean"
+      ? raw.currentCycle
+      : typeof raw.current_cycle === "boolean"
+        ? raw.current_cycle
+        : undefined;
+
   return {
     ...(raw as unknown as UploadHistoryItem),
     fileUploadFlag,
+    currentCycle,
   };
 };
-
 const normalizeUploadedFiles = (uploadedFiles: unknown): UploadHistoryItem[] => {
   if (!Array.isArray(uploadedFiles)) {
     return [];
