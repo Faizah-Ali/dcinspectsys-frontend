@@ -15,7 +15,6 @@ import {
   handleReasonToggle,
   handleRemarksChange,
   handleSubmit,
-  isRejectEnabled,
   isRemarksRequired,
   REJECTION_REASONS,
 } from "./helper";
@@ -31,7 +30,6 @@ const RejectApplication = ({
   const [reason, setReason] = useState("");
   const [remarks, setRemarks] = useState("");
 
-  const canReject = isRejectEnabled(reason, remarks);
   const remarksRequired = isRemarksRequired(reason);
 
   return (
@@ -46,7 +44,7 @@ const RejectApplication = ({
 
       <Box sx={styles.fieldSection}>
         <Box component="label" htmlFor="reject-reason" sx={styles.fieldLabel}>
-          Reason *
+          Reason
         </Box>
 
         <FormControl fullWidth>
@@ -114,7 +112,6 @@ const RejectApplication = ({
         <Button
           type="submit"
           variant={VARIANTS.CONTAINED}
-          disabled={!canReject}
           sx={styles.rejectButton}
         >
           Reject

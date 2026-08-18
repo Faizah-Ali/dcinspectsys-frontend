@@ -28,7 +28,6 @@ import {
   handleFileChange,
   handleRemoveFile,
   handleSubmit,
-  isUploadEnabled,
 } from "./helper";
 import { styles } from "./style";
 import type { UploadFileProps } from "./type";
@@ -46,7 +45,6 @@ const UploadFile = ({
   const [uploadedFiles, setUploadedFiles] = useState<UploadHistoryItem[]>([]);
   const [isLoadingUploadedFiles, setIsLoadingUploadedFiles] = useState(true);
 
-  const canUpload = isUploadEnabled(documentType, files);
   const hasCurrentPdf = hasCurrentCycleActivePdf(uploadedFiles);
 
   useEffect(() => {
@@ -89,7 +87,7 @@ const UploadFile = ({
 
       <Box sx={styles.fieldSection}>
         <Box component="label" htmlFor="upload-document-type" sx={styles.fieldLabel}>
-          Document Type *
+          Document Type
         </Box>
 
         <FormControl fullWidth>
@@ -131,7 +129,7 @@ const UploadFile = ({
 
       <Box sx={styles.filePickerSection}>
         <Box component="label" htmlFor="upload-pdf-file" sx={styles.fieldLabel}>
-          Upload PDF *
+          Upload PDF
         </Box>
 
         <input
@@ -263,7 +261,7 @@ const UploadFile = ({
         <Button
           type="submit"
           variant={VARIANTS.CONTAINED}
-          disabled={!canUpload || isSubmitting}
+          disabled={isSubmitting}
           sx={styles.submitButton}
         >
           {isSubmitting ? (

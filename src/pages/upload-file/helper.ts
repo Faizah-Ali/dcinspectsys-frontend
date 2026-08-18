@@ -1,5 +1,6 @@
 import type { SelectChangeEvent } from "@mui/material";
 
+import { uploadInspectionFileSchema } from "../../common/constants";
 import { showErrorToast } from "../../components/toast/helper";
 
 import type { DocumentTypeOption, UploadFileValues } from "./type";
@@ -17,9 +18,6 @@ export const MAX_UPLOAD_FILE_SIZE_BYTES = 10 * 1024 * 1024;
 export const isPdfFile = (file: File) =>
   file.type === "application/pdf" ||
   file.name.toLowerCase().endsWith(".pdf");
-
-export const isUploadEnabled = (documentType: string, files: File[]) =>
-  Boolean(documentType) && files.length > 0;
 
 export const getFileIdentity = (file: File) =>
   `${file.name}-${file.size}-${file.lastModified}`;
@@ -126,14 +124,43 @@ export const handleSubmit =
   async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    try {
+      await uploadInspectionFileSchema.validate(
+        { documentType, files },
+        { abortEarly: false }
+      );
+    } catch (error: unknown) {
+      const validationError = error as {
+        name?: string;
+        message?: string;
+        inner?: Array<{ message?: string }>;
+      };
+
+      if (validationError.name === "ValidationError") {
+        const messages = [
+          ...new Set(
+            (validationError.inner ?? [])
+              .map((item) => item.message?.trim() ?? "")
+              .filter(Boolean)
+          ),
+        ];
+
+        showErrorToast(
+          messages.join(". ") ||
+            validationError.message ||
+            "Please fill the required fields"
+        );
+        return;
+      }
+
+      showErrorToast("Please fill the required fields");
+      return;
+    }
+
     const validationError = validateSelectedFiles(files);
 
     if (validationError) {
       showErrorToast(validationError);
-      return;
-    }
-
-    if (!isUploadEnabled(documentType, files)) {
       return;
     }
 

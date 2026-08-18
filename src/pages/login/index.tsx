@@ -139,7 +139,7 @@ const Login = () => {
             </Box>
           </Box>
           <Box component="p" sx={styles.copyright}>
-            ©2026 ·{" "}
+            ©{new Date().getFullYear()} ·{" "}
             <Box component="span" sx={styles.copyrightSpan}>
               Delhi High Court
             </Box>{" "}

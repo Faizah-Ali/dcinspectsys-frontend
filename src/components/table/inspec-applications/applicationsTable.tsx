@@ -312,7 +312,7 @@ const ApplicationsTable = ({
         <Search
           value={searchInput}
           onChange={handleSearchChange}
-          placeholder="Search by username, case no, diary no, case title, remarks..."
+          placeholder="Search by Diary no, Case no, Case title, Remarks, Party-In-Person ID..."
           containerSx={{ marginBottom: 0, justifyContent: "flex-start" }}
         />
 

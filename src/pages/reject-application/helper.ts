@@ -1,5 +1,8 @@
 import type { SelectChangeEvent } from "@mui/material";
 
+import { rejectApplicationSchema } from "../../common/constants";
+import { showErrorToast } from "../../components/toast/helper";
+
 import type { RejectApplicationValues, RejectionReasonOption } from "./type";
 
 export const OTHER_REJECTION_REASON = "Other";
@@ -15,18 +18,6 @@ export const REJECTION_REASONS: RejectionReasonOption[] = [
 
 export const isRemarksRequired = (reason: string) =>
   reason === OTHER_REJECTION_REASON;
-
-export const isRejectEnabled = (reason: string, remarks: string) => {
-  if (!reason) {
-    return false;
-  }
-
-  if (isRemarksRequired(reason)) {
-    return remarks.trim().length > 0;
-  }
-
-  return true;
-};
 
 export const handleReasonChange =
   (setReason: React.Dispatch<React.SetStateAction<string>>) =>
@@ -60,15 +51,22 @@ export const handleSubmit =
     remarks: string,
     onSubmit: (values: RejectApplicationValues) => void
   ) =>
-  (event: React.FormEvent<HTMLFormElement>) => {
+  async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!isRejectEnabled(reason, remarks)) {
-      return;
-    }
+    try {
+      await rejectApplicationSchema.validate({ reason }, { abortEarly: false });
 
-    onSubmit({
-      reason,
-      remarks: remarks.trim(),
-    });
+      onSubmit({
+        reason,
+        remarks: remarks.trim(),
+      });
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error && error.name === "ValidationError"
+          ? error.message
+          : "Please select a reason";
+
+      showErrorToast(message);
+    }
   };

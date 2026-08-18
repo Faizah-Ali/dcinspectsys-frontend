@@ -27,7 +27,6 @@ import {
   handleDeleteInspectionFile,
   handleDownloadInspectionFile,
   handlePreviewInspectionFile,
-  isCurrentCycleActiveFile,
   isDeletedUploadFile,
 } from "./helper";
 import { getUploadHistory } from "./services/upload-history.action";
@@ -270,12 +269,11 @@ const UploadHistory = ({
                       {uploadedFiles.map((item, index) => {
                         const uniqueId = item.uniqueId?.trim() ?? "";
                         const isDeleted = isDeletedUploadFile(item);
-                        const isCurrent = isCurrentCycleActiveFile(item);
                         const isPreviewing = previewingUniqueId === uniqueId;
                         const isDownloading = downloadingUniqueId === uniqueId;
                         const isDeleting = deletingUniqueId === uniqueId;
                         const canAccessFile = Boolean(uniqueId);
-                        const canPreviewOrDownload = canAccessFile && !isDeleted;
+                        const canPreviewOrDownload = canAccessFile;
                         const canDeleteByStatus = applicationStatus === "P";
                         const canDelete =
                           canAccessFile && !isDeleted && canDeleteByStatus;
@@ -296,26 +294,7 @@ const UploadHistory = ({
                               align="center"
                               sx={{ ...styles.dataCell, ...styles.fileNameCell }}
                             >
-                              <Box sx={styles.fileNameWithBadge}>
-                                <Box component="span">{item.fileName}</Box>
-                                {!isDeleted &&
-                                  (isCurrent ? (
-                                    <Box
-                                      component="span"
-                                      sx={styles.currentCycleChip}
-                                    >
-                                      Current
-                                    </Box>
-                                  ) : (
-                                    <Box
-                                      component="span"
-                                      sx={styles.historicalCycleChip}
-                                    >
-                                      {/* Historical */}
-                                      Old
-                                    </Box>
-                                  ))}
-                              </Box>
+                              {item.fileName}
                             </TableCell>
                             <TableCell
                               align="center"
@@ -345,26 +324,15 @@ const UploadHistory = ({
                               align="center"
                               sx={{ ...styles.dataCell, ...styles.actionCell }}
                             >
-                              {isDeleted ? (
-                                <Box sx={styles.deletedActionWrap}>
-                                  <Box
-                                    component="span"
-                                    sx={styles.deletedChip}
-                                  >
-                                    Deleted
-                                  </Box>
-                                </Box>
-                              ) : (
                               <Box sx={styles.actionButtonsWrap}>
+                                {canPreviewOrDownload ? (
+                                  <>
                                     <Box
                                       component="button"
                                       type="button"
                                       title="Download PDF"
                                       aria-label="Download PDF"
-                                      disabled={
-                                        !canPreviewOrDownload ||
-                                        Boolean(downloadingUniqueId)
-                                      }
+                                      disabled={Boolean(downloadingUniqueId)}
                                       onClick={(event) => {
                                         event.currentTarget.blur();
                                         void handleDownloadInspectionFile(
@@ -376,8 +344,7 @@ const UploadHistory = ({
                                       }}
                                       sx={{
                                         ...applicationDetailsStyles.orangeIcon,
-                                        ...((!canPreviewOrDownload ||
-                                          Boolean(downloadingUniqueId)) && {
+                                        ...(Boolean(downloadingUniqueId) && {
                                           opacity: 0.4,
                                           pointerEvents: "none",
                                         }),
@@ -400,10 +367,7 @@ const UploadHistory = ({
                                       type="button"
                                       title="Print Preview"
                                       aria-label="Print Preview"
-                                      disabled={
-                                        !canPreviewOrDownload ||
-                                        Boolean(previewingUniqueId)
-                                      }
+                                      disabled={Boolean(previewingUniqueId)}
                                       onClick={(event) => {
                                         event.currentTarget.blur();
                                         void handlePreviewInspectionFile(
@@ -414,8 +378,7 @@ const UploadHistory = ({
                                       }}
                                       sx={{
                                         ...applicationDetailsStyles.blueIcon,
-                                        ...((!canPreviewOrDownload ||
-                                          Boolean(previewingUniqueId)) && {
+                                        ...(Boolean(previewingUniqueId) && {
                                           opacity: 0.4,
                                           pointerEvents: "none",
                                         }),
@@ -432,7 +395,22 @@ const UploadHistory = ({
                                         />
                                       )}
                                     </Box>
+                                  </>
+                                ) : (
+                                  <>
+                                    <Box sx={styles.actionIconSlot} />
+                                    <Box sx={styles.actionIconSlot} />
+                                  </>
+                                )}
 
+                                {isDeleted ? (
+                                  <Box
+                                    component="span"
+                                    sx={styles.deletedChip}
+                                  >
+                                    Deleted
+                                  </Box>
+                                ) : (
                                     <Box
                                       component="button"
                                       type="button"
@@ -476,8 +454,8 @@ const UploadHistory = ({
                                         />
                                       )}
                                     </Box>
+                                )}
                               </Box>
-                              )}
                             </TableCell>
                           </TableRow>
                         );

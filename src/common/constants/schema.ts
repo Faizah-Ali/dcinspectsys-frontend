@@ -22,3 +22,15 @@ export const sendMailSchema = Yup.object().shape({
 export const selectStaffSchema = Yup.object().shape({
     staffId: Yup.string().trim().required("Please select a staff member"),
 });
+
+export const rejectApplicationSchema = Yup.object().shape({
+    reason: Yup.string().trim().required("Please select a reason"),
+});
+
+export const uploadInspectionFileSchema = Yup.object().shape({
+    documentType: Yup.string()
+        .trim()
+        .required("Please select a document type"),
+    files: Yup.array()
+        .min(1, "Please select a PDF file"),
+});
