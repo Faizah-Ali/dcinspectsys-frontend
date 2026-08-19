@@ -7,6 +7,7 @@ import {
 import type { SelectChangeEvent } from "@mui/material";
 import type { SxProps, Theme } from "@mui/material/styles";
 
+import { COLORS } from "../../common/constants/colors";
 import {
   APPLICATION_STATUS_FILTER_OPTIONS,
   CASE_STATUS_FILTER_OPTIONS,
@@ -59,6 +60,22 @@ const StatusFilter = ({
         onChange={onChange}
         onClose={handleClose}
         displayEmpty
+        MenuProps={{
+          PaperProps: {
+            sx: {
+              "& .MuiMenuItem-root.Mui-selected": {
+                backgroundColor: `rgba(209, 91, 6, 0.12)`,
+                color: COLORS.primary,
+                "&:hover": {
+                  backgroundColor: `rgba(209, 91, 6, 0.2)`,
+                },
+              },
+              "& .MuiMenuItem-root:hover": {
+                backgroundColor: `rgba(209, 91, 6, 0.08)`,
+              },
+            },
+          },
+        }}
         renderValue={(selectedValue) => {
           const selectedOption = filterOptions.find(
             (option) => option.value === selectedValue

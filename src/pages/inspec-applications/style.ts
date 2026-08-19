@@ -268,10 +268,22 @@ export const styles = {
   },
   statusFilter: {
     minWidth: { xs: "100%", sm: 200 },
+    "& .MuiInputLabel-root": {
+      color: COLORS.textPrimary,
+      "&.Mui-focused": {
+        color: COLORS.primary,
+      },
+    },
     "& .MuiOutlinedInput-root": {
       borderRadius: "20px",
       "& fieldset": {
         borderRadius: "20px",
+      },
+      "&:hover fieldset": {
+        borderColor: COLORS.primary,
+      },
+      "&.Mui-focused fieldset": {
+        borderColor: COLORS.primary,
       },
     },
   },

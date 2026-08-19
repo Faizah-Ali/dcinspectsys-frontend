@@ -1,3 +1,5 @@
+import { COLORS } from "../../common/constants";
+
 export const searchStyles = {
   container: {
     display: "flex",
@@ -8,6 +10,13 @@ export const searchStyles = {
     width: { xs: "100%", sm: "360px" },
     "& .MuiOutlinedInput-root": {
       borderRadius: "20px",
+      "&:hover fieldset": {
+              borderColor: COLORS.primary,
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: COLORS.primary,
+            },
+      },            
     },
-  },
-};
+  };
+
