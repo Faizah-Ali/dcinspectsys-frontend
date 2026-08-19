@@ -81,7 +81,7 @@ export const handleSubmit =
 
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
-      showErrorToast("Please fix the form errors");
+      showErrorToast("Please fill the required fields");
       return;
     }
 
