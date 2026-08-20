@@ -119,10 +119,6 @@ const ApplicationsTable = ({
 
   const [applications, setApplications] = useState<ApplicationResponse[]>([]);
 
-  const [displayApplications, setDisplayApplications] = useState<
-    ApplicationResponse[]
-  >([]);
-
   const [totalRecords, setTotalRecords] = useState(0);
 
   const [totalPages, setTotalPages] = useState(0);
@@ -130,6 +126,9 @@ const ApplicationsTable = ({
   const [searchInput, setSearchInput] = useState(search);
 
   const [refreshKey, setRefreshKey] = useState(0);
+
+  // Avoid flashing "No records found" before the first fetch settles.
+  const [hasFetched, setHasFetched] = useState(false);
 
   const {
     selectedApplication,
@@ -160,7 +159,6 @@ const ApplicationsTable = ({
     handleCloseApproverProcess,
     handleApproverProcessSubmit,
   } = useApplicationPopups({
-    setDisplayApplications,
     setRefreshKey,
   });
 
@@ -221,9 +219,14 @@ const ApplicationsTable = ({
         setApplications(data.content);
         setTotalRecords(data.totalRecords);
         setTotalPages(data.totalPages);
+        setHasFetched(true);
       })
       .catch(() => {
         // Aborted or failed; the slice already resets `loading` in rejected.
+        // Only mark fetched for an active (non-aborted) request so the initial
+        // spinner stays up until a real response arrives.
+        if (!isActive) return;
+        setHasFetched(true);
       });
 
     return () => {
@@ -231,10 +234,6 @@ const ApplicationsTable = ({
       promise.abort();
     };
   }, [dispatch, page, limit, search, caseStatus, applicationStatus, owner, refreshKey]);
-
-  useEffect(() => {
-    setDisplayApplications(applications);
-  }, [applications]);
 
   const updateSearchParams = useCallback(
     (nextPage: number, nextLimit: number) => {
@@ -401,7 +400,7 @@ const ApplicationsTable = ({
 
             <TableBody>
 
-              {loading && displayApplications.length === 0 && (
+              {(!hasFetched || loading) && applications.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={11} sx={styles.placeholderCell}>
                     <CircularProgress size={28} />
@@ -409,7 +408,7 @@ const ApplicationsTable = ({
                 </TableRow>
               )}
 
-              {!loading && displayApplications.length === 0 && (
+              {hasFetched && !loading && applications.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={11} sx={styles.placeholderCell}>
                     No records found.
@@ -417,7 +416,7 @@ const ApplicationsTable = ({
                 </TableRow>
               )}
 
-              {displayApplications.map((row, index) => (
+              {applications.map((row, index) => (
 
                 <TableRow
                   key={`${row.diaryNo}-${index}`}
@@ -677,7 +676,7 @@ const ApplicationsTable = ({
 
         </TableContainer>
 
-        {loading && displayApplications.length > 0 && (
+        {loading && applications.length > 0 && (
           <Box sx={styles.loadingOverlay}>
             <CircularProgress size={28} />
           </Box>

@@ -18,7 +18,6 @@ import type { UploadFileValues } from "../pages/upload-file/type";
 import { showErrorToast, showSuccessToast } from "../components/toast/helper";
 
 interface UseApplicationPopupsOptions {
-  setDisplayApplications: React.Dispatch<React.SetStateAction<ApplicationResponse[]>>;
   setRefreshKey: React.Dispatch<React.SetStateAction<number>>;
 }
 
