@@ -153,6 +153,19 @@ export const styles = {
     "10%",
     "14.5%",
   ] as const,
+  // ONLINEINSPECTION has no Remarks column — redistributes the 8% remarks width
+  columnWidthsWithoutRemarks: [
+    "3%",
+    "3.5%",
+    "9%",
+    "8%",
+    "15%",
+    "14%",
+    "8%",
+    "14%",
+    "11%",
+    "14.5%",
+  ] as const,
   blueIcon: {
     padding: "2px",
     color: "#0f1729",

@@ -2,6 +2,7 @@ export interface LoginFormData {
   username: string;
   password: string;
   showPassword: boolean;
+  rememberMe: boolean;
 }
 
 export interface LoginFormErrors {

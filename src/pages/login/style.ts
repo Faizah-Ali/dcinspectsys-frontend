@@ -145,7 +145,7 @@ export const styles = {
   },
   loginBox: {
     width: "315px",
-    height: "310px",
+    height: "335px",
     background: COLORS.sidebarBg,
     padding: "32px 28px",
     "@media (max-width: 900px)": {
@@ -212,6 +212,19 @@ export const styles = {
   whiteInputField: {
     color: COLORS.sidebarBg,
   },
+  usernameInputField: {
+    // Hide native datalist dropdown arrow
+    "&::-webkit-calendar-picker-indicator": {
+      display: "none !important",
+      opacity: 0,
+      width: 0,
+      height: 0,
+    },
+    "&::-webkit-list-button": {
+      display: "none !important",
+      opacity: 0,
+    },
+  },
   darkInput: {
     background: COLORS.sidebarBg,
     color: "#ffffff",
@@ -220,6 +233,50 @@ export const styles = {
   },
   darkInputField: {
     color: "#ffffff",
+  },
+  passwordFieldRow: {
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+    width: "100%",
+  },
+  passwordToggleButton: {
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 0,
+    margin: 0,
+    border: "none",
+    background: "transparent",
+    color: "#ffffff",
+    cursor: "pointer",
+    flexShrink: 0,
+    lineHeight: 0,
+    "&:disabled": {
+      opacity: 0.6,
+      cursor: "default",
+    },
+  },
+  passwordToggleIcon: {
+    fontSize: "20px",
+  },
+  rememberMeLabel: {
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+    marginTop: "10px",
+    fontSize: "13px",
+    fontWeight: 600,
+    color: "#ffffff",
+    cursor: "pointer",
+    userSelect: "none",
+  },
+  rememberMeCheckbox: {
+    width: "15px",
+    height: "15px",
+    margin: 0,
+    accentColor: COLORS.primary,
+    cursor: "pointer",
   },
   loginButton: {
     width: "100%",

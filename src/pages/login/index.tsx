@@ -9,9 +9,11 @@ import { IMAGES } from "../../common/constants/images";
 import type { AppDispatch, RootState } from "../../redux/store";
 
 import {
+  getUsernameHistory,
   handleChange,
   handleSubmit,
   initialLoginForm,
+  USERNAME_SUGGESTIONS_LIST_ID,
 } from "./helper";
 import { styles } from "./style";
 import type { LoginFormData, LoginFormErrors } from "./type";
@@ -24,6 +26,7 @@ const Login = () => {
 
   const [formData, setFormData] = useState<LoginFormData>(initialLoginForm);
   const [errors, setErrors] = useState<LoginFormErrors>({});
+  const [usernameSuggestions] = useState<string[]>(() => getUsernameHistory());
 
   useEffect(() => {
     window.history.pushState(null, "", window.location.href);
@@ -87,6 +90,8 @@ const Login = () => {
                       id="username"
                       name="username"
                       type="text"
+                      list={USERNAME_SUGGESTIONS_LIST_ID}
+                      autoComplete="off"
                       placeholder="Enter your username"
                       value={formData.username}
                       onChange={handleChange(
@@ -96,8 +101,24 @@ const Login = () => {
                         setErrors
                       )}
                       disabled={isSubmitting}
-                      sx={{ ...styles.inputField, ...styles.whiteInputField }}
+                      sx={{
+                        ...styles.inputField,
+                        ...styles.whiteInputField,
+                        ...styles.usernameInputField,
+                      }}
                     />
+                    <Box
+                      component="datalist"
+                      id={USERNAME_SUGGESTIONS_LIST_ID}
+                    >
+                      {usernameSuggestions.map((username) => (
+                        <Box
+                          component="option"
+                          key={username}
+                          value={username}
+                        />
+                      ))}
+                    </Box>
                   </Box>
                   <Box sx={styles.errorSlot}>{errors.username ?? "\u00A0"}</Box>
                 </Box>
@@ -107,25 +128,83 @@ const Login = () => {
                     <Box component="label" htmlFor="password" sx={styles.inputLabel}>
                       Password
                     </Box>
-                    <Box
-                      component="input"
-                      id="password"
-                      name="password"
-                      placeholder="Enter your password"
-                      type="password"
-                      value={formData.password}
-                      onChange={handleChange(
-                        "password",
-                        setFormData,
-                        errors,
-                        setErrors
-                      )}
-                      disabled={isSubmitting}
-                      sx={{ ...styles.inputField, ...styles.darkInputField }}
-                    />
+                    <Box sx={styles.passwordFieldRow}>
+                      <Box
+                        component="input"
+                        id="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        type={formData.showPassword ? "text" : "password"}
+                        autoComplete="off"
+                        value={formData.password}
+                        onChange={handleChange(
+                          "password",
+                          setFormData,
+                          errors,
+                          setErrors
+                        )}
+                        disabled={isSubmitting}
+                        sx={{ ...styles.inputField, ...styles.darkInputField }}
+                      />
+                      <Box
+                        component="button"
+                        type="button"
+                        title={
+                          formData.showPassword
+                            ? "Hide password"
+                            : "Show password"
+                        }
+                        aria-label={
+                          formData.showPassword
+                            ? "Hide password"
+                            : "Show password"
+                        }
+                        disabled={isSubmitting}
+                        onClick={() => {
+                          setFormData((prev) => ({
+                            ...prev,
+                            showPassword: !prev.showPassword,
+                          }));
+                        }}
+                        sx={styles.passwordToggleButton}
+                      >
+                        {formData.showPassword ? (
+                          <IMAGES.VisibilityOffIcon
+                            sx={styles.passwordToggleIcon}
+                          />
+                        ) : (
+                          <IMAGES.VisibilityIcon
+                            sx={styles.passwordToggleIcon}
+                          />
+                        )}
+                      </Box>
+                    </Box>
                   </Box>
                   <Box sx={styles.errorSlot}>{errors.password ?? "\u00A0"}</Box>
                 </Box>
+              </Box>
+
+              <Box
+                component="label"
+                htmlFor="rememberMe"
+                sx={styles.rememberMeLabel}
+              >
+                <Box
+                  component="input"
+                  id="rememberMe"
+                  name="rememberMe"
+                  type="checkbox"
+                  checked={formData.rememberMe}
+                  onChange={handleChange(
+                    "rememberMe",
+                    setFormData,
+                    errors,
+                    setErrors
+                  )}
+                  disabled={isSubmitting}
+                  sx={styles.rememberMeCheckbox}
+                />
+                Remember me
               </Box>
 
               <Button

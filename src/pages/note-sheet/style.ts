@@ -1,0 +1,123 @@
+import { COLORS } from "../../common/constants";
+
+export const styles = {
+  container: {
+    display: "flex",
+    flexDirection: "column" as const,
+    gap: "22px",
+  },
+  referenceText: {
+    margin: 0,
+    fontSize: "16px",
+    fontWeight: 600,
+    color: COLORS.textPrimary,
+    textAlign: "center" as const,
+  },
+  loadingWrap: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    minHeight: "120px",
+  },
+  tableWrapper: {
+    width: "100%",
+    maxWidth: "100%",
+    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+    borderRadius: "8px",
+    overflowX: "auto" as const,
+    overflowY: "hidden" as const,
+  },
+  table: {
+    width: "100%",
+    tableLayout: "fixed" as const,
+  },
+  headerRow: {
+    backgroundColor: "#f5f5f5",
+  },
+  headerCell: {
+    fontWeight: 700,
+    fontSize: "14px",
+    color: COLORS.textPrimary,
+    borderBottom: "2px solid #ddd",
+    padding: "10px 12px !important",
+    whiteSpace: "nowrap" as const,
+    textAlign: "center" as const,
+    verticalAlign: "middle" as const,
+    boxSizing: "border-box" as const,
+    overflow: "hidden" as const,
+  },
+  dataRow: {
+    "&:nth-of-type(even)": {
+      backgroundColor: "#fafafa",
+    },
+    "&:hover": {
+      backgroundColor: "#f0f0f0",
+    },
+  },
+  dataCell: {
+    fontSize: "14px",
+    fontWeight: 400,
+    lineHeight: 1.43,
+    color: COLORS.textPrimary,
+    padding: "10px 12px !important",
+    borderBottom: "1px solid #e0e0e0",
+    textAlign: "center" as const,
+    verticalAlign: "middle" as const,
+    boxSizing: "border-box" as const,
+    overflow: "hidden" as const,
+    wordBreak: "break-word" as const,
+  },
+  contentCell: {
+    fontSize: "14px",
+    fontWeight: 400,
+    lineHeight: 1.43,
+    color: COLORS.textPrimary,
+    padding: "10px 12px !important",
+    borderBottom: "1px solid #e0e0e0",
+    textAlign: "center" as const,
+    verticalAlign: "middle" as const,
+    boxSizing: "border-box" as const,
+    overflow: "hidden" as const,
+    wordBreak: "break-word" as const,
+  },
+  emptyText: {
+    margin: 0,
+    fontSize: "14px",
+    color: COLORS.textPrimary,
+    opacity: 0.7,
+  },
+  actionsWrap: {
+    display: "flex",
+    justifyContent: "flex-end",
+    gap: "12px",
+  },
+  closeButton: {
+    minWidth: "128px",
+    height: "48px",
+    backgroundColor: COLORS.white,
+    border: `1px solid ${COLORS.primary} !important`,
+    borderRadius: "3px",
+    color: `${COLORS.primary} !important`,
+    fontSize: "15px",
+    fontWeight: 800,
+    cursor: "pointer",
+    padding: "0 24px !important",
+    boxShadow: "none !important",
+    "&:hover": {
+      backgroundColor: "rgba(209, 91, 6, 0.08)",
+      color: COLORS.primary,
+      boxShadow: "none !important",
+    },
+  },
+  authorCell: {
+    width: "22%",
+  },
+  dateCell: {
+    width: "22%",
+    whiteSpace: "nowrap" as const,
+  },
+  commentCell: {
+    width: "56%",
+  },
+  columnWidths: ["22%", "22%", "56%"] as const,
+} as const;

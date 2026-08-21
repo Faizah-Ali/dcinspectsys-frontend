@@ -100,9 +100,18 @@ const ApproverProcess = ({
             id="approver-forward-to"
             value={forwardTo}
             onChange={handleForwardChange(setForwardTo)}
+            onClose={() => {
+              requestAnimationFrame(() => {
+                const active = document.activeElement;
+
+                if (active instanceof HTMLElement) {
+                  active.blur();
+                }
+              });
+            }}
             disabled={isLoadingApprovers || isSubmitting}
             displayEmpty
-            sx={styles.documentTypeSelect}
+            sx={styles.forwardToSelect}
             renderValue={(selectedValue) => {
               if (!selectedValue) {
                 return (

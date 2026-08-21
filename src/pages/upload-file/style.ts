@@ -14,6 +14,17 @@ export const styles = {
     fontWeight: 600,
   },
   documentTypeSelect: {
+    borderRadius: "4px",
+    backgroundColor: COLORS.white,
+    "& fieldset": {
+      borderColor: "rgba(15, 23, 41, 0.2)",
+    },
+    "&:hover fieldset": {
+      borderColor: COLORS.primary,
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: COLORS.primary,
+    },
     "& .MuiOutlinedInput-root": {
       borderRadius: "4px",
       backgroundColor: COLORS.white,

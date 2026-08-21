@@ -38,6 +38,8 @@ export const useApplicationPopups = ({
     useState<ApplicationResponse | null>(null);
   const [selectedApproverProcessApplication, setSelectedApproverProcessApplication] =
     useState<ApplicationResponse | null>(null);
+  const [selectedRemarksApplication, setSelectedRemarksApplication] =
+    useState<ApplicationResponse | null>(null);
 
   const handleOpenAssignPopup = (application: ApplicationResponse) => {
     setSelectedApplication(application);
@@ -215,6 +217,14 @@ export const useApplicationPopups = ({
     setSelectedApproverProcessApplication(null);
   };
 
+  const handleOpenRemarksPopup = (application: ApplicationResponse) => {
+    setSelectedRemarksApplication(application);
+  };
+
+  const handleCloseRemarksPopup = () => {
+    setSelectedRemarksApplication(null);
+  };
+
   const handleApproverProcessSubmit = async (values: ApproverProcessValues) => {
     if (values.action === "APPROVE" || values.action === "REJECT") {
       try {
@@ -294,6 +304,7 @@ export const useApplicationPopups = ({
     completeAction,
     selectedRejectApplication,
     selectedApproverProcessApplication,
+    selectedRemarksApplication,
     handleOpenAssignPopup,
     handleCloseAssignPopup,
     handleAssignSubmit,
@@ -314,5 +325,7 @@ export const useApplicationPopups = ({
     handleOpenApproverProcess,
     handleCloseApproverProcess,
     handleApproverProcessSubmit,
+    handleOpenRemarksPopup,
+    handleCloseRemarksPopup,
   };
 };

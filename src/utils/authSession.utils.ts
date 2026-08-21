@@ -1,6 +1,16 @@
 // Auth helper functions for managing login state and user info
 
-import { USERNAME_KEY, ROLE_KEY, GROUP_KEY, LOGGED_IN_KEY, LOGIN_TIME_KEY } from "../common/constants/storageKeys";
+import {
+  USERNAME_KEY,
+  ROLE_KEY,
+  GROUP_KEY,
+  LOGGED_IN_KEY,
+  LOGIN_TIME_KEY,
+  REMEMBER_ME_KEY,
+  REMEMBER_USERNAME_KEY,
+  REMEMBER_PASSWORD_KEY,
+  USERNAME_HISTORY_KEY,
+} from "../common/constants/storageKeys";
 import { showErrorToast } from "../components/toast/helper";
 import { store } from "../redux/store";
 import { clearAuth } from "../redux/auth.slice";
@@ -133,8 +143,28 @@ const formatLoginTime = (date: Date): string => {
 // Logout function - clears all storage and redirects to login
 export const logout = (message?: string) => {
   try {
+    const rememberMe = localStorage.getItem(REMEMBER_ME_KEY);
+    const rememberedUsername = localStorage.getItem(REMEMBER_USERNAME_KEY);
+    const rememberedPassword = localStorage.getItem(REMEMBER_PASSWORD_KEY);
+    const usernameHistory = localStorage.getItem(USERNAME_HISTORY_KEY);
+
     localStorage.clear();
     sessionStorage.clear();
+
+    // Keep remembered credentials so password can autofill when username is typed
+    if (rememberMe === "true") {
+      localStorage.setItem(REMEMBER_ME_KEY, rememberMe);
+      if (rememberedUsername) {
+        localStorage.setItem(REMEMBER_USERNAME_KEY, rememberedUsername);
+      }
+      if (rememberedPassword) {
+        localStorage.setItem(REMEMBER_PASSWORD_KEY, rememberedPassword);
+      }
+    }
+
+    if (usernameHistory) {
+      localStorage.setItem(USERNAME_HISTORY_KEY, usernameHistory);
+    }
 
     store.dispatch(clearAuth());
 

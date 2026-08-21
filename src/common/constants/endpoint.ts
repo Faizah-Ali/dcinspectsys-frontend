@@ -7,6 +7,7 @@ export const ENDPOINTS = {
   SEND_FOR_APPROVAL: "/api/send-for-approval",
   UPLOAD_INSPECTION_FILE: "/api/upload-inspection-file",
   UPLOAD_HISTORY: "/api/upload-history",
+  INSPECTION_COMMENTS: "/api/inspection-comments",
   DOWNLOAD_INSPECTION_FILE: "/api/download-inspection-file",
   DOWNLOAD_HISTORY_FILE: "/api/download-history-file",
   DELETE_INSPECTION_FILE: "/api/delete-inspection-file",

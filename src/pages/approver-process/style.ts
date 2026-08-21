@@ -3,6 +3,23 @@ import { styles as rejectApplicationStyles } from "../reject-application/style";
 
 export const styles = {
   ...rejectApplicationStyles,
+  forwardToSelect: {
+    borderRadius: "4px",
+    backgroundColor: COLORS.white,
+    "& .MuiOutlinedInput-notchedOutline": {
+      borderColor: "rgba(15, 23, 41, 0.2)",
+    },
+    "&:hover .MuiOutlinedInput-notchedOutline": {
+      borderColor: `${COLORS.primary} !important`,
+    },
+    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+      borderColor: `${COLORS.primary} !important`,
+    },
+    "& .MuiSelect-select": {
+      fontSize: "14px",
+      color: COLORS.textPrimary,
+    },
+  },
   actionsWrap: {
     display: "flex",
     justifyContent: "space-between",

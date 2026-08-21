@@ -53,6 +53,7 @@ import {
   ApproverProcessPopup,
   AssignPopup,
   CompletePopup,
+  NoteSheetPopup,
   RejectApplicationPopup,
   SelectApproverPopup,
   UploadFilePopup,
@@ -138,6 +139,7 @@ const ApplicationsTable = ({
     completeAction,
     selectedRejectApplication,
     selectedApproverProcessApplication,
+    selectedRemarksApplication,
     handleOpenAssignPopup,
     handleCloseAssignPopup,
     handleAssignSubmit,
@@ -158,11 +160,22 @@ const ApplicationsTable = ({
     handleOpenApproverProcess,
     handleCloseApproverProcess,
     handleApproverProcessSubmit,
+    handleOpenRemarksPopup,
+    handleCloseRemarksPopup,
   } = useApplicationPopups({
     setRefreshKey,
   });
 
   const debouncedSearch = useDebounce(searchInput.trim(), SEARCH_DEBOUNCE_MS);
+
+  const showRemarksColumn =
+    role === "INSPECTIONADMIN" || role === "INSPECTIONAPPROVER";
+  const remarksColumnLabel =
+    role === "INSPECTIONAPPROVER" ? "Dealing remarks" : "Remarks";
+  const columnWidths = showRemarksColumn
+    ? styles.columnWidths
+    : styles.columnWidthsWithoutRemarks;
+  const tableColumnCount = showRemarksColumn ? 11 : 10;
 
   // Keep local input in sync if URL param changes externally (e.g. back/forward).
   useEffect(() => {
@@ -341,7 +354,7 @@ const ApplicationsTable = ({
 
           <Table size="small" sx={styles.table}>
             <colgroup>
-              {styles.columnWidths.map((width, colIndex) => (
+              {columnWidths.map((width, colIndex) => (
                 <col key={colIndex} style={{ width }} />
               ))}
             </colgroup>
@@ -374,9 +387,11 @@ const ApplicationsTable = ({
                   Case Status
                 </TableCell>
 
-                <TableCell align="center" sx={{ ...styles.headerCell, ...styles.remarksCell }}>
-                  Remarks
-                </TableCell>
+                {showRemarksColumn && (
+                  <TableCell align="center" sx={{ ...styles.headerCell, ...styles.remarksCell }}>
+                    {remarksColumnLabel}
+                  </TableCell>
+                )}
 
                 <TableCell align="center" sx={{ ...styles.headerCell, ...styles.applicationDateCell }}>
                   Application Date 
@@ -402,7 +417,7 @@ const ApplicationsTable = ({
 
               {(!hasFetched || loading) && applications.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={11} sx={styles.placeholderCell}>
+                  <TableCell colSpan={tableColumnCount} sx={styles.placeholderCell}>
                     <CircularProgress size={28} />
                   </TableCell>
                 </TableRow>
@@ -410,7 +425,7 @@ const ApplicationsTable = ({
 
               {hasFetched && !loading && applications.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={11} sx={styles.placeholderCell}>
+                  <TableCell colSpan={tableColumnCount} sx={styles.placeholderCell}>
                     No records found.
                   </TableCell>
                 </TableRow>
@@ -457,9 +472,24 @@ const ApplicationsTable = ({
                     />
                   </TableCell>
 
-                  <TableCell align="center" sx={{ ...styles.dataCell, ...styles.remarksCell }}>
-                    {row.remarks || "-"}
-                  </TableCell>
+                  {showRemarksColumn && (
+                    <TableCell align="center" sx={{ ...styles.dataCell, ...styles.remarksCell }}>
+                      <Box sx={styles.actionButtons}>
+                        <Box
+                          component="button"
+                          type="button"
+                          sx={styles.orangeIcon}
+                          title="Click here to view Dealing remarks."
+                          onClick={(event) => {
+                            event.currentTarget.blur();
+                            handleOpenRemarksPopup(row);
+                          }}
+                        >
+                          <IMAGES.SpeakerNotesIcon sx={styles.actionIcon} />
+                        </Box>
+                      </Box>
+                    </TableCell>
+                  )}
 
                   <TableCell align="center" sx={{ ...styles.dataCell, ...styles.applicationDateCell }}>
                     {formatDate(row.appliedDate)}
@@ -739,6 +769,11 @@ const ApplicationsTable = ({
         application={selectedApproverProcessApplication}
         onClose={handleCloseApproverProcess}
         onSubmit={handleApproverProcessSubmit}
+      />
+
+      <NoteSheetPopup
+        application={selectedRemarksApplication}
+        onClose={handleCloseRemarksPopup}
       />
 
     </Box>
