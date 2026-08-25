@@ -2,6 +2,7 @@
 
 import {
   USERNAME_KEY,
+  FULL_NAME_KEY,
   ROLE_KEY,
   GROUP_KEY,
   LOGGED_IN_KEY,
@@ -23,6 +24,11 @@ export const saveLoginState = (isLoggedIn: boolean) => {
 // Save username to localStorage
 export const saveUsername = (username: string) => {
   localStorage.setItem(USERNAME_KEY, username);
+};
+
+// Save full name to localStorage
+export const saveFullName = (fullName: string) => {
+  localStorage.setItem(FULL_NAME_KEY, fullName);
 };
 
 // Save role to localStorage
@@ -60,6 +66,16 @@ export const getUsername = (): string => {
     return localStorage.getItem(USERNAME_KEY) || "";
   } catch (error) {
     console.error("Error reading username:", error);
+  }
+  return "";
+};
+
+// Get full name from localStorage
+export const getFullName = (): string => {
+  try {
+    return localStorage.getItem(FULL_NAME_KEY) || "";
+  } catch (error) {
+    console.error("Error reading full name:", error);
   }
   return "";
 };

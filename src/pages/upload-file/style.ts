@@ -16,31 +16,40 @@ export const styles = {
   documentTypeSelect: {
     borderRadius: "4px",
     backgroundColor: COLORS.white,
-    "& fieldset": {
+    "& .MuiOutlinedInput-notchedOutline": {
       borderColor: "rgba(15, 23, 41, 0.2)",
     },
-    "&:hover fieldset": {
-      borderColor: COLORS.primary,
+    "&:hover .MuiOutlinedInput-notchedOutline": {
+      borderColor: `${COLORS.primary} !important`,
     },
-    "&.Mui-focused fieldset": {
-      borderColor: COLORS.primary,
+    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+      borderColor: `${COLORS.primary} !important`,
+      borderWidth: "2px",
     },
-    "& .MuiOutlinedInput-root": {
-      borderRadius: "4px",
-      backgroundColor: COLORS.white,
-      "& fieldset": {
-        borderColor: "rgba(15, 23, 41, 0.2)",
-      },
-      "&:hover fieldset": {
-        borderColor: COLORS.primary,
-      },
-      "&.Mui-focused fieldset": {
-        borderColor: COLORS.primary,
-      },
+    "&.Mui-focused .MuiSvgIcon-root": {
+      color: COLORS.primary,
     },
     "& .MuiSelect-select": {
       fontSize: "14px",
       color: COLORS.textPrimary,
+    },
+  },
+  documentTypeMenu: {
+    "& .MuiMenuItem-root:hover": {
+      backgroundColor: "rgba(209, 91, 6, 0.08)",
+    },
+    "& .MuiMenuItem-root.Mui-selected": {
+      backgroundColor: "rgba(209, 91, 6, 0.12) !important",
+      color: COLORS.primary,
+    },
+    "& .MuiMenuItem-root.Mui-selected:hover": {
+      backgroundColor: "rgba(209, 91, 6, 0.2) !important",
+    },
+    "& .MuiMenuItem-root.Mui-selected.Mui-focusVisible": {
+      backgroundColor: "rgba(209, 91, 6, 0.12) !important",
+    },
+    "& .MuiMenuItem-root.Mui-focusVisible": {
+      backgroundColor: "rgba(209, 91, 6, 0.08)",
     },
   },
   placeholderText: {

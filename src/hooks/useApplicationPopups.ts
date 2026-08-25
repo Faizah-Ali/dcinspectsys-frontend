@@ -7,6 +7,10 @@ import {
   rejectApplication,
 } from "../pages/inspec-applications/services/approver.action";
 import type { ApproverProcessValues } from "../pages/approver-process/type";
+import {
+  resolveCompleteRemarks,
+  toRejectIdKey,
+} from "../pages/complete-application/helper";
 import { completeApplication } from "../pages/complete-application/services/complete-application.action";
 import type { RejectApplicationValues } from "../pages/reject-application/type";
 import { handleSendForApprovalSubmit } from "../pages/select-approver/services/send-for-approval.helper";
@@ -40,6 +44,47 @@ export const useApplicationPopups = ({
     useState<ApplicationResponse | null>(null);
   const [selectedRemarksApplication, setSelectedRemarksApplication] =
     useState<ApplicationResponse | null>(null);
+  /**
+   * Per-application legacy REJECTID mirror (keyed by diaryNo/diaryYr).
+   * Present only after reject-reason UI interaction (takeaction equivalent).
+   * Complete reads this when set; otherwise uses Application REMARKS initial value.
+   */
+  const [rejectIdOverrides, setRejectIdOverrides] = useState<
+    Record<string, string>
+  >({});
+
+  const clearRejectIdOverride = (diaryNo: number, diaryYr: number) => {
+    const key = toRejectIdKey(diaryNo, diaryYr);
+
+    setRejectIdOverrides((prev) => {
+      if (!(key in prev)) {
+        return prev;
+      }
+
+      const next = { ...prev };
+      delete next[key];
+      return next;
+    });
+  };
+
+  const handleRejectIdChange = (value: string) => {
+    if (!selectedRejectApplication) {
+      return;
+    }
+
+    const { diaryNo, diaryYr } = selectedRejectApplication;
+
+    if (!diaryNo || !diaryYr) {
+      return;
+    }
+
+    const key = toRejectIdKey(diaryNo, diaryYr);
+
+    setRejectIdOverrides((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  };
 
   const handleOpenAssignPopup = (application: ApplicationResponse) => {
     setSelectedApplication(application);
@@ -147,15 +192,24 @@ export const useApplicationPopups = ({
     }
 
     try {
-      const { diaryNo, diaryYr } = completeAction;
+      const { diaryNo, diaryYr, remarks: applicationRemarks } = completeAction;
 
       if (!diaryNo || !diaryYr) {
         throw new Error("Application diary details are missing");
       }
 
-      const message = await completeApplication(diaryNo, diaryYr, "");
+      // Legacy accept(): copy current REJECTID value (override if reject UI
+      // interacted; otherwise initial Application REMARKS via MyUtil.getString).
+      const key = toRejectIdKey(diaryNo, diaryYr);
+      const remarks = resolveCompleteRemarks(
+        applicationRemarks,
+        rejectIdOverrides[key]
+      );
+
+      const message = await completeApplication(diaryNo, diaryYr, remarks);
 
       showSuccessToast(message);
+      clearRejectIdOverride(diaryNo, diaryYr);
       handleCloseComplete();
       setRefreshKey((prev) => prev + 1);
     } catch (error) {
@@ -188,15 +242,16 @@ export const useApplicationPopups = ({
         throw new Error("Application diary details are missing");
       }
 
-      // The backend only accepts remarks, so prepend the selected reason.
-      const trimmedRemarks = values.remarks.trim();
-      const remarks = trimmedRemarks
-        ? `Reason: ${values.reason}\n${trimmedRemarks}`
-        : `Reason: ${values.reason}`;
-
-      const message = await rejectApplication(diaryNo, diaryYr, remarks);
+      // Officer Reject: form already resolved legacy payload remarks
+      // (preset option value OR raw Other text — no "Reason:" prefix, no trim).
+      const message = await rejectApplication(
+        diaryNo,
+        diaryYr,
+        values.remarks
+      );
 
       showSuccessToast(message);
+      clearRejectIdOverride(diaryNo, diaryYr);
       handleCloseRejectPopup();
       setRefreshKey((prev) => prev + 1);
     } catch (error) {
@@ -322,6 +377,7 @@ export const useApplicationPopups = ({
     handleOpenRejectPopup,
     handleCloseRejectPopup,
     handleRejectSubmit,
+    handleRejectIdChange,
     handleOpenApproverProcess,
     handleCloseApproverProcess,
     handleApproverProcessSubmit,

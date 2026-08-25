@@ -157,6 +157,7 @@ const ApplicationsTable = ({
     handleOpenRejectPopup,
     handleCloseRejectPopup,
     handleRejectSubmit,
+    handleRejectIdChange,
     handleOpenApproverProcess,
     handleCloseApproverProcess,
     handleApproverProcessSubmit,
@@ -485,7 +486,7 @@ const ApplicationsTable = ({
                             handleOpenRemarksPopup(row);
                           }}
                         >
-                          <IMAGES.SpeakerNotesIcon sx={styles.actionIcon} />
+                          <IMAGES.TextSnippetIcon sx={styles.actionIcon} />
                         </Box>
                       </Box>
                     </TableCell>
@@ -763,6 +764,7 @@ const ApplicationsTable = ({
         application={selectedRejectApplication}
         onClose={handleCloseRejectPopup}
         onSubmit={handleRejectSubmit}
+        onRejectIdChange={handleRejectIdChange}
       />
 
       <ApproverProcessPopup

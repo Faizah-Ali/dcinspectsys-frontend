@@ -64,11 +64,14 @@ const StatusFilter = ({
           PaperProps: {
             sx: {
               "& .MuiMenuItem-root.Mui-selected": {
-                backgroundColor: `rgba(209, 91, 6, 0.12)`,
+                backgroundColor: `rgba(209, 91, 6, 0.12) !important`,
                 color: COLORS.primary,
-                "&:hover": {
-                  backgroundColor: `rgba(209, 91, 6, 0.2)`,
-                },
+              },
+              "& .MuiMenuItem-root.Mui-selected:hover": {
+                backgroundColor: `rgba(209, 91, 6, 0.2) !important`,
+              },
+              "& .MuiMenuItem-root.Mui-selected.Mui-focusVisible": {
+                backgroundColor: `rgba(209, 91, 6, 0.12) !important`,
               },
               "& .MuiMenuItem-root:hover": {
                 backgroundColor: `rgba(209, 91, 6, 0.08)`,

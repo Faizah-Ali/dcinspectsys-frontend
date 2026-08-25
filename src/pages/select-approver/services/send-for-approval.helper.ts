@@ -58,14 +58,13 @@ export const handleSendForApprovalSubmit = async ({
     throw new Error("Please select an approver");
   }
 
-  const trimmedRemarks = values.remarks.trim();
-
+  // Preserve raw dealing remarks (legacy Approve_Inspection_Appl — no trim).
   const message = await sendForApproval({
     diaryNo: application.diaryNo,
     diaryYr: application.diaryYr,
     approverId: values.approverId,
     approverName: values.approverName,
-    remarks: trimmedRemarks,
+    remarks: values.remarks,
   });
 
   showSuccessToast(message);

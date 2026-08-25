@@ -19,12 +19,11 @@ const AssignPopup = ({ application, onClose, onSubmit }: AssignPopupProps) => {
     >
       {application && (
         <SelectStaff
-          key={`${application.diaryNo}-${application.diaryYr}-${application.assigned ?? ""}-${application.assignedname ?? ""}-${application.remarks ?? ""}`}
+          key={`${application.diaryNo}-${application.diaryYr}-${application.assigned ?? ""}-${application.assignedname ?? ""}`}
           diaryNo={application.diaryNo}
           diaryYr={application.diaryYr}
           initialAssignedName={application.assignedname}
           initialAssignedId={application.assigned}
-          initialRemarks={application.remarks}
           onSubmit={onSubmit}
         />
       )}

@@ -8,5 +8,6 @@ export interface LoginResponse {
   username: string;
   role: string;
   group: string;
+  fullName?: string;
   message?: string;
 }

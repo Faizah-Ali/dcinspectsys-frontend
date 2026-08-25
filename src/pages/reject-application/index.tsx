@@ -26,11 +26,31 @@ const RejectApplication = ({
   diaryYr,
   onSubmit,
   onCancel,
+  onRejectIdChange,
 }: RejectApplicationProps) => {
   const [reason, setReason] = useState("");
   const [remarks, setRemarks] = useState("");
 
   const remarksRequired = isRemarksRequired(reason);
+
+  // Legacy takeaction(): any reason selection clears REJECTID to "".
+  const applyReasonChange = (
+    event: Parameters<ReturnType<typeof handleReasonChange>>[0]
+  ) => {
+    handleReasonChange(setReason)(event);
+    onRejectIdChange?.("");
+  };
+
+  const applyRemarksChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    handleRemarksChange(setRemarks)(event);
+
+    // Only Other edits update REJECTID (preset path kept the field disabled in legacy).
+    if (isRemarksRequired(reason)) {
+      onRejectIdChange?.(event.target.value);
+    }
+  };
 
   return (
     <Box
@@ -51,7 +71,7 @@ const RejectApplication = ({
           <Select
             id="reject-reason"
             value={reason}
-            onChange={handleReasonChange(setReason)}
+            onChange={applyReasonChange}
             displayEmpty
             sx={styles.documentTypeSelect}
             renderValue={(selectedValue) => {
@@ -93,7 +113,7 @@ const RejectApplication = ({
           multiline
           rows={4}
           value={remarks}
-          onChange={handleRemarksChange(setRemarks)}
+          onChange={applyRemarksChange}
           helperText={remarksRequired ? "Please enter remarks." : undefined}
           sx={styles.remarksField}
         />

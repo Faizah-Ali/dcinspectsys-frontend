@@ -15,6 +15,7 @@ import {
   saveLoginState,
   saveLoginTime,
   saveUsername,
+  saveFullName,
   saveRole,
   saveGroup,
 } from "../../utils/authSession.utils";
@@ -196,6 +197,7 @@ export const handleSubmit =
 
       saveLoginState(true);
       saveUsername(data.username);
+      saveFullName(data.fullName || data.username);
       saveRole(data.role);
       saveGroup(data.group);
       saveLoginTime();
@@ -205,6 +207,7 @@ export const handleSubmit =
       dispatch(
         setAuth({
           username: data.username,
+          fullName: data.fullName || data.username,
           role: data.role,
           group: data.group,
           permissions: [],

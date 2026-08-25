@@ -383,12 +383,11 @@ const ApplicationDetailsTable = () => {
       >
         {selectedApplication && (
           <SelectStaff
-            key={`${selectedApplication.diaryNo}-${selectedApplication.diaryYr}-${selectedApplication.assigned ?? ""}-${selectedApplication.assignedname ?? ""}-${selectedApplication.remarks ?? ""}`}
+            key={`${selectedApplication.diaryNo}-${selectedApplication.diaryYr}-${selectedApplication.assigned ?? ""}-${selectedApplication.assignedname ?? ""}`}
             diaryNo={selectedApplication.diaryNo}
             diaryYr={selectedApplication.diaryYr}
             initialAssignedName={selectedApplication.assignedname}
             initialAssignedId={selectedApplication.assigned}
-            initialRemarks={selectedApplication.remarks}
             onSubmit={handleAssignSubmit}
           />
         )}

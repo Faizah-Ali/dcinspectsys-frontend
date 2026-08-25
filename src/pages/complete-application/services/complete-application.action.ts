@@ -11,10 +11,11 @@ export const completeApplication = async (
   diaryYr: number,
   remarks: string
 ): Promise<string> => {
+  // Do not trim: legacy accept() copies REJECTID.value as-is (whitespace preserved).
   const payload: CompleteApplicationRequest = {
     diaryNo,
     diaryYr,
-    remarks: remarks.trim(),
+    remarks,
   };
 
   const response = await authFetch(ENDPOINTS.COMPLETE_APPLICATION, {

@@ -7,7 +7,14 @@ import './App.css';
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setAuth, clearAuth } from "./redux/auth.slice";
-import { getLoginState, getUsername, isSessionValid } from "./utils/authSession.utils";
+import {
+  getLoginState,
+  getUsername,
+  getFullName,
+  getRole,
+  getGroup,
+  isSessionValid,
+} from "./utils/authSession.utils";
 
 function App() {
   return (
@@ -24,10 +31,21 @@ function AppWrapper() {
   useEffect(() => {
     const isLoggedIn = getLoginState();
     const username = getUsername();
+    const fullName = getFullName();
+    const role = getRole();
+    const group = getGroup();
     const isValid = isSessionValid();
 
     if (isLoggedIn && isValid && username) {
-      dispatch(setAuth({ username, permissions: [] }));
+      dispatch(
+        setAuth({
+          username,
+          fullName: fullName || username,
+          role,
+          group,
+          permissions: [],
+        })
+      );
     } else {
       dispatch(clearAuth());
     }

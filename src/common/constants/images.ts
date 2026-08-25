@@ -17,9 +17,9 @@ import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import UploadFileSharpIcon from '@mui/icons-material/UploadFileSharp';
 import WorkHistorySharpIcon from '@mui/icons-material/WorkHistorySharp';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
-import SpeakerNotesIcon from '@mui/icons-material/SpeakerNotes';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 
 import DhcLogo from "../../assets/images/dhclogo.png";
 import Emblem from "../../assets/images/emblem.png";
@@ -46,7 +46,7 @@ export const IMAGES = {
     WorkHistorySharpIcon,
     UploadFileSharpIcon,
     PictureAsPdfIcon,
-    SpeakerNotesIcon,
     VisibilityIcon,
     VisibilityOffIcon,
+    TextSnippetIcon,
 };

@@ -5,6 +5,7 @@ import Header from "../components/header";
 import Sidebar from "../components/sidebar";
 import {
     getUsername,
+    getFullName,
     getLoginTime,
     isSessionValid,
     logout,
@@ -16,11 +17,14 @@ interface PrivateRouteProps {
 }
 
 const PrivateRoute = ({ children }: PrivateRouteProps) => {
-    const { isAuthenticated } = useAppSelector((state) => state.auth);
+    const { isAuthenticated, fullName: reduxFullName } = useAppSelector(
+        (state) => state.auth
+    );
     const location = useLocation();
 
     const isValidSession = isSessionValid();
-    const username = getUsername();
+    const displayName =
+        reduxFullName || getFullName() || getUsername() || "User";
     const loginTime = getLoginTime();
 
     // Scroll to top on route (pathname) change only.
@@ -52,7 +56,7 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
             <Header />
             <Sidebar
                 userInfo={{
-                    name: username || "User",
+                    name: displayName,
                     loginTime: loginTime,
                 }}
                 activeRoute={location.pathname}

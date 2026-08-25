@@ -9,6 +9,5 @@ export interface SelectStaffProps {
   diaryYr: number;
   initialAssignedName?: string | null;
   initialAssignedId?: string | null;
-  initialRemarks?: string | null;
   onSubmit: (values: SelectStaffValues) => void | Promise<void>;
 }

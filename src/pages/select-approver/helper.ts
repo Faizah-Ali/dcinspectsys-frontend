@@ -52,10 +52,11 @@ export const handleSubmit =
     setIsSubmitting(true);
 
     try {
+      // Preserve raw dealing remarks (legacy Approve_Inspection_Appl — no trim).
       await onSubmit({
         approverId,
         approverName,
-        remarks: remarks.trim(),
+        remarks,
       });
     } catch {
       setIsSubmitting(false);

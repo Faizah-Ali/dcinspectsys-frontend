@@ -6,8 +6,12 @@ import { useAppSelector } from "../hooks/useAppSelector.ts";
 import type { RootState } from "../redux/store.ts";
 import Header from "../components/header/index.tsx";
 import Sidebar from "../components/sidebar/index.tsx";
-import { getUsername, getLoginTime } from "../utils/authSession.utils.ts";
-import { isSessionValid } from "../utils/authSession.utils.ts";
+import {
+    getUsername,
+    getFullName,
+    getLoginTime,
+    isSessionValid,
+} from "../utils/authSession.utils.ts";
 
 interface PermissionRouteProps {
     children: React.JSX.Element;
@@ -18,10 +22,18 @@ const PermissionRoute = ({ children, requiredModule }: PermissionRouteProps) => 
     const isLoggedIn = localStorage.getItem(LOGGED_IN_KEY) === "true";
     const isValidSession = isSessionValid();
     const location = useLocation();
-    const { permissions, isAuthenticated, username: reduxUsername } = useAppSelector(
-        (state: RootState) => state.auth
-    );
-    const username = getUsername() || reduxUsername || null;
+    const {
+        permissions,
+        isAuthenticated,
+        username: reduxUsername,
+        fullName: reduxFullName,
+    } = useAppSelector((state: RootState) => state.auth);
+    const displayName =
+        reduxFullName ||
+        getFullName() ||
+        getUsername() ||
+        reduxUsername ||
+        "User";
     const loginTime = getLoginTime();
 
     // Only scroll to top when the route (pathname) actually changes.
@@ -50,8 +62,8 @@ const PermissionRoute = ({ children, requiredModule }: PermissionRouteProps) => 
     return (
         <>
             <Header />
-            <Sidebar 
-                userInfo={{ name: username || "User", loginTime: loginTime }}
+            <Sidebar
+                userInfo={{ name: displayName, loginTime: loginTime }}
                 activeRoute={location.pathname}
                 onItemClick={(item) => console.log("Clicked:", item)}
             />

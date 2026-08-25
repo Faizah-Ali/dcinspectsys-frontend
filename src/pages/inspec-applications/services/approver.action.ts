@@ -9,12 +9,13 @@ export const approveApplication = async (
   diaryYr: number,
   remarks: string
 ): Promise<string> => {
+  // Preserve raw dealing remarks (legacy ApproverProcess ACCEPT — no trim).
   const response = await authFetch("/api/approve-application", {
     method: "PATCH",
     body: JSON.stringify({
       diaryNo,
       diaryYr,
-      remarks: remarks.trim(),
+      remarks,
     }),
   });
 
@@ -40,12 +41,15 @@ export const rejectApplication = async (
   diaryYr: number,
   remarks: string
 ): Promise<string> => {
+  // Do not trim remarks here: Officer Reject must preserve whitespace-only
+  // and leading/trailing spaces (legacy userlist.jsp). Approver Reject still
+  // trims in approver-process/helper before calling this action.
   const response = await authFetch("/api/reject-application", {
     method: "PATCH",
     body: JSON.stringify({
       diaryNo,
       diaryYr,
-      remarks: remarks.trim(),
+      remarks,
     }),
   });
 
@@ -73,6 +77,7 @@ export const forwardApplication = async (
   approverName: string,
   remarks: string
 ): Promise<string> => {
+  // Preserve raw dealing remarks (legacy ApproverProcess FORWARD — no trim).
   const response = await authFetch("/api/forward-application", {
     method: "PATCH",
     body: JSON.stringify({
@@ -80,7 +85,7 @@ export const forwardApplication = async (
       diaryYr,
       approverId,
       approverName,
-      remarks: remarks.trim(),
+      remarks,
     }),
   });
 

@@ -9,6 +9,8 @@ import {
   getGroup,
   getLoginTime,
   getRole,
+  getFullName,
+  getUsername,
 } from "../../utils/authSession.utils.ts";
 import { store } from "../../redux/store.ts";
 import { clearAuth } from "../../redux/auth.slice.ts";
@@ -16,11 +18,19 @@ import { useAppSelector } from "../../hooks/useAppSelector.ts";
 
 const Sidebar = ({ userInfo, activeRoute, onItemClick }: SidebarProps) => {
   const navigate = useNavigate();
-  const { role: reduxRole, group: reduxGroup } = useAppSelector(
-    (state) => state.auth
-  );
+  const {
+    role: reduxRole,
+    group: reduxGroup,
+    fullName: reduxFullName,
+  } = useAppSelector((state) => state.auth);
   const role = reduxRole || getRole();
   const group = getGroup() || reduxGroup || "";
+  const welcomeName =
+    reduxFullName ||
+    getFullName() ||
+    userInfo?.name ||
+    getUsername() ||
+    "User";
   const sidebarItems = getSidebarItems(role, group);
 
   // Icon mapping for sidebar items
@@ -77,7 +87,8 @@ const Sidebar = ({ userInfo, activeRoute, onItemClick }: SidebarProps) => {
       {/* User Info Section */}
       {userInfo && (
         <Box sx={styles.userInfoContainer}>
-          <Box sx={styles.userName}>Welcome {userInfo.name}</Box>
+          <Box sx={styles.userName}>Welcome {welcomeName}</Box>
+          {role && <Box sx={styles.loginTime}>Role : {role}</Box>}
           <Box sx={styles.loginTime}>
             Login At : {userInfo.loginTime || getLoginTime() || "Not available"}
           </Box>

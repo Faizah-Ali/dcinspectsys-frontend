@@ -59,21 +59,23 @@ export const handleAssignApplicationSubmit = async ({
     throw new Error("Application diary details are missing");
   }
 
-  const trimmedRemarks = values.remarks.trim();
+  // Preserve raw dealing remarks (legacy AssignAppl — no trim).
+  const remarks = values.remarks;
 
   const message = await assignApplication({
     diaryNo: application.diaryNo,
     diaryYr: application.diaryYr,
     assigned: values.staffId,
     assignedname: values.staffName,
-    remarks: trimmedRemarks,
+    remarks,
   });
 
   showSuccessToast(message);
   onClose();
+  // Assign does not update application REMARKS on the backend — keep local value.
   onSuccess({
     assigned: values.staffId,
     assignedname: values.staffName,
-    remarks: trimmedRemarks,
+    remarks: application.remarks,
   });
 };

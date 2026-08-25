@@ -98,6 +98,11 @@ const UploadFile = ({
             displayEmpty
             disabled={isSubmitting}
             sx={styles.documentTypeSelect}
+            MenuProps={{
+              PaperProps: {
+                sx: styles.documentTypeMenu,
+              },
+            }}
             renderValue={(selectedValue) => {
               if (!selectedValue) {
                 return (

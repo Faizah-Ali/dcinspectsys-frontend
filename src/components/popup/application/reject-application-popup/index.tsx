@@ -7,12 +7,15 @@ interface RejectApplicationPopupProps {
   application: ApplicationResponse | null;
   onClose: () => void;
   onSubmit: (values: RejectApplicationValues) => void;
+  /** Legacy REJECTID mirror for Complete parity; does not change Reject API payload. */
+  onRejectIdChange?: (value: string) => void;
 }
 
 const RejectApplicationPopup = ({
   application,
   onClose,
   onSubmit,
+  onRejectIdChange,
 }: RejectApplicationPopupProps) => {
   return (
     <Popup
@@ -27,6 +30,7 @@ const RejectApplicationPopup = ({
           diaryYr={application.diaryYr}
           onSubmit={onSubmit}
           onCancel={onClose}
+          onRejectIdChange={onRejectIdChange}
         />
       )}
     </Popup>

@@ -47,8 +47,9 @@ export const handleAction =
     setIsSubmitting(true);
 
     try {
+      // Preserve raw dealing remarks (legacy ApproverProcess — no trim).
       await onSubmit({
-        remarks: remarks.trim(),
+        remarks,
         forwardTo,
         forwardToName,
         action,

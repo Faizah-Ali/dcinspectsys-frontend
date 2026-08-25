@@ -4,12 +4,15 @@ import { showErrorToast } from "../../components/toast/helper";
 import type { Approver } from "./services/select-staff.type";
 import type { SelectStaffValues } from "./type";
 
+/**
+ * Assign/Re-assign dealing remarks always start empty (legacy AdministratorInbox /
+ * ReInbox textarea value=""). Never seed from application.remarks.
+ */
 export const getSelectStaffFormDefaults = (
-  assignedName?: string | null,
-  remarks?: string | null
+  assignedName?: string | null
 ) => ({
   assignedName: assignedName?.trim() ?? "",
-  remarks: remarks ?? "",
+  remarks: "",
 });
 
 export const findApproverByName = (
@@ -78,7 +81,7 @@ export const hasSelectStaffFormChanges = ({
   initialRemarks: string;
 }) =>
   staffId !== initialStaffId ||
-  remarks.trim() !== initialRemarks.trim();
+  remarks !== initialRemarks;
 
 export const handleStaffIdChange =
   (setStaffId: React.Dispatch<React.SetStateAction<string>>) =>
@@ -134,7 +137,7 @@ export const handleSubmit =
       await onSubmit({
         staffId,
         staffName: selectedApprover.fullname,
-        remarks: remarks.trim(),
+        remarks,
       });
     } catch (error: any) {
       if (error?.name === "ValidationError") {

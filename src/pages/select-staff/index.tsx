@@ -33,7 +33,6 @@ const SelectStaff = ({
   diaryYr,
   initialAssignedName = null,
   initialAssignedId = null,
-  initialRemarks = null,
   onSubmit,
 }: SelectStaffProps) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -42,10 +41,7 @@ const SelectStaff = ({
     (state: RootState) => state.selectStaff
   );
 
-  const applicationDefaults = getSelectStaffFormDefaults(
-    initialAssignedName,
-    initialRemarks
-  );
+  const applicationDefaults = getSelectStaffFormDefaults(initialAssignedName);
 
   const [staffId, setStaffId] = useState("");
   const [remarks, setRemarks] = useState(applicationDefaults.remarks);
@@ -63,6 +59,7 @@ const SelectStaff = ({
     [approvers, initialAssignedId, initialAssignedName, isLoading]
   );
 
+  // Dealing remarks always start as "" (never seeded from application.remarks).
   const initialRemarksValue = applicationDefaults.remarks;
 
   const hasChanges = hasSelectStaffFormChanges({
@@ -73,31 +70,19 @@ const SelectStaff = ({
   });
 
   useEffect(() => {
-    const defaults = getSelectStaffFormDefaults(
-      initialAssignedName,
-      initialRemarks
-    );
+    const defaults = getSelectStaffFormDefaults(initialAssignedName);
 
     setRemarks(defaults.remarks);
     setStaffId("");
     setIsSubmitting(false);
-  }, [
-    diaryNo,
-    diaryYr,
-    initialAssignedName,
-    initialAssignedId,
-    initialRemarks,
-  ]);
+  }, [diaryNo, diaryYr, initialAssignedName, initialAssignedId]);
 
   useEffect(() => {
     if (isLoading) {
       return;
     }
 
-    const defaults = getSelectStaffFormDefaults(
-      initialAssignedName,
-      initialRemarks
-    );
+    const defaults = getSelectStaffFormDefaults(initialAssignedName);
 
     if (!defaults.assignedName) {
       setStaffId("");
