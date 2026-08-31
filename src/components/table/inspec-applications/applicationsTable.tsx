@@ -480,7 +480,7 @@ const ApplicationsTable = ({
                           component="button"
                           type="button"
                           sx={styles.orangeIcon}
-                          title="Click here to view Dealing remarks."
+                          title="Dealing remarks"
                           onClick={(event) => {
                             event.currentTarget.blur();
                             handleOpenRemarksPopup(row);
