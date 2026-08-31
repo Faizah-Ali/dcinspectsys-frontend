@@ -112,6 +112,11 @@ const ApproverProcess = ({
             disabled={isLoadingApprovers || isSubmitting}
             displayEmpty
             sx={styles.forwardToSelect}
+            MenuProps={{
+              PaperProps: {
+                sx: styles.forwardToMenu,
+              },
+            }}
             renderValue={(selectedValue) => {
               if (!selectedValue) {
                 return (

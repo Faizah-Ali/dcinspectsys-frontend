@@ -14,10 +14,32 @@ export const styles = {
     },
     "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
       borderColor: `${COLORS.primary} !important`,
+      borderWidth: "2px",
+    },
+    "&.Mui-focused .MuiSvgIcon-root": {
+      color: COLORS.primary,
     },
     "& .MuiSelect-select": {
       fontSize: "14px",
       color: COLORS.textPrimary,
+    },
+  },
+  forwardToMenu: {
+    "& .MuiMenuItem-root:hover": {
+      backgroundColor: "rgba(209, 91, 6, 0.08)",
+    },
+    "& .MuiMenuItem-root.Mui-selected": {
+      backgroundColor: "rgba(209, 91, 6, 0.12) !important",
+      color: COLORS.primary,
+    },
+    "& .MuiMenuItem-root.Mui-selected:hover": {
+      backgroundColor: "rgba(209, 91, 6, 0.2) !important",
+    },
+    "& .MuiMenuItem-root.Mui-selected.Mui-focusVisible": {
+      backgroundColor: "rgba(209, 91, 6, 0.12) !important",
+    },
+    "& .MuiMenuItem-root.Mui-focusVisible": {
+      backgroundColor: "rgba(209, 91, 6, 0.08)",
     },
   },
   actionsWrap: {
