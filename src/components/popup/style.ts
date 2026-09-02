@@ -1,4 +1,5 @@
 import { COLORS } from "../../common/constants";
+import { MOBILE_MAX, RESPONSIVE_MAX } from "../../common/constants/breakpoints";
 
 export const styles = {
   dialogPaper: {
@@ -7,6 +8,11 @@ export const styles = {
     overflow: "hidden",
     boxShadow: "0 18px 45px rgba(15, 23, 41, 0.18)",
     backgroundColor: COLORS.white,
+    [`@media (max-width: ${RESPONSIVE_MAX}px)`]: {
+      maxHeight: "calc(100vh - 32px)",
+      display: "flex",
+      flexDirection: "column",
+    },
   },
   header: {
     display: "flex",
@@ -15,6 +21,9 @@ export const styles = {
     minHeight: "64px",
     padding: "14px 18px",
     borderBottom: "1px solid rgba(15, 23, 41, 0.08)",
+    [`@media (max-width: ${RESPONSIVE_MAX}px)`]: {
+      flexShrink: 0,
+    },
   },
   titleWrap: {
     flex: 1,
@@ -44,8 +53,26 @@ export const styles = {
   },
   content: {
     padding: "24px 28px 28px",
+    [`@media (max-width: ${RESPONSIVE_MAX}px)`]: {
+      flex: 1,
+      minHeight: 0,
+      overflowY: "auto",
+      overflowX: "hidden",
+    },
+    [`@media (max-width: ${MOBILE_MAX}px)`]: {
+      padding: "16px",
+    },
   },
   contentNoHeader: {
     padding: "28px 24px 24px",
+    [`@media (max-width: ${RESPONSIVE_MAX}px)`]: {
+      flex: 1,
+      minHeight: 0,
+      overflowY: "auto",
+      overflowX: "hidden",
+    },
+    [`@media (max-width: ${MOBILE_MAX}px)`]: {
+      padding: "16px",
+    },
   },
 } as const;

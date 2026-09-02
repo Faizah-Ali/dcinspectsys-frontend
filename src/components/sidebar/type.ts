@@ -10,4 +10,8 @@ export interface SidebarProps {
   };
   activeRoute?: string;
   onItemClick?: (item: string) => void;
+  /** Controlled open state for the responsive Drawer (< DESKTOP_MIN). */
+  drawerOpen?: boolean;
+  /** Close handler for the responsive Drawer. */
+  onDrawerClose?: () => void;
 }

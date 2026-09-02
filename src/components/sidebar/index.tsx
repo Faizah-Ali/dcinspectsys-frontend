@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom";
-import { Box, List, ListItem } from "@mui/material";
+import { Box, Drawer, List, ListItem, useMediaQuery } from "@mui/material";
 import { styles } from "./style";
 import { getSidebarItems } from "./helper";
 import type { SidebarProps } from "./type";
 import { IMAGES } from "../../common/constants";
+import { DESKTOP_MIN } from "../../common/constants/breakpoints";
 import {
   logout,
   getGroup,
@@ -16,8 +17,15 @@ import { store } from "../../redux/store.ts";
 import { clearAuth } from "../../redux/auth.slice.ts";
 import { useAppSelector } from "../../hooks/useAppSelector.ts";
 
-const Sidebar = ({ userInfo, activeRoute, onItemClick }: SidebarProps) => {
+const Sidebar = ({
+  userInfo,
+  activeRoute,
+  onItemClick,
+  drawerOpen = false,
+  onDrawerClose,
+}: SidebarProps) => {
   const navigate = useNavigate();
+  const isDesktop = useMediaQuery(`(min-width:${DESKTOP_MIN}px)`);
   const {
     role: reduxRole,
     group: reduxGroup,
@@ -33,7 +41,6 @@ const Sidebar = ({ userInfo, activeRoute, onItemClick }: SidebarProps) => {
     "User";
   const sidebarItems = getSidebarItems(role, group);
 
-  // Icon mapping for sidebar items
   const getIcon = (text: string) => {
     if (text === "Admin Inbox" || text === "Approver Inbox") {
       return <IMAGES.InboxIcon sx={styles.itemIcon} />;
@@ -44,9 +51,6 @@ const Sidebar = ({ userInfo, activeRoute, onItemClick }: SidebarProps) => {
     if (text === "Re-Assign Application") {
       return <IMAGES.AssignmentIcon sx={styles.itemIcon} />;
     }
-    // if (text === "Send Email") {
-    //   return <IMAGES.MailIcon sx={styles.itemIcon} />;
-    // }
     if (
       text === "Processed (Application Side)" ||
       text === "Processed (Original Side)" ||
@@ -60,31 +64,31 @@ const Sidebar = ({ userInfo, activeRoute, onItemClick }: SidebarProps) => {
     return <IMAGES.DescriptionIcon sx={styles.itemIcon} />;
   };
 
-  // Check if item is active
   const isActive = (route: string) => {
     return activeRoute === route;
   };
 
-  // Handle item click
   const handleItemClick = (text: string, route: string) => {
     if (onItemClick) {
       onItemClick(text);
     }
-    // Navigate to the route
     navigate(route);
+
+    if (!isDesktop) {
+      onDrawerClose?.();
+    }
   };
 
-  // Handle logout
   const handleLogout = () => {
-    // Clear Redux state
+    if (!isDesktop) {
+      onDrawerClose?.();
+    }
     store.dispatch(clearAuth());
-    // Clear storage and reload
     logout();
   };
 
-  return (
-    <Box sx={styles.sideBar}>
-      {/* User Info Section */}
+  const navigationContent = (
+    <>
       {userInfo && (
         <Box sx={styles.userInfoContainer}>
           <Box sx={styles.userName}>Welcome {welcomeName}</Box>
@@ -95,7 +99,6 @@ const Sidebar = ({ userInfo, activeRoute, onItemClick }: SidebarProps) => {
         </Box>
       )}
 
-      {/* Sidebar Items */}
       <List sx={styles.itemList}>
         {sidebarItems.map((item) => (
           <ListItem
@@ -118,7 +121,25 @@ const Sidebar = ({ userInfo, activeRoute, onItemClick }: SidebarProps) => {
           Logout
         </ListItem>
       </Box>
-    </Box>
+    </>
+  );
+
+  if (isDesktop) {
+    return <Box sx={styles.sideBar}>{navigationContent}</Box>;
+  }
+
+  return (
+    <Drawer
+      anchor="left"
+      open={drawerOpen}
+      onClose={onDrawerClose}
+      ModalProps={{ keepMounted: true }}
+      PaperProps={{ sx: styles.drawerPaper }}
+    >
+      <Box sx={styles.drawerPanel} role="navigation" aria-label="Main navigation">
+        {navigationContent}
+      </Box>
+    </Drawer>
   );
 };
 

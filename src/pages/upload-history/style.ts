@@ -1,5 +1,11 @@
 import { COLORS } from "../../common/constants";
+import { RESPONSIVE_MAX } from "../../common/constants/breakpoints";
 import { styles as uploadFileStyles } from "../upload-file/style";
+
+/** 3-column tables (User Comments, Log) — horizontal scroll below desktop. */
+const TABLE_THREE_COL_MIN_WIDTH = 480;
+/** 6-column uploaded-files summary — keeps action icons readable. */
+const TABLE_UPLOADED_FILES_MIN_WIDTH = 720;
 
 export const styles = {
   ...uploadFileStyles,
@@ -19,6 +25,16 @@ export const styles = {
   table: {
     width: "100%",
     tableLayout: "fixed" as const,
+    [`@media (max-width: ${RESPONSIVE_MAX}px)`]: {
+      minWidth: `${TABLE_THREE_COL_MIN_WIDTH}px`,
+    },
+  },
+  uploadedFilesTable: {
+    width: "100%",
+    tableLayout: "fixed" as const,
+    [`@media (max-width: ${RESPONSIVE_MAX}px)`]: {
+      minWidth: `${TABLE_UPLOADED_FILES_MIN_WIDTH}px`,
+    },
   },
   headerRow: {
     backgroundColor: "#f5f5f5",

@@ -326,7 +326,7 @@ const ApplicationsTable = ({
           value={searchInput}
           onChange={handleSearchChange}
           placeholder="Search by Diary no, Case no, Case title, Remarks, Party-In-Person ID..."
-          containerSx={{ marginBottom: 0, justifyContent: "flex-start" }}
+          containerSx={styles.searchToolbar}
         />
 
         <Box sx={styles.filters}>

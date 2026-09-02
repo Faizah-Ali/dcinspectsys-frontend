@@ -1,15 +1,8 @@
 import { COLORS } from "../../common/constants/colors";
+import { authenticatedMainContainer } from "../../components/layout/style";
 
 export const styles = {
-  mainContainer: {
-    width: "calc(100% - 350px)",
-    minHeight: "100vh",
-    paddingTop: "110px",
-    paddingLeft: "16px",
-    paddingRight: "16px",
-    marginLeft: "350px",
-    boxSizing: "border-box" as const,
-  },
+  mainContainer: authenticatedMainContainer,
   contentContainer: {
     width: "100%",
     maxWidth: "560px",

@@ -1,3 +1,6 @@
+import { COLORS } from "../../common/constants/colors";
+import { RESPONSIVE_MAX } from "../../common/constants/breakpoints";
+
 export const styles = {
   header: {
     position: "fixed" as const,
@@ -14,6 +17,28 @@ export const styles = {
     justifyContent: "space-between" as const,
     borderBottom: "1px solid #e0e0e0",
     boxSizing: "border-box" as const,
+    [`@media (max-width: ${RESPONSIVE_MAX}px)`]: {
+      padding: "12px 8px",
+      gap: "4px",
+    },
+  },
+  leftSection: {
+    display: "flex",
+    alignItems: "center" as const,
+    flexShrink: 0,
+    gap: 0,
+    [`@media (max-width: ${RESPONSIVE_MAX}px)`]: {
+      gap: "4px",
+    },
+  },
+  menuButton: {
+    width: "40px",
+    height: "40px",
+    color: COLORS.sidebarBg,
+    flexShrink: 0,
+    "&:hover": {
+      backgroundColor: "rgba(15, 23, 41, 0.08)",
+    },
   },
   leftEmblem: {
     width: "90px",
@@ -22,6 +47,10 @@ export const styles = {
     alignItems: "center" as const,
     justifyContent: "center" as const,
     flexShrink: 0,
+    [`@media (max-width: ${RESPONSIVE_MAX}px)`]: {
+      width: "56px",
+      height: "44px",
+    },
   },
   leftEmblemImage: {
     width: "100%",
@@ -37,6 +66,9 @@ export const styles = {
     flex: 1,
     minWidth: 0,
     padding: "0 8px",
+    [`@media (max-width: ${RESPONSIVE_MAX}px)`]: {
+      padding: "0 4px",
+    },
   },
   title: {
     fontSize: "26px",
@@ -46,6 +78,14 @@ export const styles = {
     lineHeight: 1.3,
     letterSpacing: "1px",
     textAlign: "center" as const,
+    [`@media (max-width: ${RESPONSIVE_MAX}px)`]: {
+      fontSize: "18px",
+      letterSpacing: "0.5px",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+      whiteSpace: "nowrap" as const,
+      maxWidth: "100%",
+    },
   },
   subtitle: {
     fontSize: "16px",
@@ -55,6 +95,15 @@ export const styles = {
     lineHeight: 1.3,
     letterSpacing: "1px",
     textAlign: "center" as const,
+    [`@media (max-width: ${RESPONSIVE_MAX}px)`]: {
+      fontSize: "12px",
+      letterSpacing: "0.5px",
+      margin: "2px 0 0 0",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+      whiteSpace: "nowrap" as const,
+      maxWidth: "100%",
+    },
   },
   rightEmblem: {
     width: "90px",
@@ -63,6 +112,10 @@ export const styles = {
     alignItems: "center" as const,
     justifyContent: "center" as const,
     flexShrink: 0,
+    [`@media (max-width: ${RESPONSIVE_MAX}px)`]: {
+      width: "56px",
+      height: "44px",
+    },
   },
   rightEmblemImage: {
     width: "100%",

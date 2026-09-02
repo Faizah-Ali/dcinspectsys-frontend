@@ -218,7 +218,7 @@ const UploadHistory = ({
                 </Box>
               ) : (
                 <TableContainer component={Paper} sx={styles.tableWrapper}>
-                  <Table sx={styles.table}>
+                  <Table sx={styles.uploadedFilesTable}>
                     <colgroup>
                       {styles.uploadedFilesColumnWidths.map((width, colIndex) => (
                         <col key={colIndex} style={{ width }} />

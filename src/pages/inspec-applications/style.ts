@@ -1,19 +1,18 @@
 import { COLORS } from "../../common/constants/colors";
+import { MOBILE_MAX, RESPONSIVE_MAX } from "../../common/constants/breakpoints";
+import { CONTENT_OFFSET } from "../../common/constants/layout";
+import { authenticatedMainContainer } from "../../components/layout/style";
+
+/**
+ * Minimum applications-table width below desktop.
+ * Derived from the smallest approved desktop baseline:
+ * 1366px viewport − 350px sidebar − 32px horizontal page padding = 984px.
+ */
+const APPLICATIONS_TABLE_MIN_WIDTH =
+  1366 - CONTENT_OFFSET - 32;
 
 export const styles = {
-  mainContainer: {
-    width: "calc(100% - 350px)",
-    minHeight: "100vh",
-    // Clear fixed header (~100px)
-    paddingTop: "110px",
-    paddingLeft: "16px",
-    paddingRight: "16px",
-    paddingBottom: "24px",
-    marginLeft: "350px",
-    boxSizing: "border-box" as const,
-    textAlign: "left" as const,
-    overflowX: "hidden" as const,
-  },
+  mainContainer: authenticatedMainContainer,
   tableContainer: {
     width: "100%",
     maxWidth: "100%",
@@ -34,11 +33,19 @@ export const styles = {
     boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
     borderRadius: "8px",
     overflow: "hidden" as const,
+    [`@media (max-width: ${RESPONSIVE_MAX}px)`]: {
+      overflowX: "auto" as const,
+      overflowY: "hidden" as const,
+      WebkitOverflowScrolling: "touch",
+    },
   },
   table: {
     width: "100%",
     tableLayout: "fixed" as const,
     borderCollapse: "collapse" as const,
+    [`@media (max-width: ${RESPONSIVE_MAX}px)`]: {
+      minWidth: `${APPLICATIONS_TABLE_MIN_WIDTH}px`,
+    },
     // Force identical padding on every head + body cell so columns stay synced
     "& .MuiTableCell-root": {
       padding: "10px 8px !important",
@@ -270,6 +277,16 @@ export const styles = {
     justifyContent: "space-between",
     gap: "16px",
     marginBottom: "16px",
+    [`@media (max-width: ${MOBILE_MAX}px)`]: {
+      flexDirection: "column" as const,
+      alignItems: "stretch",
+      gap: "12px",
+    },
+  },
+  searchToolbar: {
+    marginBottom: 0,
+    justifyContent: "flex-start",
+    width: { xs: "100%", sm: "auto" },
   },
   filters: {
     display: "flex",
@@ -278,6 +295,16 @@ export const styles = {
     justifyContent: "flex-end",
     gap: "12px",
     marginLeft: "auto",
+    [`@media (max-width: ${RESPONSIVE_MAX}px)`]: {
+      marginLeft: 0,
+      width: "100%",
+      justifyContent: "flex-start",
+    },
+    [`@media (max-width: ${MOBILE_MAX}px)`]: {
+      flexDirection: "column" as const,
+      alignItems: "stretch",
+      gap: "10px",
+    },
   },
   statusFilter: {
     minWidth: { xs: "100%", sm: 200 },

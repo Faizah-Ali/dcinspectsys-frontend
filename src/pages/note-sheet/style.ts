@@ -1,4 +1,8 @@
 import { COLORS } from "../../common/constants";
+import { RESPONSIVE_MAX } from "../../common/constants/breakpoints";
+
+/** 3-column dealing remarks table — horizontal scroll below desktop. */
+const NOTE_SHEET_TABLE_MIN_WIDTH = 480;
 
 export const styles = {
   container: {
@@ -30,6 +34,9 @@ export const styles = {
   table: {
     width: "100%",
     tableLayout: "fixed" as const,
+    [`@media (max-width: ${RESPONSIVE_MAX}px)`]: {
+      minWidth: `${NOTE_SHEET_TABLE_MIN_WIDTH}px`,
+    },
   },
   headerRow: {
     backgroundColor: "#f5f5f5",

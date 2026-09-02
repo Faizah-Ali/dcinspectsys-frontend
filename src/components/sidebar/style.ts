@@ -1,18 +1,48 @@
 import { COLORS } from "../../common/constants/colors";
+import { DESKTOP_MIN, RESPONSIVE_MAX } from "../../common/constants/breakpoints";
+import {
+  HEADER_HEIGHT,
+  SIDEBAR_TOP_OFFSET,
+  SIDEBAR_WIDTH,
+} from "../../common/constants/layout";
 
 export const styles = {
   sideBar: {
-    width: "350px",
+    width: `${SIDEBAR_WIDTH}px`,
     position: "fixed" as const,
-    height: "calc(100vh - 100px)",
+    height: `calc(100vh - ${HEADER_HEIGHT}px)`,
     left: 0,
-    top: "90px", // Start below the header
+    top: `${SIDEBAR_TOP_OFFSET}px`, // Start below the header
     zIndex: 100,
     overflow: "hidden" as const,
     backgroundColor: COLORS.sidebarBg,
     boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15), 0 4px 16px rgba(0, 0, 0, 0.1)",
     display: "flex",
     flexDirection: "column" as const,
+    fontFamily: "system-ui, Avenir, Helvetica, Arial, sans-serif",
+    lineHeight: 1.5,
+    fontWeight: 400,
+    fontSynthesis: "none",
+    textRendering: "optimizeLegibility",
+    WebkitFontSmoothing: "antialiased",
+    MozOsxFontSmoothing: "grayscale",
+    [`@media (max-width: ${RESPONSIVE_MAX}px)`]: {
+      display: "none",
+    },
+  },
+  drawerPaper: {
+    width: `min(${SIDEBAR_WIDTH}px, 85vw)`,
+    backgroundColor: COLORS.sidebarBg,
+    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15), 0 4px 16px rgba(0, 0, 0, 0.1)",
+    [`@media (min-width: ${DESKTOP_MIN}px)`]: {
+      display: "none",
+    },
+  },
+  drawerPanel: {
+    display: "flex",
+    flexDirection: "column" as const,
+    height: "100%",
+    overflow: "hidden" as const,
     fontFamily: "system-ui, Avenir, Helvetica, Arial, sans-serif",
     lineHeight: 1.5,
     fontWeight: 400,

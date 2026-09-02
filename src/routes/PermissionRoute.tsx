@@ -4,8 +4,7 @@ import { LOGGED_IN_KEY } from "../common/constants/storageKeys.ts";
 import { Paths } from "../common/constants";
 import { useAppSelector } from "../hooks/useAppSelector.ts";
 import type { RootState } from "../redux/store.ts";
-import Header from "../components/header/index.tsx";
-import Sidebar from "../components/sidebar/index.tsx";
+import AuthenticatedLayout from "../components/layout/AuthenticatedLayout.tsx";
 import {
     getUsername,
     getFullName,
@@ -60,15 +59,13 @@ const PermissionRoute = ({ children, requiredModule }: PermissionRouteProps) => 
     }
 
     return (
-        <>
-            <Header />
-            <Sidebar
-                userInfo={{ name: displayName, loginTime: loginTime }}
-                activeRoute={location.pathname}
-                onItemClick={(item) => console.log("Clicked:", item)}
-            />
+        <AuthenticatedLayout
+            userInfo={{ name: displayName, loginTime: loginTime }}
+            activeRoute={location.pathname}
+            onItemClick={(item) => console.log("Clicked:", item)}
+        >
             {children}
-        </>
+        </AuthenticatedLayout>
     );
 };
 

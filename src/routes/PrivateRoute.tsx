@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
 import { useLocation, Navigate } from "react-router-dom";
 import { Paths } from "../common/constants";
-import Header from "../components/header";
-import Sidebar from "../components/sidebar";
+import AuthenticatedLayout from "../components/layout/AuthenticatedLayout";
 import {
     getUsername,
     getFullName,
@@ -52,18 +51,16 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
     }
 
     return (
-        <>
-            <Header />
-            <Sidebar
-                userInfo={{
-                    name: displayName,
-                    loginTime: loginTime,
-                }}
-                activeRoute={location.pathname}
-                onItemClick={() => {}}
-            />
+        <AuthenticatedLayout
+            userInfo={{
+                name: displayName,
+                loginTime: loginTime,
+            }}
+            activeRoute={location.pathname}
+            onItemClick={() => {}}
+        >
             {children}
-        </>
+        </AuthenticatedLayout>
     );
 };
 
