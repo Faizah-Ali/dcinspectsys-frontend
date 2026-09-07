@@ -1,5 +1,6 @@
 import Popup from "../..";
 import RejectApplication from "../../../../pages/reject-application";
+import { rejectApplicationPopupStyles } from "../../../../pages/reject-application/style";
 import type { ApplicationResponse } from "../../../../pages/inspec-applications/services/applications.type";
 import type { RejectApplicationValues } from "../../../../pages/reject-application/type";
 
@@ -23,6 +24,9 @@ const RejectApplicationPopup = ({
       title="Reject Application"
       onClose={onClose}
       maxWidth="md"
+      paperSx={rejectApplicationPopupStyles.paper}
+      headerSx={rejectApplicationPopupStyles.header}
+      contentSx={rejectApplicationPopupStyles.content}
     >
       {application && (
         <RejectApplication

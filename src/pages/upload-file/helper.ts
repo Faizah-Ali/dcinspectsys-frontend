@@ -13,8 +13,6 @@ export const DOCUMENT_TYPE_OPTIONS: DocumentTypeOption[] = [
   { value: "Other", label: "Other" },
 ];
 
-export const MAX_UPLOAD_FILE_SIZE_BYTES = 10 * 1024 * 1024;
-
 export const isPdfFile = (file: File) =>
   file.type === "application/pdf" ||
   file.name.toLowerCase().endsWith(".pdf");
@@ -30,10 +28,6 @@ export const validateSelectedFiles = (files: File[]): string | null => {
   for (const file of files) {
     if (!isPdfFile(file)) {
       return "Only PDF files are allowed";
-    }
-
-    if (file.size > MAX_UPLOAD_FILE_SIZE_BYTES) {
-      return "File size must be 10 MB or less";
     }
   }
 

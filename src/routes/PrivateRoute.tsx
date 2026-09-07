@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useLocation, Navigate } from "react-router-dom";
+import { useLocation, Navigate, Outlet } from "react-router-dom";
 import { Paths } from "../common/constants";
 import AuthenticatedLayout from "../components/layout/AuthenticatedLayout";
 import {
@@ -12,7 +12,8 @@ import {
 import { useAppSelector } from "../hooks/useAppSelector";
 
 interface PrivateRouteProps {
-    children: React.JSX.Element;
+    /** When omitted, renders nested route content via `<Outlet />`. */
+    children?: React.JSX.Element;
 }
 
 const PrivateRoute = ({ children }: PrivateRouteProps) => {
@@ -59,7 +60,7 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
             activeRoute={location.pathname}
             onItemClick={() => {}}
         >
-            {children}
+            {children ?? <Outlet />}
         </AuthenticatedLayout>
     );
 };

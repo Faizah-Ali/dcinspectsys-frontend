@@ -1,5 +1,6 @@
 import Popup from "../..";
 import ApproverProcess from "../../../../pages/approver-process";
+import { approverProcessPopupStyles } from "../../../../pages/approver-process/style";
 import type { ApplicationResponse } from "../../../../pages/inspec-applications/services/applications.type";
 import type { ApproverProcessValues } from "../../../../pages/approver-process/type";
 
@@ -20,6 +21,9 @@ const ApproverProcessPopup = ({
       title="Approver Process"
       onClose={onClose}
       maxWidth="md"
+      paperSx={approverProcessPopupStyles.paper}
+      headerSx={approverProcessPopupStyles.header}
+      contentSx={approverProcessPopupStyles.content}
     >
       {application && (
         <ApproverProcess

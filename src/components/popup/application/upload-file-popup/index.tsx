@@ -1,5 +1,6 @@
 import Popup from "../..";
 import UploadFile from "../../../../pages/upload-file";
+import { uploadFilePopupStyles } from "../../../../pages/upload-file/style";
 import type { ApplicationResponse } from "../../../../pages/inspec-applications/services/applications.type";
 import type { UploadFileValues } from "../../../../pages/upload-file/type";
 
@@ -20,6 +21,9 @@ const UploadFilePopup = ({
       title="Upload File"
       onClose={onClose}
       maxWidth="md"
+      paperSx={uploadFilePopupStyles.paper}
+      headerSx={uploadFilePopupStyles.header}
+      contentSx={uploadFilePopupStyles.content}
     >
       {application && (
         <UploadFile

@@ -1,5 +1,6 @@
 import Popup from "../..";
 import UploadHistory from "../../../../pages/upload-history";
+import { uploadHistoryPopupStyles } from "../../../../pages/upload-history/style";
 import type { ApplicationResponse } from "../../../../pages/inspec-applications/services/applications.type";
 
 interface UploadHistoryPopupProps {
@@ -17,6 +18,9 @@ const UploadHistoryPopup = ({
       title="Upload History"
       onClose={onClose}
       maxWidth="md"
+      paperSx={uploadHistoryPopupStyles.paper}
+      headerSx={uploadHistoryPopupStyles.header}
+      contentSx={uploadHistoryPopupStyles.content}
     >
       {application && (
         <UploadHistory

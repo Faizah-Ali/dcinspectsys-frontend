@@ -123,7 +123,7 @@ export const styles = {
     lineHeight: 1.4,
   },
   applicationDateCell: {
-    width: "7%",
+    width: "5.5%",
   },
   applicationStatusCell: {
     width: "12.5%",
@@ -134,7 +134,7 @@ export const styles = {
     lineHeight: 1.4,
   },
   actionsCell: {
-    width: "14.5%",
+    width: "16%",
     whiteSpace: "nowrap" as const,
     textAlign: "center" as const,
   },
@@ -155,10 +155,10 @@ export const styles = {
     "13.5%",
     "12.5%",
     "8%",
-    "7%",
+    "5.5%",
     "12.5%",
     "10%",
-    "14.5%",
+    "16%",
   ] as const,
   // ONLINEINSPECTION has no Remarks column — redistributes the 8% remarks width
   columnWidthsWithoutRemarks: [
@@ -168,10 +168,10 @@ export const styles = {
     "8%",
     "15%",
     "14%",
-    "8%",
+    "6.5%",
     "14%",
     "11%",
-    "14.5%",
+    "16%",
   ] as const,
   blueIcon: {
     padding: "2px",
@@ -183,9 +183,9 @@ export const styles = {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    minWidth: "32px",
-    width: "32px",
-    height: "32px",
+    minWidth: "36px",
+    width: "36px",
+    height: "36px",
     flexShrink: 0,
     outline: "none",
     "&:hover": {
@@ -215,9 +215,9 @@ export const styles = {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    minWidth: "32px",
-    width: "32px",
-    height: "32px",
+    minWidth: "36px",
+    width: "36px",
+    height: "36px",
     flexShrink: 0,
     outline: "none",
     "&:hover": {
@@ -251,7 +251,7 @@ export const styles = {
     textDecoration: "underline",
   },
   actionIcon: {
-    fontSize: "22px",
+    fontSize: "26px",
   },
   loadingOverlay: {
     position: "absolute" as const,

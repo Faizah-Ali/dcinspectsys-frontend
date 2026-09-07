@@ -1,7 +1,11 @@
 import { createHashRouter, RouterProvider } from 'react-router-dom';
 import { lazy } from 'react';
 import { Paths } from "../common/constants";
-import { createRoute } from "./routeFactory.tsx";
+import {
+  createAuthenticatedLayoutRoute,
+  createPrivatePage,
+  createRoute,
+} from "./routeFactory.tsx";
 
 // Lazy load components
 const Login = lazy(() => import("../pages/login"));
@@ -31,60 +35,42 @@ const router = createHashRouter([
     }),
   },
   {
-    path: Paths.INSPECT_APPLICATIONS,
-    element: createRoute({
-      component: <InspectApplications />,
-      type: "private"
-    }),
-  },
-  {
-    path: Paths.REASSIGN_APPLICATIONS,
-    element: createRoute({
-      component: <ReassignApplications />,
-      type: "private"
-    }),
-  },
-  {
-    path: Paths.APPLICATION_DETAILS,
-    element: createRoute({
-      component: <ApplicationDetails />,
-      type: "private"
-    }),
-  },
-  // {
-  //   path: Paths.SEND_MAIL,
-  //   element: createRoute({
-  //     component: <SendMail />,
-  //     type: "private"
-  //   }),
-  // },
-  {
-    path: Paths.PROCESSED_APPLICATION_SIDE,
-    element: createRoute({
-      component: <ProcessedApplicationSide />,
-      type: "private"
-    }),
-  },
-  {
-    path: Paths.PROCESSED_ORIGINAL_SIDE,
-    element: createRoute({
-      component: <ProcessedOriginalSide />,
-      type: "private"
-    }),
-  },
-  {
-    path: Paths.PROCESSED_COMP_SIDE,
-    element: createRoute({
-      component: <ProcessedCompSide />,
-      type: "private"
-    }),
-  },
-  {
-    path: Paths.REJECTED_APPLICATION,
-    element: createRoute({
-      component: <RejectedApplication />,
-      type: "private"
-    }),
+    // Persistent authenticated shell: PrivateRoute → AuthenticatedLayout → Outlet
+    element: createAuthenticatedLayoutRoute(),
+    children: [
+      {
+        path: Paths.INSPECT_APPLICATIONS,
+        element: createPrivatePage(<InspectApplications />),
+      },
+      {
+        path: Paths.REASSIGN_APPLICATIONS,
+        element: createPrivatePage(<ReassignApplications />),
+      },
+      {
+        path: Paths.APPLICATION_DETAILS,
+        element: createPrivatePage(<ApplicationDetails />),
+      },
+      // {
+      //   path: Paths.SEND_MAIL,
+      //   element: createPrivatePage(<SendMail />),
+      // },
+      {
+        path: Paths.PROCESSED_APPLICATION_SIDE,
+        element: createPrivatePage(<ProcessedApplicationSide />),
+      },
+      {
+        path: Paths.PROCESSED_ORIGINAL_SIDE,
+        element: createPrivatePage(<ProcessedOriginalSide />),
+      },
+      {
+        path: Paths.PROCESSED_COMP_SIDE,
+        element: createPrivatePage(<ProcessedCompSide />),
+      },
+      {
+        path: Paths.REJECTED_APPLICATION,
+        element: createPrivatePage(<RejectedApplication />),
+      },
+    ],
   },
 ]);
 

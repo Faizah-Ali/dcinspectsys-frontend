@@ -20,6 +20,7 @@ import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
+import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 
 import DhcLogo from "../../assets/images/dhclogo.png";
 import Emblem from "../../assets/images/emblem.png";
@@ -49,4 +50,5 @@ export const IMAGES = {
     VisibilityIcon,
     VisibilityOffIcon,
     TextSnippetIcon,
+    DriveFolderUploadIcon,
 };

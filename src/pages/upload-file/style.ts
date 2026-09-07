@@ -1,30 +1,56 @@
 import { COLORS } from "../../common/constants";
+import { MOBILE_MAX } from "../../common/constants/breakpoints";
 import { styles as selectApproverStyles } from "../select-approver/style";
 
 export const styles = {
   ...selectApproverStyles,
+  pageShell: {
+    width: "100%",
+    margin: "0 auto",
+  },
+  uploadForm: {
+    display: "flex",
+    flexDirection: "column" as const,
+    gap: "18px",
+    width: "100%",
+    maxWidth: "720px",
+    margin: "0 auto",
+  },
+  section: {
+    display: "flex",
+    flexDirection: "column" as const,
+    gap: "8px",
+  },
+  sectionEyebrow: {
+    margin: 0,
+    color: "rgba(15, 23, 41, 0.55)",
+    fontSize: "11px",
+    fontWeight: 700,
+    letterSpacing: "0.08em",
+    textTransform: "uppercase" as const,
+  },
   fieldSection: {
     display: "flex",
     flexDirection: "column" as const,
-    gap: "10px",
+    gap: "8px",
   },
   fieldLabel: {
     color: COLORS.textPrimary,
-    fontSize: "16px",
+    fontSize: "14px",
     fontWeight: 600,
   },
   documentTypeSelect: {
-    borderRadius: "4px",
+    borderRadius: "10px",
     backgroundColor: COLORS.white,
     "& .MuiOutlinedInput-notchedOutline": {
-      borderColor: "rgba(15, 23, 41, 0.2)",
+      borderColor: "rgba(15, 23, 41, 0.14)",
     },
     "&:hover .MuiOutlinedInput-notchedOutline": {
       borderColor: `${COLORS.primary} !important`,
     },
     "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
       borderColor: `${COLORS.primary} !important`,
-      borderWidth: "2px",
+      borderWidth: "1.5px",
     },
     "&.Mui-focused .MuiSvgIcon-root": {
       color: COLORS.primary,
@@ -32,6 +58,7 @@ export const styles = {
     "& .MuiSelect-select": {
       fontSize: "14px",
       color: COLORS.textPrimary,
+      padding: "12px 14px",
     },
   },
   documentTypeMenu: {
@@ -53,28 +80,58 @@ export const styles = {
     },
   },
   placeholderText: {
-    color: "rgba(51, 51, 51, 0.6)",
+    color: "rgba(51, 51, 51, 0.55)",
   },
-  filePickerSection: {
+  uploadPanel: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: "16px",
+    padding: "14px 16px",
+    borderRadius: "12px",
+    border: "1px dashed rgba(15, 23, 41, 0.18)",
+    backgroundColor: COLORS.white,
+    boxSizing: "border-box" as const,
+    [`@media (max-width: ${MOBILE_MAX}px)`]: {
+      flexDirection: "column" as const,
+      alignItems: "stretch",
+    },
+  },
+  uploadPanelCopy: {
     display: "flex",
     flexDirection: "column" as const,
-    gap: "10px",
+    gap: "2px",
+    minWidth: 0,
+  },
+  uploadPanelTitle: {
+    margin: 0,
+    color: COLORS.textPrimary,
+    fontSize: "14px",
+    fontWeight: 600,
+  },
+  uploadPanelHint: {
+    margin: 0,
+    color: "rgba(51, 51, 51, 0.55)",
+    fontSize: "12px",
+    lineHeight: 1.4,
   },
   hiddenFileInput: {
     display: "none",
   },
   chooseFileButton: {
-    alignSelf: "flex-start",
-    minWidth: "148px",
+    minWidth: "140px",
     height: "40px",
+    flexShrink: 0,
     backgroundColor: COLORS.white,
     border: `1px solid ${COLORS.primary} !important`,
-    borderRadius: "3px",
+    borderRadius: "10px",
     color: `${COLORS.primary} !important`,
-    fontSize: "14px",
-    fontWeight: 700,
+    fontSize: "13px !important",
+    fontWeight: "700 !important",
+    letterSpacing: "0.04em",
+    textTransform: "uppercase" as const,
     cursor: "pointer",
-    padding: "0 20px !important",
+    padding: "0 18px !important",
     boxShadow: "none !important",
     "&:hover": {
       backgroundColor: "rgba(209, 91, 6, 0.08)",
@@ -85,18 +142,168 @@ export const styles = {
   fileListsRow: {
     display: "grid",
     gridTemplateColumns: "1fr 1fr",
-    gap: "16px",
-    alignItems: "start",
+    gap: "14px",
+    alignItems: "stretch",
     width: "100%",
-    "@media (max-width: 600px)": {
+    [`@media (max-width: ${MOBILE_MAX}px)`]: {
       gridTemplateColumns: "1fr",
     },
   },
-  uploadedFilesSection: {
+  filePanel: {
+    display: "flex",
+    flexDirection: "column" as const,
+    gap: "8px",
+    minWidth: 0,
+    padding: "12px 14px",
+    borderRadius: "12px",
+    border: "1px solid rgba(15, 23, 41, 0.1)",
+    backgroundColor: COLORS.white,
+    minHeight: "88px",
+  },
+  filePanelTitle: {
+    margin: 0,
+    color: "rgba(15, 23, 41, 0.55)",
+    fontSize: "11px",
+    fontWeight: 700,
+    letterSpacing: "0.07em",
+    textTransform: "uppercase" as const,
+  },
+  filePanelBody: {
+    display: "flex",
+    flexDirection: "column" as const,
+    gap: "6px",
+    minWidth: 0,
+  },
+  selectedFileRow: {
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+    minWidth: 0,
+  },
+  selectedFileName: {
+    flex: 1,
+    minWidth: 0,
+    color: COLORS.textPrimary,
+    fontSize: "13px",
+    fontWeight: 500,
+    wordBreak: "break-word" as const,
+    lineHeight: 1.35,
+  },
+  deletedUploadedFileName: {
+    color: "#9e9e9e",
+    fontSize: "13px",
+    wordBreak: "break-word" as const,
+    lineHeight: 1.35,
+  },
+  deletedLabel: {
+    fontStyle: "italic" as const,
+  },
+  emptyFileName: {
+    color: "rgba(51, 51, 51, 0.55)",
+    fontSize: "13px",
+    fontStyle: "italic" as const,
+  },
+  removeFileButton: {
+    padding: "2px",
+    color: "rgba(15, 23, 41, 0.45)",
+    "&:hover": {
+      color: COLORS.primary,
+      backgroundColor: "rgba(209, 91, 6, 0.08)",
+    },
+  },
+  portfolioSection: {
     display: "flex",
     flexDirection: "column" as const,
     gap: "4px",
-    minWidth: 0,
+    padding: "12px 14px",
+    borderRadius: "12px",
+    backgroundColor: "rgba(15, 23, 41, 0.03)",
+    border: "1px solid rgba(15, 23, 41, 0.08)",
+  },
+  portfolioPrompt: {
+    margin: 0,
+    color: COLORS.textPrimary,
+    fontSize: "13px",
+    fontWeight: 600,
+  },
+  portfolioConversionLink: {
+    alignSelf: "flex-start",
+    color: `${COLORS.primary} !important`,
+    fontFamily: "inherit",
+    fontSize: "13px !important",
+    fontWeight: "700 !important",
+    lineHeight: 1.5,
+    cursor: "pointer",
+    textDecoration: "underline !important",
+    background: "none",
+    border: "none",
+    padding: 0,
+    textAlign: "left" as const,
+    "&:hover": {
+      color: COLORS.primary,
+    },
+  },
+  footerActions: {
+    display: "flex",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    gap: "12px",
+    flexWrap: "wrap" as const,
+    paddingTop: "4px",
+    borderTop: "1px solid rgba(15, 23, 41, 0.08)",
+    marginTop: "2px",
+  },
+  uploadCancelButton: {
+    minWidth: "120px",
+    height: "42px",
+    backgroundColor: COLORS.white,
+    border: `1px solid ${COLORS.primary} !important`,
+    borderRadius: "10px",
+    color: `${COLORS.primary} !important`,
+    fontSize: "13px",
+    fontWeight: 700,
+    letterSpacing: "0.06em",
+    textTransform: "uppercase" as const,
+    cursor: "pointer",
+    padding: "0 22px !important",
+    boxShadow: "none !important",
+    "&:hover": {
+      backgroundColor: "rgba(209, 91, 6, 0.08)",
+      color: COLORS.primary,
+      boxShadow: "none !important",
+    },
+  },
+  uploadSubmitButton: {
+    minWidth: "120px",
+    height: "42px",
+    backgroundColor: COLORS.primary,
+    border: "none !important",
+    borderRadius: "10px",
+    color: `${COLORS.white} !important`,
+    fontSize: "13px",
+    fontWeight: 700,
+    letterSpacing: "0.06em",
+    textTransform: "uppercase" as const,
+    cursor: "pointer",
+    padding: "0 22px !important",
+    boxShadow: "0 6px 16px rgba(209, 91, 6, 0.28) !important",
+    "&:hover": {
+      backgroundColor: "#b34d05",
+      color: COLORS.white,
+      border: "none !important",
+      boxShadow: "0 8px 18px rgba(209, 91, 6, 0.34) !important",
+    },
+    "&.Mui-disabled": {
+      backgroundColor: "rgba(209, 91, 6, 0.32) !important",
+      color: `${COLORS.white} !important`,
+      boxShadow: "none !important",
+    },
+  },
+  // Kept for any residual consumers of the previous keys.
+  selectedFileLabel: {
+    color: COLORS.textPrimary,
+    fontSize: "14px",
+    fontWeight: 600,
   },
   selectedFileWrap: {
     display: "flex",
@@ -104,31 +311,59 @@ export const styles = {
     gap: "4px",
     minWidth: 0,
   },
-  selectedFileRow: {
+  uploadedFilesSection: {
     display: "flex",
+    flexDirection: "column" as const,
+    gap: "4px",
+    minWidth: 0,
+  },
+  filePickerSection: {
+    display: "flex",
+    flexDirection: "column" as const,
+    gap: "10px",
+  },
+  uploadPdfControls: {
+    display: "grid",
+    gridTemplateColumns: "1fr auto",
+    columnGap: "12px",
+    rowGap: "10px",
     alignItems: "center",
-    gap: "8px",
+    width: "100%",
   },
-  selectedFileLabel: {
-    color: COLORS.textPrimary,
-    fontSize: "14px",
+  portfolioConversionPrompt: {
+    color: `${COLORS.textPrimary} !important`,
+    fontSize: "16px",
     fontWeight: 600,
+    lineHeight: 1.4,
+    justifySelf: "start",
+    whiteSpace: "nowrap" as const,
   },
-  selectedFileName: {
-    color: COLORS.textPrimary,
-    fontSize: "14px",
-    wordBreak: "break-word" as const,
+} as const;
+
+/** Popup chrome used only by Upload File entry points. */
+export const uploadFilePopupStyles = {
+  paper: {
+    width: "100%",
+    maxWidth: "760px",
+    borderRadius: "16px",
+    overflow: "hidden",
+    backgroundColor: COLORS.white,
+    boxShadow: "0 20px 48px rgba(15, 23, 41, 0.18)",
+    maxHeight: "none",
   },
-  deletedUploadedFileName: {
-    color: "#9e9e9e",
-    fontSize: "14px",
-    wordBreak: "break-word" as const,
+  header: {
+    backgroundColor: COLORS.white,
+    borderBottom: "1px solid rgba(15, 23, 41, 0.08)",
   },
-  deletedLabel: {
-    fontStyle: "italic" as const,
-  },
-  emptyFileName: {
-    color: "rgba(51, 51, 51, 0.6)",
-    fontStyle: "italic" as const,
+  content: {
+    padding: "18px 28px 22px",
+    backgroundColor: "#fafbfc",
+    overflow: "visible",
+    overflowY: "visible",
+    flex: "none",
+    minHeight: "unset",
+    [`@media (max-width: ${MOBILE_MAX}px)`]: {
+      padding: "14px 16px 16px",
+    },
   },
 } as const;

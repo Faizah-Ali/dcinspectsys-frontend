@@ -25,6 +25,7 @@ import { IMAGES, VARIANTS } from "../../../common/constants";
 
 import Popup from "../../popup";
 import SelectStaff from "../../../pages/select-staff";
+import { selectStaffPopupStyles } from "../../../pages/select-staff/style";
 import type { SelectStaffValues } from "../../../pages/select-staff/type";
 import { handleAssignApplicationSubmit } from "../../../pages/select-staff/services/assign-application.helper";
 import StatusChip from "../../status-chip";
@@ -380,6 +381,9 @@ const ApplicationDetailsTable = () => {
         title="Select Staff"
         onClose={handleCloseAssignPopup}
         maxWidth="md"
+        paperSx={selectStaffPopupStyles.paper}
+        headerSx={selectStaffPopupStyles.header}
+        contentSx={selectStaffPopupStyles.content}
       >
         {selectedApplication && (
           <SelectStaff

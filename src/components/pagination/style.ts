@@ -34,11 +34,29 @@ const styles = {
     },
     "& button": {
       color: COLORS.textPrimary,
+      "&:hover": {
+        backgroundColor: "rgba(209, 91, 6, 0.12) !important",
+        color: COLORS.primary,
+      },
+    },
+    "& .MuiIconButton-root": {
+      color: COLORS.textPrimary,
+      "&:hover": {
+        backgroundColor: "rgba(209, 91, 6, 0.12) !important",
+        color: `${COLORS.primary} !important`,
+      },
+      "&.Mui-disabled": {
+        color: "rgba(0, 0, 0, 0.26)",
+      },
     },
     "& .Mui-selected": {
       border: `1px solid ${COLORS.primary}`,
       color: COLORS.textPrimary,
       backgroundColor: `transparent !important`,
+      "&:hover": {
+        backgroundColor: "rgba(209, 91, 6, 0.12) !important",
+        color: COLORS.primary,
+      },
     },
     "& .MuiTablePagination-root": {
       [`@media (max-width: ${MOBILE_MAX}px)`]: {
@@ -69,6 +87,41 @@ const styles = {
   select: {
     height: "30px",
     marginLeft: "5px",
+    color: COLORS.textPrimary,
+    "& .MuiOutlinedInput-notchedOutline": {
+      borderColor: "rgba(15, 23, 41, 0.2)",
+    },
+    "&:hover .MuiOutlinedInput-notchedOutline": {
+      borderColor: `${COLORS.primary} !important`,
+    },
+    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+      borderColor: `${COLORS.primary} !important`,
+      borderWidth: "1.5px",
+    },
+    "&.Mui-focused .MuiSvgIcon-root": {
+      color: COLORS.primary,
+    },
+    "&:hover .MuiSvgIcon-root": {
+      color: COLORS.primary,
+    },
+  },
+  selectMenu: {
+    "& .MuiMenuItem-root:hover": {
+      backgroundColor: "rgba(209, 91, 6, 0.08)",
+    },
+    "& .MuiMenuItem-root.Mui-selected": {
+      backgroundColor: "rgba(209, 91, 6, 0.12) !important",
+      color: COLORS.primary,
+    },
+    "& .MuiMenuItem-root.Mui-selected:hover": {
+      backgroundColor: "rgba(209, 91, 6, 0.2) !important",
+    },
+    "& .MuiMenuItem-root.Mui-selected.Mui-focusVisible": {
+      backgroundColor: "rgba(209, 91, 6, 0.12) !important",
+    },
+    "& .MuiMenuItem-root.Mui-focusVisible": {
+      backgroundColor: "rgba(209, 91, 6, 0.08)",
+    },
   },
   paginationInfo: {
     marginRight: "20px",

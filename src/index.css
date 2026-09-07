@@ -1,3 +1,17 @@
+html {
+  scrollbar-gutter: stable;
+}
+
+/*
+ * MUI Modal/Dialog scroll-lock adds padding-right equal to the scrollbar width
+ * on body and .mui-fixed elements (header/sidebar). With scrollbar-gutter:
+ * stable that space is already reserved, so the extra padding shifts the
+ * applications table (and chrome) horizontally on popup open/close.
+ */
+.mui-fixed {
+  padding-right: 0 !important;
+}
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -27,6 +41,8 @@ body {
   min-width: 320px;
   min-height: 100vh;
   overflow-x: hidden;
+  /* Cancel MUI scroll-lock padding; see note above .mui-fixed */
+  padding-right: 0 !important;
 }
 
 h1 {

@@ -25,16 +25,38 @@ export const styles = {
       flexShrink: 0,
     },
   },
+  headerInline: {
+    minHeight: "56px",
+    padding: "12px 16px 12px 12px",
+    gap: "4px",
+    backgroundColor: COLORS.sidebarBg,
+    borderBottom: "none",
+  },
   titleWrap: {
     flex: 1,
     display: "flex",
     justifyContent: "center",
+  },
+  titleWrapInline: {
+    flex: 1,
+    display: "flex",
+    justifyContent: "flex-start",
+    minWidth: 0,
   },
   title: {
     color: COLORS.sidebarBg,
     fontSize: "22px",
     fontWeight: 700,
     textAlign: "center" as const,
+  },
+  titleInline: {
+    margin: 0,
+    color: COLORS.white,
+    fontSize: "18px",
+    fontWeight: 600,
+    letterSpacing: "0.01em",
+    textAlign: "left" as const,
+    lineHeight: 1.3,
   },
   iconButton: {
     width: "40px",
@@ -44,6 +66,16 @@ export const styles = {
     "&:hover": {
       backgroundColor: COLORS.primary,
       color: "#ffffff",
+    },
+  },
+  iconButtonOnDark: {
+    width: "40px",
+    height: "40px",
+    color: COLORS.white,
+    borderRadius: "10px",
+    "&:hover": {
+      backgroundColor: "rgba(255, 255, 255, 0.12)",
+      color: COLORS.white,
     },
   },
   iconPlaceholder: {

@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 
 import { VARIANTS } from "../../common/constants";
+import ReferenceNoBanner from "../../components/reference-no-banner";
 import { showErrorToast } from "../../components/toast/helper";
 
 import {
@@ -71,9 +72,11 @@ const ApproverProcess = ({
 
   return (
     <Box sx={styles.form}>
-      <Box component="p" sx={styles.referenceText}>
-        Reference No.-  {diaryNo}/{diaryYr}
-      </Box>
+      <ReferenceNoBanner
+        diaryNo={diaryNo}
+        diaryYr={diaryYr}
+        sx={{ marginBottom: "16px" }}
+      />
 
       <Box sx={styles.remarksSection}>
         <Box component="label" htmlFor="approver-remarks" sx={styles.fieldLabel}>
@@ -83,7 +86,7 @@ const ApproverProcess = ({
         <TextField
           id="approver-remarks"
           multiline
-          rows={4}
+          minRows={3}
           value={remarks}
           onChange={handleRemarksChange(setRemarks)}
           sx={styles.remarksField}
@@ -91,7 +94,11 @@ const ApproverProcess = ({
       </Box>
 
       <Box sx={styles.fieldSection}>
-        <Box component="label" htmlFor="approver-forward-to" sx={styles.fieldLabel}>
+        <Box
+          component="label"
+          htmlFor="approver-forward-to"
+          sx={styles.fieldLabel}
+        >
           Forward To
         </Box>
 
@@ -116,6 +123,9 @@ const ApproverProcess = ({
               PaperProps: {
                 sx: styles.forwardToMenu,
               },
+              MenuListProps: {
+                dense: true,
+              },
             }}
             renderValue={(selectedValue) => {
               if (!selectedValue) {
@@ -139,19 +149,21 @@ const ApproverProcess = ({
               </MenuItem>
             ) : forwardUsers.length === 0 ? (
               <MenuItem disabled>No approvers found.</MenuItem>
-            ) : forwardUsers.map((user) => (
-              <MenuItem
-                key={user.id}
-                value={user.id}
-                onClick={handleForwardToggle(
-                  forwardTo,
-                  user.id,
-                  setForwardTo
-                )}
-              >
-                {user.name}
-              </MenuItem>
-            ))}
+            ) : (
+              forwardUsers.map((user) => (
+                <MenuItem
+                  key={user.id}
+                  value={user.id}
+                  onClick={handleForwardToggle(
+                    forwardTo,
+                    user.id,
+                    setForwardTo
+                  )}
+                >
+                  {user.name}
+                </MenuItem>
+              ))
+            )}
           </Select>
         </FormControl>
       </Box>
@@ -164,7 +176,7 @@ const ApproverProcess = ({
           disabled={isSubmitting}
           sx={styles.cancelButton}
         >
-          Cancel
+          CANCEL
         </Button>
 
         <Box sx={styles.actionButtonsGroup}>
@@ -182,7 +194,7 @@ const ApproverProcess = ({
             )}
             sx={styles.approveButton}
           >
-            {isSubmitting ? "Submitting..." : "Approve"}
+            {isSubmitting ? "Submitting..." : "APPROVE"}
           </Button>
 
           <Button
@@ -199,7 +211,7 @@ const ApproverProcess = ({
             )}
             sx={styles.rejectButton}
           >
-            Reject
+            REJECT
           </Button>
 
           <Button
@@ -216,7 +228,7 @@ const ApproverProcess = ({
             )}
             sx={styles.forwardButton}
           >
-            Forward
+            FORWARD
           </Button>
         </Box>
       </Box>

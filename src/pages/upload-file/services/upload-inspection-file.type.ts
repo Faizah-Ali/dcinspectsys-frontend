@@ -6,4 +6,5 @@ export interface UploadInspectionFileParams {
 
 export interface UploadInspectionFileResponse {
   message: string;
+  errorCode?: string;
 }

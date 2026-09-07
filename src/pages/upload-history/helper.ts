@@ -17,6 +17,28 @@ export const getUploadHistoryRowKey = (
 export const isDeletedUploadFile = (file: UploadHistoryItem): boolean =>
   file.fileUploadFlag === "D";
 
+/** Compact client-side page size so history tables fit without dialog scroll. */
+export const UPLOAD_HISTORY_PAGE_SIZE = 6;
+
+/** Items-per-page choices for Upload History only (multiples of 6). */
+export const UPLOAD_HISTORY_LIMIT_OPTIONS = [6, 12, 18, 24, 30, 36] as const;
+
+export const getUploadHistoryPageCount = (totalItems: number, pageSize = UPLOAD_HISTORY_PAGE_SIZE) =>
+  Math.max(1, Math.ceil(Math.max(totalItems, 0) / pageSize));
+
+export const paginateUploadHistoryItems = <T,>(
+  items: T[],
+  page: number,
+  pageSize = UPLOAD_HISTORY_PAGE_SIZE
+): T[] => {
+  const safePage = Math.min(
+    Math.max(page, 0),
+    Math.max(getUploadHistoryPageCount(items.length, pageSize) - 1, 0)
+  );
+  const start = safePage * pageSize;
+  return items.slice(start, start + pageSize);
+};
+
 /**
  * Current PDF for this assignment cycle only.
  * Historical files (currentCycle !== true) must not count as uploaded.

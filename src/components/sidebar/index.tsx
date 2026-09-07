@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { Box, Drawer, List, ListItem, useMediaQuery } from "@mui/material";
 import { styles } from "./style";
 import { getSidebarItems } from "./helper";
-import type { SidebarProps } from "./type";
+import type { SidebarItem, SidebarProps } from "./type";
 import { IMAGES } from "../../common/constants";
 import { DESKTOP_MIN } from "../../common/constants/breakpoints";
 import {
@@ -61,6 +61,9 @@ const Sidebar = ({
     if (text === "Rejected Application") {
       return <IMAGES.RejectIcon sx={styles.itemIcon} />;
     }
+    if (text === "PDF Portfolio Merger") {
+      return <IMAGES.DriveFolderUploadIcon sx={styles.itemIcon} />;
+    }
     return <IMAGES.DescriptionIcon sx={styles.itemIcon} />;
   };
 
@@ -68,11 +71,22 @@ const Sidebar = ({
     return activeRoute === route;
   };
 
-  const handleItemClick = (text: string, route: string) => {
+  const handleItemClick = (item: SidebarItem) => {
     if (onItemClick) {
-      onItemClick(text);
+      onItemClick(item.text);
     }
-    navigate(route);
+
+    if (item.external) {
+      window.open(item.route, "_blank", "noopener,noreferrer");
+
+      if (!isDesktop) {
+        onDrawerClose?.();
+      }
+
+      return;
+    }
+
+    navigate(item.route);
 
     if (!isDesktop) {
       onDrawerClose?.();
@@ -107,7 +121,7 @@ const Sidebar = ({
               ...styles.sidebarItem,
               ...(isActive(item.route) ? styles.activeItem : {}),
             }}
-            onClick={() => handleItemClick(item.text, item.route)}
+            onClick={() => handleItemClick(item)}
           >
             {getIcon(item.text)}
             {item.text}

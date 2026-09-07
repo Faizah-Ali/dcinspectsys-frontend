@@ -9,12 +9,15 @@ import type { PaginationProps } from "./type";
 import styles from "./style";
 import { useState, useEffect } from "react";
 
+const DEFAULT_LIMIT_OPTIONS = [10, 20, 30, 40, 50];
+
 const PaginationSection = ({
   listData,
   handleChangePage,
   handleChangeLimit,
   externalStyles = {},
   currentLimit = 10,
+  limitOptions = DEFAULT_LIMIT_OPTIONS,
 }: PaginationProps) => {
   const [limit, setLimit] = useState(currentLimit.toString());
   
@@ -33,8 +36,13 @@ const PaginationSection = ({
               setLimit(e.target.value);
             }}
             sx={styles.select}
+            MenuProps={{
+              PaperProps: {
+                sx: styles.selectMenu,
+              },
+            }}
           >
-          {[10, 20, 30, 40, 50]?.map((option) => (
+          {limitOptions.map((option) => (
             <MenuItem key={option} value={option}>
               {option}
             </MenuItem>

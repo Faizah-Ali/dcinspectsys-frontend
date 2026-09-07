@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 
 import { VARIANTS } from "../../common/constants";
+import ReferenceNoBanner from "../../components/reference-no-banner";
 import { showErrorToast } from "../../components/toast/helper";
 
 import { formatCommentDateTime } from "./helper";
@@ -60,8 +61,14 @@ const NoteSheet = ({ diaryNo, diaryYr, onClose }: NoteSheetProps) => {
 
   return (
     <Box sx={styles.container}>
-      <Box component="p" sx={styles.referenceText}>
-        Reference No.-  {diaryNo}/{diaryYr}
+      <ReferenceNoBanner
+        diaryNo={diaryNo}
+        diaryYr={diaryYr}
+        sx={{ marginBottom: "14px" }}
+      />
+
+      <Box component="p" sx={styles.sectionHeading}>
+        Note Sheet Record
       </Box>
 
       {isLoading ? (
@@ -73,7 +80,7 @@ const NoteSheet = ({ diaryNo, diaryYr, onClose }: NoteSheetProps) => {
           No dealing remarks found.
         </Box>
       ) : (
-        <TableContainer component={Paper} sx={styles.tableWrapper}>
+        <TableContainer component={Paper} sx={styles.tableWrapper} elevation={0}>
           <Table sx={styles.table}>
             <colgroup>
               {styles.columnWidths.map((width, colIndex) => (
@@ -137,11 +144,11 @@ const NoteSheet = ({ diaryNo, diaryYr, onClose }: NoteSheetProps) => {
       <Box sx={styles.actionsWrap}>
         <Button
           type="button"
-          variant={VARIANTS.OUTLINED}
+          variant={VARIANTS.CONTAINED}
           onClick={onClose}
           sx={styles.closeButton}
         >
-          Close
+          CLOSE
         </Button>
       </Box>
     </Box>

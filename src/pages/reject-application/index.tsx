@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   Box,
   Button,
@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 
 import { VARIANTS } from "../../common/constants";
+import ReferenceNoBanner from "../../components/reference-no-banner";
 
 import {
   handleReasonChange,
@@ -30,6 +31,9 @@ const RejectApplication = ({
 }: RejectApplicationProps) => {
   const [reason, setReason] = useState("");
   const [remarks, setRemarks] = useState("");
+  /** Presentation-only: lock menu width to the Reason field. */
+  const [reasonMenuWidth, setReasonMenuWidth] = useState<number | undefined>();
+  const reasonFieldRef = useRef<HTMLDivElement | null>(null);
 
   const remarksRequired = isRemarksRequired(reason);
 
@@ -52,28 +56,79 @@ const RejectApplication = ({
     }
   };
 
+  const syncReasonMenuWidth = () => {
+    const width = reasonFieldRef.current?.offsetWidth;
+    if (width && width > 0) {
+      setReasonMenuWidth(width);
+    }
+  };
+
+  /** Drop focus after the menu closes so the orange outline does not linger. */
+  const blurReasonSelect = () => {
+    window.setTimeout(() => {
+      const active = document.activeElement;
+      if (
+        active instanceof HTMLElement &&
+        reasonFieldRef.current?.contains(active)
+      ) {
+        active.blur();
+      }
+    }, 0);
+  };
+
   return (
     <Box
       component="form"
       onSubmit={handleSubmit(reason, remarks, onSubmit)}
       sx={styles.form}
     >
-      <Box component="p" sx={styles.referenceText}>
-        Reference No.-  {diaryNo}/{diaryYr}
-      </Box>
+      <ReferenceNoBanner
+        diaryNo={diaryNo}
+        diaryYr={diaryYr}
+        sx={{ marginBottom: "16px" }}
+      />
 
       <Box sx={styles.fieldSection}>
         <Box component="label" htmlFor="reject-reason" sx={styles.fieldLabel}>
           Reason
         </Box>
 
-        <FormControl fullWidth>
+        <FormControl fullWidth ref={reasonFieldRef}>
           <Select
             id="reject-reason"
             value={reason}
             onChange={applyReasonChange}
+            onOpen={syncReasonMenuWidth}
+            onClose={blurReasonSelect}
             displayEmpty
+            autoWidth={false}
             sx={styles.documentTypeSelect}
+            MenuProps={{
+              anchorOrigin: {
+                vertical: "bottom",
+                horizontal: "left",
+              },
+              transformOrigin: {
+                vertical: "top",
+                horizontal: "left",
+              },
+              marginThreshold: 12,
+              PaperProps: {
+                sx: {
+                  ...styles.documentTypeMenu,
+                  ...(reasonMenuWidth
+                    ? {
+                        width: reasonMenuWidth,
+                        maxWidth: reasonMenuWidth,
+                        minWidth: `${reasonMenuWidth}px !important`,
+                      }
+                    : {}),
+                },
+              },
+              MenuListProps: {
+                dense: true,
+              },
+            }}
             renderValue={(selectedValue) => {
               if (!selectedValue) {
                 return (
@@ -90,11 +145,7 @@ const RejectApplication = ({
               <MenuItem
                 key={option.value}
                 value={option.value}
-                onClick={handleReasonToggle(
-                  reason,
-                  option.value,
-                  setReason
-                )}
+                onClick={handleReasonToggle(reason, option.value, setReason)}
               >
                 {option.label}
               </MenuItem>
@@ -111,7 +162,7 @@ const RejectApplication = ({
         <TextField
           id="reject-remarks"
           multiline
-          rows={4}
+          minRows={3}
           value={remarks}
           onChange={applyRemarksChange}
           helperText={remarksRequired ? "Please enter remarks." : undefined}
@@ -124,17 +175,17 @@ const RejectApplication = ({
           type="button"
           variant={VARIANTS.OUTLINED}
           onClick={onCancel}
-          sx={styles.cancelButton}
+          sx={styles.rejectPopupCancelButton}
         >
-          Cancel
+          CANCEL
         </Button>
 
         <Button
           type="submit"
           variant={VARIANTS.CONTAINED}
-          sx={styles.rejectButton}
+          sx={styles.rejectPopupRejectButton}
         >
-          Reject
+          REJECT
         </Button>
       </Box>
     </Box>

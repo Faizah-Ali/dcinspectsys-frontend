@@ -50,3 +50,13 @@ export const createRoute = ({
             return wrappedComponent;
     }
 };
+
+/** Persistent authenticated shell (Header/Sidebar) with nested `<Outlet />`. */
+export const createAuthenticatedLayoutRoute = (): React.JSX.Element => (
+    <PrivateRoute />
+);
+
+/** Lazy page element for nested private routes (Suspense only; no layout remount). */
+export const createPrivatePage = (
+    component: React.JSX.Element
+): React.JSX.Element => <RouterLoader>{component}</RouterLoader>;

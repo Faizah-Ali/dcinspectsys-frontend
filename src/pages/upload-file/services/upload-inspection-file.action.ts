@@ -34,8 +34,16 @@ export const uploadInspectionFile = async ({
     .catch(() => ({ message: "" }));
 
   const message = data.message?.trim();
+  const errorCode = data.errorCode?.trim();
 
   if (!response.ok) {
+    if (errorCode === "PORTFOLIO_PDF_NOT_ALLOWED") {
+      throw new Error(
+        message ||
+          "PDF Portfolio is not valid to upload. Please upload PDF file."
+      );
+    }
+
     throw new Error(message || "Failed to upload inspection file");
   }
 

@@ -2,6 +2,7 @@
 export * from "./breakpoints";
 export * from "./colors";
 export * from "./endpoint";
+export * from "./externalLinks";
 export * from "./images";
 export * from "./layout";
 export * from "./path";

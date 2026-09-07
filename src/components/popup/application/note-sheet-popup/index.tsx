@@ -1,5 +1,6 @@
 import Popup from "../..";
 import NoteSheet from "../../../../pages/note-sheet";
+import { noteSheetPopupStyles } from "../../../../pages/note-sheet/style";
 import type { ApplicationResponse } from "../../../../pages/inspec-applications/services/applications.type";
 
 interface NoteSheetPopupProps {
@@ -14,6 +15,9 @@ const NoteSheetPopup = ({ application, onClose }: NoteSheetPopupProps) => {
       title="NOTE SHEET"
       onClose={onClose}
       maxWidth="md"
+      paperSx={noteSheetPopupStyles.paper}
+      headerSx={noteSheetPopupStyles.header}
+      contentSx={noteSheetPopupStyles.content}
     >
       {application && (
         <NoteSheet

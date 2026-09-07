@@ -1,3 +1,4 @@
+import { PORTFOLIO_TO_PDF_CONVERSION_URL } from "../../common/constants/externalLinks";
 import { Paths } from "../../common/constants/path";
 import type { SidebarItem } from "./type";
 
@@ -51,6 +52,12 @@ const getOfficerSidebarItems = (
   items.push({
     text: "Rejected Application",
     route: Paths.REJECTED_APPLICATION,
+  });
+
+  items.push({
+    text: "PDF Portfolio Merger",
+    route: PORTFOLIO_TO_PDF_CONVERSION_URL,
+    external: true,
   });
 
   return items;

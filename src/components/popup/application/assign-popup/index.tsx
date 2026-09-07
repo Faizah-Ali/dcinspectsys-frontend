@@ -1,5 +1,6 @@
 import Popup from "../..";
 import SelectStaff from "../../../../pages/select-staff";
+import { selectStaffPopupStyles } from "../../../../pages/select-staff/style";
 import type { ApplicationResponse } from "../../../../pages/inspec-applications/services/applications.type";
 import type { SelectStaffValues } from "../../../../pages/select-staff/type";
 
@@ -16,6 +17,9 @@ const AssignPopup = ({ application, onClose, onSubmit }: AssignPopupProps) => {
       title="Select Staff"
       onClose={onClose}
       maxWidth="md"
+      paperSx={selectStaffPopupStyles.paper}
+      headerSx={selectStaffPopupStyles.header}
+      contentSx={selectStaffPopupStyles.content}
     >
       {application && (
         <SelectStaff

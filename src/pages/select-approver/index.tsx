@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 
 import { VARIANTS } from "../../common/constants";
+import ReferenceNoBanner from "../../components/reference-no-banner";
 import { showErrorToast } from "../../components/toast/helper";
 import { handleRemarksChange } from "../select-staff/helper";
 
@@ -87,9 +88,11 @@ const SelectApprover = ({
       )}
       sx={styles.form}
     >
-      <Box component="p" sx={styles.referenceText}>
-        Reference No.-  {diaryNo}/{diaryYr}
-      </Box>
+      <ReferenceNoBanner
+        diaryNo={diaryNo}
+        diaryYr={diaryYr}
+        sx={{ marginBottom: "16px" }}
+      />
 
       {isLoading ? (
         <Box sx={styles.loadingWrap}>

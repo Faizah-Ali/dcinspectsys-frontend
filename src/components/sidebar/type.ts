@@ -1,6 +1,7 @@
 export interface SidebarItem {
   text: string;
   route: string;
+  external?: boolean;
 }
 
 export interface SidebarProps {

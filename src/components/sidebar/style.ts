@@ -97,7 +97,7 @@ export const styles = {
     alignItems: "center" as const,
     gap: "12px",
     color: COLORS.white,
-    fontSize: "14px",
+    fontSize: "16px",
     fontWeight: 500,
     transition: "all 0.2s ease",
     "&:hover": {
@@ -115,8 +115,8 @@ export const styles = {
     },
   },
   itemIcon: {
-    width: "25px",
-    height: "25px",
+    width: "27px",
+    height: "27px",
     color: "inherit",
   },
   logoutContainer: {
@@ -137,7 +137,7 @@ export const styles = {
     alignItems: "center" as const,
     gap: "12px",
     color: COLORS.white,
-    fontSize: "16px",
+    fontSize: "18px",
     fontWeight: 500,
     transition: "all 0.2s ease",
     borderRadius: "8px",
