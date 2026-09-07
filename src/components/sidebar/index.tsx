@@ -56,13 +56,34 @@ const Sidebar = ({
       text === "Processed (Original Side)" ||
       text === "Processed Application (Comp Side)"
     ) {
-      return <IMAGES.TaskIcon sx={styles.itemIcon} />;
+      return (
+        <Box
+          component="img"
+          src={IMAGES.ProcessedApplicationIcon}
+          alt=""
+          sx={styles.itemIconImage}
+        />
+      );
     }
     if (text === "Rejected Application") {
-      return <IMAGES.RejectIcon sx={styles.itemIcon} />;
+      return (
+        <Box
+          component="img"
+          src={IMAGES.RejectedApplicationIcon}
+          alt=""
+          sx={styles.itemIconImage}
+        />
+      );
     }
     if (text === "PDF Portfolio Merger") {
-      return <IMAGES.DriveFolderUploadIcon sx={styles.itemIcon} />;
+      return (
+        <Box
+          component="img"
+          src={IMAGES.PortfolioIcon}
+          alt=""
+          sx={styles.itemIconImage}
+        />
+      );
     }
     return <IMAGES.DescriptionIcon sx={styles.itemIcon} />;
   };
@@ -131,7 +152,12 @@ const Sidebar = ({
 
       <Box sx={styles.logoutContainer}>
         <ListItem onClick={handleLogout} sx={styles.logoutButton}>
-          <IMAGES.LogoutIcon sx={styles.itemIcon} />
+          <Box
+            component="img"
+            src={IMAGES.LogoutIcon}
+            alt=""
+            sx={styles.itemIconImage}
+          />
           Logout
         </ListItem>
       </Box>

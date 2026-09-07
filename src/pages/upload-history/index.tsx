@@ -448,8 +448,14 @@ const UploadHistory = ({
                               {isDownloading ? (
                                 <CircularProgress size={14} color="inherit" />
                               ) : (
-                                <IMAGES.PictureAsPdfIcon
-                                  sx={applicationDetailsStyles.actionIcon}
+                                <Box
+                                  component="span"
+                                  sx={{
+                                    ...applicationDetailsStyles.actionIconImage,
+                                    maskImage: `url(${IMAGES.DownloadPdfIcon})`,
+                                    WebkitMaskImage: `url(${IMAGES.DownloadPdfIcon})`,
+                                  }}
+                                  aria-hidden
                                 />
                               )}
                             </Box>

@@ -253,6 +253,20 @@ export const styles = {
   actionIcon: {
     fontSize: "26px",
   },
+  /** Monochrome PNG icons that inherit button `currentColor` (incl. hover). */
+  actionIconImage: {
+    width: "26px",
+    height: "26px",
+    display: "inline-block",
+    flexShrink: 0,
+    backgroundColor: "currentColor",
+    maskSize: "contain",
+    maskRepeat: "no-repeat",
+    maskPosition: "center",
+    WebkitMaskSize: "contain",
+    WebkitMaskRepeat: "no-repeat",
+    WebkitMaskPosition: "center",
+  },
   loadingOverlay: {
     position: "absolute" as const,
     inset: 0,

@@ -119,6 +119,13 @@ export const styles = {
     height: "27px",
     color: "inherit",
   },
+  itemIconImage: {
+    width: "27px",
+    height: "27px",
+    objectFit: "contain" as const,
+    flexShrink: 0,
+    filter: "brightness(0) invert(1)",
+  },
   logoutContainer: {
     paddingBottom: "10px",
     borderTop: "1px solid rgba(255, 255, 255, 0.1)",

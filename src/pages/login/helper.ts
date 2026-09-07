@@ -32,7 +32,7 @@ export const initialLoginForm: LoginFormData = {
   rememberMe: false,
 };
 
-const getSavedCredentials = () => {
+export const getSavedCredentials = () => {
   try {
     if (localStorage.getItem(REMEMBER_ME_KEY) !== "true") {
       return null;
@@ -45,6 +45,22 @@ const getSavedCredentials = () => {
   } catch {
     return null;
   }
+};
+
+/** Initial login form, hydrated once from Remember Me localStorage when present. */
+export const getInitialLoginForm = (): LoginFormData => {
+  const saved = getSavedCredentials();
+
+  if (!saved || saved.username === "") {
+    return initialLoginForm;
+  }
+
+  return {
+    ...initialLoginForm,
+    username: saved.username,
+    password: saved.password,
+    rememberMe: true,
+  };
 };
 
 export const getUsernameHistory = (): string[] => {

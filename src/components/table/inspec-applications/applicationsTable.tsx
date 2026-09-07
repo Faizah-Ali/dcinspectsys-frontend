@@ -552,8 +552,14 @@ const ApplicationsTable = ({
                           generateApplicationPDF(row);
                         }}
                       >
-                        <IMAGES.PictureAsPdfIcon
-                          sx={styles.actionIcon}
+                        <Box
+                          component="span"
+                          sx={{
+                            ...styles.actionIconImage,
+                            maskImage: `url(${IMAGES.DownloadPdfIcon})`,
+                            WebkitMaskImage: `url(${IMAGES.DownloadPdfIcon})`,
+                          }}
+                          aria-hidden
                         />
                       </Box>
 
@@ -610,7 +616,15 @@ const ApplicationsTable = ({
                             handleOpenSelectApprover(row);
                           }}
                         >
-                          <IMAGES.AssignmentIcon sx={styles.actionIcon} />
+                          <Box
+                            component="span"
+                            sx={{
+                              ...styles.actionIconImage,
+                              maskImage: `url(${IMAGES.SendFileIcon})`,
+                              WebkitMaskImage: `url(${IMAGES.SendFileIcon})`,
+                            }}
+                            aria-hidden
+                          />
                         </Box>
                       )}
 
@@ -655,7 +669,15 @@ const ApplicationsTable = ({
                             handleComplete(row);
                           }}
                         >
-                          <IMAGES.ApproveIcon sx={styles.actionIcon} />
+                          <Box
+                            component="span"
+                            aria-hidden
+                            sx={{
+                              ...styles.actionIconImage,
+                              maskImage: `url(${IMAGES.ApproveActionIcon})`,
+                              WebkitMaskImage: `url(${IMAGES.ApproveActionIcon})`,
+                            }}
+                          />
                         </Box>
                       )}
 
@@ -671,7 +693,15 @@ const ApplicationsTable = ({
                             handleOpenRejectPopup(row);
                           }}
                         >
-                          <IMAGES.RejectIcon sx={styles.actionIcon} />
+                          <Box
+                            component="span"
+                            aria-hidden
+                            sx={{
+                              ...styles.actionIconImage,
+                              maskImage: `url(${IMAGES.RejectActionIcon})`,
+                              WebkitMaskImage: `url(${IMAGES.RejectActionIcon})`,
+                            }}
+                          />
                         </Box>
                       )}
 

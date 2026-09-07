@@ -9,10 +9,10 @@ import { IMAGES } from "../../common/constants/images";
 import type { AppDispatch, RootState } from "../../redux/store";
 
 import {
+  getInitialLoginForm,
   getUsernameHistory,
   handleChange,
   handleSubmit,
-  initialLoginForm,
   USERNAME_SUGGESTIONS_LIST_ID,
 } from "./helper";
 import { styles } from "./style";
@@ -24,7 +24,9 @@ const Login = () => {
 
   const isSubmitting = useSelector((state: RootState) => state.login.loading);
 
-  const [formData, setFormData] = useState<LoginFormData>(initialLoginForm);
+  const [formData, setFormData] = useState<LoginFormData>(() =>
+    getInitialLoginForm()
+  );
   const [errors, setErrors] = useState<LoginFormErrors>({});
   const [usernameSuggestions] = useState<string[]>(() => getUsernameHistory());
 

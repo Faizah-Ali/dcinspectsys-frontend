@@ -324,7 +324,15 @@ const ApplicationDetailsTable = () => {
                             generateApplicationPDF(row);
                           }}
                         >
-                          <IMAGES.PictureAsPdfIcon sx={styles.actionIcon} />
+                          <Box
+                            component="span"
+                            sx={{
+                              ...styles.actionIconImage,
+                              maskImage: `url(${IMAGES.DownloadPdfIcon})`,
+                              WebkitMaskImage: `url(${IMAGES.DownloadPdfIcon})`,
+                            }}
+                            aria-hidden
+                          />
                         </Box>
 
                         <Box
