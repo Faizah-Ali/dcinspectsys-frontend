@@ -20,9 +20,9 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 
-import DhcLogo from "../../assets/images/dhclogo.png";
+import DhcLogo from "../../assets/images/dhc-logo.png";
 import Emblem from "../../assets/images/emblem.png";
-import CourtBuilding from "../../assets/images/dhc3.jpg";
+import CourtBuilding from "../../assets/images/dhc-building.jpg";
 import PortfolioIcon from "../../assets/images/portfolio-icon.png";
 import ProcessedApplicationIcon from "../../assets/images/processed-application.png";
 import RejectedApplicationIcon from "../../assets/images/rejected-application.png";
