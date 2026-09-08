@@ -251,7 +251,7 @@ const buildApplicationPDF = async (row: ApplicationResponse) => {
       ["Case Type", displayValue(row.casetype)],
       ["Registration No.", displayValue(row.regNo)],
       ["Registration Year", displayValue(row.regYr)],
-      ["Diary Number", displayValue(row.diaryNo)],
+      ["Diary No.", displayValue(row.diaryNo)],
       ["Diary Year", displayValue(row.diaryYr)],
       ["Case No.", `${row.casetype}-${row.regNo}/${row.regYr}`],
       ["Case Title", displayValue(row.caseTitle)],

@@ -10,4 +10,6 @@ export const LOGIN_TIME_KEY = "dhc_inspection_login_time";
 export const REMEMBER_ME_KEY = "dhc_inspection_remember_me";
 export const REMEMBER_USERNAME_KEY = "dhc_inspection_remember_username";
 export const REMEMBER_PASSWORD_KEY = "dhc_inspection_remember_password";
+/** JSON map of remembered username → password (multi-account Remember Me). */
+export const REMEMBER_CREDENTIALS_KEY = "dhc_inspection_remember_credentials";
 export const USERNAME_HISTORY_KEY = "dhc_inspection_username_history";

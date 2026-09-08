@@ -3,15 +3,13 @@ import {
   Box,
   Button,
   CircularProgress,
-  FormControl,
   IconButton,
-  MenuItem,
-  Select,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
 import { PORTFOLIO_TO_PDF_CONVERSION_URL, VARIANTS } from "../../common/constants";
 import ReferenceNoBanner from "../../components/reference-no-banner";
+import SearchableSelect from "../../components/searchable-select";
 import { getUploadHistory } from "../upload-history/services/upload-history.action";
 import type { UploadHistoryItem } from "../upload-history/services/upload-history.type";
 import {
@@ -25,7 +23,6 @@ import {
   getFileIdentity,
   handleChooseFileClick,
   handleDocumentTypeChange,
-  handleDocumentTypeToggle,
   handleFileChange,
   handleRemoveFile,
   handleSubmit,
@@ -106,46 +103,15 @@ const UploadFile = ({
               Document Type
             </Box>
 
-            <FormControl fullWidth>
-              <Select
-                id="upload-document-type"
-                value={documentType}
-                onChange={handleDocumentTypeChange(setDocumentType)}
-                displayEmpty
-                disabled={isSubmitting}
-                sx={styles.documentTypeSelect}
-                MenuProps={{
-                  PaperProps: {
-                    sx: styles.documentTypeMenu,
-                  },
-                }}
-                renderValue={(selectedValue) => {
-                  if (!selectedValue) {
-                    return (
-                      <Box component="span" sx={styles.placeholderText}>
-                        Select Document
-                      </Box>
-                    );
-                  }
-
-                  return selectedValue;
-                }}
-              >
-                {DOCUMENT_TYPE_OPTIONS.map((option) => (
-                  <MenuItem
-                    key={option.value}
-                    value={option.value}
-                    onClick={handleDocumentTypeToggle(
-                      documentType,
-                      option.value,
-                      setDocumentType
-                    )}
-                  >
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <SearchableSelect
+              id="upload-document-type"
+              value={documentType}
+              options={DOCUMENT_TYPE_OPTIONS}
+              onChange={handleDocumentTypeChange(setDocumentType)}
+              placeholder="Select Document"
+              disabled={isSubmitting}
+              sx={styles.documentTypeSelect}
+            />
           </Box>
         </Box>
 

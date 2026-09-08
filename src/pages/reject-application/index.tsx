@@ -1,19 +1,12 @@
-import { useRef, useState } from "react";
-import {
-  Box,
-  Button,
-  FormControl,
-  MenuItem,
-  Select,
-  TextField,
-} from "@mui/material";
+import { useState } from "react";
+import { Box, Button, TextField } from "@mui/material";
 
 import { VARIANTS } from "../../common/constants";
 import ReferenceNoBanner from "../../components/reference-no-banner";
+import SearchableSelect from "../../components/searchable-select";
 
 import {
   handleReasonChange,
-  handleReasonToggle,
   handleRemarksChange,
   handleSubmit,
   isRemarksRequired,
@@ -31,17 +24,12 @@ const RejectApplication = ({
 }: RejectApplicationProps) => {
   const [reason, setReason] = useState("");
   const [remarks, setRemarks] = useState("");
-  /** Presentation-only: lock menu width to the Reason field. */
-  const [reasonMenuWidth, setReasonMenuWidth] = useState<number | undefined>();
-  const reasonFieldRef = useRef<HTMLDivElement | null>(null);
 
   const remarksRequired = isRemarksRequired(reason);
 
   // Legacy takeaction(): any reason selection clears REJECTID to "".
-  const applyReasonChange = (
-    event: Parameters<ReturnType<typeof handleReasonChange>>[0]
-  ) => {
-    handleReasonChange(setReason)(event);
+  const applyReasonChange = (value: string) => {
+    handleReasonChange(setReason)(value);
     onRejectIdChange?.("");
   };
 
@@ -56,21 +44,11 @@ const RejectApplication = ({
     }
   };
 
-  const syncReasonMenuWidth = () => {
-    const width = reasonFieldRef.current?.offsetWidth;
-    if (width && width > 0) {
-      setReasonMenuWidth(width);
-    }
-  };
-
   /** Drop focus after the menu closes so the orange outline does not linger. */
   const blurReasonSelect = () => {
     window.setTimeout(() => {
       const active = document.activeElement;
-      if (
-        active instanceof HTMLElement &&
-        reasonFieldRef.current?.contains(active)
-      ) {
+      if (active instanceof HTMLElement) {
         active.blur();
       }
     }, 0);
@@ -93,65 +71,15 @@ const RejectApplication = ({
           Reason
         </Box>
 
-        <FormControl fullWidth ref={reasonFieldRef}>
-          <Select
-            id="reject-reason"
-            value={reason}
-            onChange={applyReasonChange}
-            onOpen={syncReasonMenuWidth}
-            onClose={blurReasonSelect}
-            displayEmpty
-            autoWidth={false}
-            sx={styles.documentTypeSelect}
-            MenuProps={{
-              anchorOrigin: {
-                vertical: "bottom",
-                horizontal: "left",
-              },
-              transformOrigin: {
-                vertical: "top",
-                horizontal: "left",
-              },
-              marginThreshold: 12,
-              PaperProps: {
-                sx: {
-                  ...styles.documentTypeMenu,
-                  ...(reasonMenuWidth
-                    ? {
-                        width: reasonMenuWidth,
-                        maxWidth: reasonMenuWidth,
-                        minWidth: `${reasonMenuWidth}px !important`,
-                      }
-                    : {}),
-                },
-              },
-              MenuListProps: {
-                dense: true,
-              },
-            }}
-            renderValue={(selectedValue) => {
-              if (!selectedValue) {
-                return (
-                  <Box component="span" sx={styles.placeholderText}>
-                    Select Reason
-                  </Box>
-                );
-              }
-
-              return selectedValue;
-            }}
-          >
-            {REJECTION_REASONS.map((option) => (
-              <MenuItem
-                key={option.value}
-                value={option.value}
-                onClick={handleReasonToggle(reason, option.value, setReason)}
-              >
-                {option.label}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        <SearchableSelect
+          id="reject-reason"
+          value={reason}
+          options={REJECTION_REASONS}
+          onChange={applyReasonChange}
+          onClose={blurReasonSelect}
+          placeholder="Select Reason"
+          sx={styles.documentTypeSelect}
+        />
       </Box>
 
       <Box sx={styles.remarksSection}>

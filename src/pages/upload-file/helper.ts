@@ -1,5 +1,3 @@
-import type { SelectChangeEvent } from "@mui/material";
-
 import { uploadInspectionFileSchema } from "../../common/constants";
 import { showErrorToast } from "../../components/toast/helper";
 
@@ -36,22 +34,8 @@ export const validateSelectedFiles = (files: File[]): string | null => {
 
 export const handleDocumentTypeChange =
   (setDocumentType: React.Dispatch<React.SetStateAction<string>>) =>
-  (event: SelectChangeEvent<string>) => {
-    setDocumentType(event.target.value);
-  };
-
-// MUI Select does not fire onChange when the selected item is clicked
-// again, so clearing is handled via MenuItem onClick.
-export const handleDocumentTypeToggle =
-  (
-    documentType: string,
-    optionValue: string,
-    setDocumentType: React.Dispatch<React.SetStateAction<string>>
-  ) =>
-  () => {
-    if (documentType === optionValue) {
-      setDocumentType("");
-    }
+  (value: string) => {
+    setDocumentType(value);
   };
 
 export const handleFileChange =

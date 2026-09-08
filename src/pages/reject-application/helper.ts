@@ -1,5 +1,3 @@
-import type { SelectChangeEvent } from "@mui/material";
-
 import { rejectApplicationSchema } from "../../common/constants";
 import { showErrorToast } from "../../components/toast/helper";
 
@@ -106,22 +104,8 @@ export const buildOfficerRejectRemarks = (
 
 export const handleReasonChange =
   (setReason: React.Dispatch<React.SetStateAction<string>>) =>
-  (event: SelectChangeEvent<string>) => {
-    setReason(event.target.value);
-  };
-
-// MUI Select does not fire onChange when the selected item is clicked
-// again, so clearing is handled via MenuItem onClick.
-export const handleReasonToggle =
-  (
-    reason: string,
-    optionValue: string,
-    setReason: React.Dispatch<React.SetStateAction<string>>
-  ) =>
-  () => {
-    if (reason === optionValue) {
-      setReason("");
-    }
+  (value: string) => {
+    setReason(value);
   };
 
 export const handleRemarksChange =

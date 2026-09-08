@@ -10,6 +10,7 @@ import {
   REMEMBER_ME_KEY,
   REMEMBER_USERNAME_KEY,
   REMEMBER_PASSWORD_KEY,
+  REMEMBER_CREDENTIALS_KEY,
   USERNAME_HISTORY_KEY,
 } from "../common/constants/storageKeys";
 import { showErrorToast } from "../components/toast/helper";
@@ -162,6 +163,7 @@ export const logout = (message?: string) => {
     const rememberMe = localStorage.getItem(REMEMBER_ME_KEY);
     const rememberedUsername = localStorage.getItem(REMEMBER_USERNAME_KEY);
     const rememberedPassword = localStorage.getItem(REMEMBER_PASSWORD_KEY);
+    const rememberedCredentials = localStorage.getItem(REMEMBER_CREDENTIALS_KEY);
     const usernameHistory = localStorage.getItem(USERNAME_HISTORY_KEY);
 
     localStorage.clear();
@@ -176,6 +178,12 @@ export const logout = (message?: string) => {
       if (rememberedPassword) {
         localStorage.setItem(REMEMBER_PASSWORD_KEY, rememberedPassword);
       }
+    }
+
+    if (rememberedCredentials) {
+      localStorage.setItem(REMEMBER_CREDENTIALS_KEY, rememberedCredentials);
+      // Ensure Remember Me flag stays set when a multi-account map exists.
+      localStorage.setItem(REMEMBER_ME_KEY, "true");
     }
 
     if (usernameHistory) {

@@ -1,5 +1,6 @@
 import { loginSchema } from "../../common/constants/schema";
 import {
+  REMEMBER_CREDENTIALS_KEY,
   REMEMBER_ME_KEY,
   REMEMBER_PASSWORD_KEY,
   REMEMBER_USERNAME_KEY,
@@ -25,6 +26,13 @@ import type { LoginFormData, LoginFormErrors } from "./type";
 
 export const USERNAME_SUGGESTIONS_LIST_ID = "login-username-suggestions";
 
+const MAX_REMEMBERED_CREDENTIALS = 10;
+
+type RememberedCredential = {
+  username: string;
+  password: string;
+};
+
 export const initialLoginForm: LoginFormData = {
   username: "",
   password: "",
@@ -32,16 +40,101 @@ export const initialLoginForm: LoginFormData = {
   rememberMe: false,
 };
 
-export const getSavedCredentials = () => {
+const credentialKey = (username: string) => username.trim().toLowerCase();
+
+/** Read multi-account map; migrate legacy single-user Remember Me keys if needed. */
+export const getRememberedCredentialsMap = (): Record<
+  string,
+  RememberedCredential
+> => {
+  try {
+    const raw = localStorage.getItem(REMEMBER_CREDENTIALS_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+        const map: Record<string, RememberedCredential> = {};
+        for (const [key, value] of Object.entries(parsed)) {
+          if (
+            value &&
+            typeof value === "object" &&
+            typeof (value as RememberedCredential).username === "string" &&
+            typeof (value as RememberedCredential).password === "string"
+          ) {
+            const entry = value as RememberedCredential;
+            map[credentialKey(key)] = {
+              username: entry.username,
+              password: entry.password,
+            };
+          }
+        }
+        return map;
+      }
+    }
+
+    // Legacy: only the last remembered username/password existed.
+    if (localStorage.getItem(REMEMBER_ME_KEY) === "true") {
+      const username = localStorage.getItem(REMEMBER_USERNAME_KEY) || "";
+      const password = localStorage.getItem(REMEMBER_PASSWORD_KEY) || "";
+      if (username) {
+        const map = {
+          [credentialKey(username)]: { username, password },
+        };
+        localStorage.setItem(REMEMBER_CREDENTIALS_KEY, JSON.stringify(map));
+        return map;
+      }
+    }
+
+    return {};
+  } catch {
+    return {};
+  }
+};
+
+const persistRememberedCredentialsMap = (
+  map: Record<string, RememberedCredential>
+) => {
+  const keys = Object.keys(map);
+  if (keys.length === 0) {
+    localStorage.removeItem(REMEMBER_CREDENTIALS_KEY);
+    localStorage.removeItem(REMEMBER_ME_KEY);
+    localStorage.removeItem(REMEMBER_USERNAME_KEY);
+    localStorage.removeItem(REMEMBER_PASSWORD_KEY);
+    return;
+  }
+
+  localStorage.setItem(REMEMBER_CREDENTIALS_KEY, JSON.stringify(map));
+  localStorage.setItem(REMEMBER_ME_KEY, "true");
+};
+
+export const getSavedCredentialForUsername = (
+  username: string
+): RememberedCredential | null => {
+  const key = credentialKey(username);
+  if (!key) {
+    return null;
+  }
+
+  return getRememberedCredentialsMap()[key] ?? null;
+};
+
+/** Last-used remembered account (for initial form hydrate after logout). */
+export const getSavedCredentials = (): RememberedCredential | null => {
   try {
     if (localStorage.getItem(REMEMBER_ME_KEY) !== "true") {
       return null;
     }
 
-    return {
-      username: localStorage.getItem(REMEMBER_USERNAME_KEY) || "",
-      password: localStorage.getItem(REMEMBER_PASSWORD_KEY) || "",
-    };
+    const lastUsername = localStorage.getItem(REMEMBER_USERNAME_KEY) || "";
+    if (lastUsername) {
+      const matched = getSavedCredentialForUsername(lastUsername);
+      if (matched) {
+        return matched;
+      }
+    }
+
+    const map = getRememberedCredentialsMap();
+    const first = Object.values(map)[0];
+    return first ?? null;
   } catch {
     return null;
   }
@@ -67,8 +160,10 @@ export const getUsernameHistory = (): string[] => {
   try {
     const raw = localStorage.getItem(USERNAME_HISTORY_KEY);
     if (!raw) {
-      const remembered = localStorage.getItem(REMEMBER_USERNAME_KEY);
-      return remembered ? [remembered] : [];
+      const remembered = Object.values(getRememberedCredentialsMap()).map(
+        (entry) => entry.username
+      );
+      return remembered;
     }
 
     const parsed = JSON.parse(raw);
@@ -102,16 +197,48 @@ export const saveUsernameToHistory = (username: string) => {
 };
 
 export const saveRememberedCredentials = (formData: LoginFormData) => {
-  if (formData.rememberMe) {
-    localStorage.setItem(REMEMBER_ME_KEY, "true");
-    localStorage.setItem(REMEMBER_USERNAME_KEY, formData.username);
+  const map = getRememberedCredentialsMap();
+  const key = credentialKey(formData.username);
+
+  if (formData.rememberMe && key) {
+    // Keep most-recent first by rebuilding with this account at the front.
+    const next: Record<string, RememberedCredential> = {
+      [key]: {
+        username: formData.username.trim(),
+        password: formData.password,
+      },
+    };
+
+    for (const [existingKey, entry] of Object.entries(map)) {
+      if (existingKey === key) {
+        continue;
+      }
+      if (Object.keys(next).length >= MAX_REMEMBERED_CREDENTIALS) {
+        break;
+      }
+      next[existingKey] = entry;
+    }
+
+    persistRememberedCredentialsMap(next);
+    localStorage.setItem(REMEMBER_USERNAME_KEY, formData.username.trim());
     localStorage.setItem(REMEMBER_PASSWORD_KEY, formData.password);
     return;
   }
 
-  localStorage.removeItem(REMEMBER_ME_KEY);
-  localStorage.removeItem(REMEMBER_USERNAME_KEY);
-  localStorage.removeItem(REMEMBER_PASSWORD_KEY);
+  // Remember Me unchecked: drop only this username from the map.
+  if (key && map[key]) {
+    delete map[key];
+    persistRememberedCredentialsMap(map);
+
+    const remaining = Object.values(map)[0];
+    if (remaining) {
+      localStorage.setItem(REMEMBER_USERNAME_KEY, remaining.username);
+      localStorage.setItem(REMEMBER_PASSWORD_KEY, remaining.password);
+    }
+    return;
+  }
+
+  persistRememberedCredentialsMap(map);
 };
 
 export const validateForm = async (
@@ -154,20 +281,24 @@ export const handleChange =
     const value = event.target.value;
 
     if (field === "username") {
-      const saved = getSavedCredentials();
-      const matched =
-        !!saved && saved.username !== "" && value === saved.username;
+      const matched = getSavedCredentialForUsername(value);
 
-      setFormData((prev) => ({
-        ...prev,
-        username: value,
-        password: matched
-          ? saved.password
-          : prev.password === saved?.password
-            ? ""
-            : prev.password,
-        rememberMe: matched ? true : prev.rememberMe,
-      }));
+      setFormData((prev) => {
+        const previousMatch = getSavedCredentialForUsername(prev.username);
+        const wasAutofilledPassword =
+          !!previousMatch && prev.password === previousMatch.password;
+
+        return {
+          ...prev,
+          username: value,
+          password: matched
+            ? matched.password
+            : wasAutofilledPassword
+              ? ""
+              : prev.password,
+          rememberMe: matched ? true : prev.rememberMe,
+        };
+      });
     } else {
       setFormData((prev) => ({
         ...prev,

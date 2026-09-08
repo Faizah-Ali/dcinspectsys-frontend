@@ -1,22 +1,14 @@
 import { useEffect, useState } from "react";
-import {
-  Box,
-  Button,
-  CircularProgress,
-  FormControl,
-  MenuItem,
-  Select,
-  TextField,
-} from "@mui/material";
+import { Box, Button, CircularProgress, TextField } from "@mui/material";
 
 import { VARIANTS } from "../../common/constants";
 import ReferenceNoBanner from "../../components/reference-no-banner";
+import SearchableSelect from "../../components/searchable-select";
 import { showErrorToast } from "../../components/toast/helper";
 
 import {
   handleAction,
   handleForwardChange,
-  handleForwardToggle,
   handleRemarksChange,
   isForwardEnabled,
 } from "./helper";
@@ -39,6 +31,11 @@ const ApproverProcess = ({
   const canForward = isForwardEnabled(forwardTo);
   const forwardToName =
     forwardUsers.find((user) => user.id === forwardTo)?.name ?? "";
+
+  const forwardOptions = forwardUsers.map((user) => ({
+    value: user.id,
+    label: user.name,
+  }));
 
   useEffect(() => {
     const controller = new AbortController();
@@ -69,6 +66,16 @@ const ApproverProcess = ({
       controller.abort();
     };
   }, [diaryNo, diaryYr]);
+
+  const blurForwardSelect = () => {
+    requestAnimationFrame(() => {
+      const active = document.activeElement;
+
+      if (active instanceof HTMLElement) {
+        active.blur();
+      }
+    });
+  };
 
   return (
     <Box sx={styles.form}>
@@ -102,70 +109,18 @@ const ApproverProcess = ({
           Forward To
         </Box>
 
-        <FormControl fullWidth>
-          <Select
-            id="approver-forward-to"
-            value={forwardTo}
-            onChange={handleForwardChange(setForwardTo)}
-            onClose={() => {
-              requestAnimationFrame(() => {
-                const active = document.activeElement;
-
-                if (active instanceof HTMLElement) {
-                  active.blur();
-                }
-              });
-            }}
-            disabled={isLoadingApprovers || isSubmitting}
-            displayEmpty
-            sx={styles.forwardToSelect}
-            MenuProps={{
-              PaperProps: {
-                sx: styles.forwardToMenu,
-              },
-              MenuListProps: {
-                dense: true,
-              },
-            }}
-            renderValue={(selectedValue) => {
-              if (!selectedValue) {
-                return (
-                  <Box component="span" sx={styles.placeholderText}>
-                    Select Approver
-                  </Box>
-                );
-              }
-
-              const selectedUser = forwardUsers.find(
-                (user) => user.id === selectedValue
-              );
-
-              return selectedUser?.name ?? selectedValue;
-            }}
-          >
-            {isLoadingApprovers ? (
-              <MenuItem disabled>
-                <CircularProgress size={20} />
-              </MenuItem>
-            ) : forwardUsers.length === 0 ? (
-              <MenuItem disabled>No approvers found.</MenuItem>
-            ) : (
-              forwardUsers.map((user) => (
-                <MenuItem
-                  key={user.id}
-                  value={user.id}
-                  onClick={handleForwardToggle(
-                    forwardTo,
-                    user.id,
-                    setForwardTo
-                  )}
-                >
-                  {user.name}
-                </MenuItem>
-              ))
-            )}
-          </Select>
-        </FormControl>
+        <SearchableSelect
+          id="approver-forward-to"
+          value={forwardTo}
+          options={forwardOptions}
+          onChange={handleForwardChange(setForwardTo)}
+          onClose={blurForwardSelect}
+          placeholder="Select Approver"
+          disabled={isLoadingApprovers || isSubmitting}
+          loading={isLoadingApprovers}
+          noOptionsText="No approvers found."
+          sx={styles.forwardToSelect}
+        />
       </Box>
 
       <Box sx={styles.actionsWrap}>
