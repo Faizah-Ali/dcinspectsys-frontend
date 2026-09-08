@@ -109,13 +109,13 @@ export const styles = {
     whiteSpace: "nowrap" as const,
   },
   caseNoCell: {
-    width: "13.5%",
+    width: "12.5%",
     whiteSpace: "normal" as const,
     lineHeight: 1.4,
   },
   // Case Status + Application Status share the same column width
   caseStatusCell: {
-    width: "12.5%",
+    width: "11%",
   },
   remarksCell: {
     width: "8%",
@@ -123,10 +123,10 @@ export const styles = {
     lineHeight: 1.4,
   },
   applicationDateCell: {
-    width: "5.5%",
+    width: "8%",
   },
   applicationStatusCell: {
-    width: "12.5%",
+    width: "11%",
   },
   courtFeeCell: {
     width: "10%",
@@ -134,7 +134,7 @@ export const styles = {
     lineHeight: 1.4,
   },
   actionsCell: {
-    width: "16%",
+    width: "18%",
     whiteSpace: "nowrap" as const,
     textAlign: "center" as const,
   },
@@ -152,13 +152,13 @@ export const styles = {
     "3.5%",
     "8%",
     "7.5%",
-    "13.5%",
     "12.5%",
+    "11%",
     "8%",
-    "5.5%",
-    "12.5%",
+    "8%",
+    "11%",
     "10%",
-    "16%",
+    "18%",
   ] as const,
   // ONLINEINSPECTION has no Remarks column — redistributes the 8% remarks width
   columnWidthsWithoutRemarks: [
@@ -166,12 +166,12 @@ export const styles = {
     "3.5%",
     "9%",
     "8%",
-    "15%",
-    "14%",
-    "6.5%",
-    "14%",
+    "13.5%",
+    "12.5%",
+    "9%",
+    "12.5%",
     "11%",
-    "16%",
+    "18%",
   ] as const,
   blueIcon: {
     padding: "2px",
