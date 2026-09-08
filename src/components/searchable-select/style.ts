@@ -40,6 +40,12 @@ export const styles = {
     border: "1px solid rgba(15, 23, 41, 0.14)",
     backgroundColor: COLORS.white,
     boxShadow: "0 6px 18px rgba(15, 23, 41, 0.12)",
+  },
+  listbox: {
+    maxHeight: "min(260px, calc(100vh - 160px))",
+    padding: 0,
+    // Autocomplete highlights the active row with `.Mui-focused` (theme grey
+    // action.hover). Force orange so hover/keyboard focus match the app theme.
     "& .MuiAutocomplete-option": {
       fontSize: "13px",
       lineHeight: 1.35,
@@ -50,7 +56,13 @@ export const styles = {
       color: COLORS.textPrimary,
     },
     "& .MuiAutocomplete-option:hover": {
-      backgroundColor: "rgba(209, 91, 6, 0.1)",
+      backgroundColor: "rgba(209, 91, 6, 0.1) !important",
+    },
+    "& .MuiAutocomplete-option.Mui-focused": {
+      backgroundColor: "rgba(209, 91, 6, 0.1) !important",
+    },
+    '& .MuiAutocomplete-option[data-focus="true"]': {
+      backgroundColor: "rgba(209, 91, 6, 0.1) !important",
     },
     "& .MuiAutocomplete-option[aria-selected='true']": {
       backgroundColor: "rgba(209, 91, 6, 0.14) !important",
@@ -60,12 +72,8 @@ export const styles = {
     "& .MuiAutocomplete-option[aria-selected='true']:hover": {
       backgroundColor: "rgba(209, 91, 6, 0.2) !important",
     },
-    "& .MuiAutocomplete-option.Mui-focused": {
-      backgroundColor: "rgba(209, 91, 6, 0.1)",
+    "& .MuiAutocomplete-option[aria-selected='true'].Mui-focused": {
+      backgroundColor: "rgba(209, 91, 6, 0.2) !important",
     },
-  },
-  listbox: {
-    maxHeight: "min(260px, calc(100vh - 160px))",
-    padding: 0,
   },
 };
