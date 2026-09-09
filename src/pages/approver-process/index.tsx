@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Box, Button, CircularProgress, TextField } from "@mui/material";
+import { Box, Button, TextField } from "@mui/material";
 
 import { VARIANTS } from "../../common/constants";
 import ReferenceNoBanner from "../../components/reference-no-banner";

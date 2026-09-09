@@ -109,6 +109,31 @@ export const handleRemarksChange =
     setRemarks(event.target.value);
   };
 
+export const handleOfficerSearchChange =
+  (setOfficerSearch: React.Dispatch<React.SetStateAction<string>>) =>
+  (event: React.ChangeEvent<HTMLInputElement>) => {
+    setOfficerSearch(event.target.value);
+  };
+
+export const filterOfficersBySearch = <
+  T extends { id: string; fullname: string },
+>(
+  officers: T[],
+  search: string
+): T[] => {
+  const query = search.trim().toLowerCase();
+
+  if (!query) {
+    return officers;
+  }
+
+  return officers.filter(
+    (officer) =>
+      officer.fullname.toLowerCase().includes(query) ||
+      officer.id.toLowerCase().includes(query)
+  );
+};
+
 export const handleSubmit =
   (
     staffId: string,

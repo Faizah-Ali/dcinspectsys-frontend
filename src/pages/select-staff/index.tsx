@@ -1,31 +1,25 @@
 import { useEffect, useMemo, useState } from "react";
-import {
-  Box,
-  Button,
-  CircularProgress,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-  TextField,
-} from "@mui/material";
+import { Box, Button, CircularProgress, TextField } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 
 import { VARIANTS } from "../../common/constants";
 import ReferenceNoBanner from "../../components/reference-no-banner";
+import Search from "../../components/search";
 import { showErrorToast } from "../../components/toast/helper";
 import type { AppDispatch, RootState } from "../../redux/store";
 
 import {
+  filterOfficersBySearch,
   findApproverForApplication,
   getInitialStaffId,
   getSelectStaffFormDefaults,
+  handleOfficerSearchChange,
   handleRemarksChange,
-  handleStaffIdChange,
-  handleStaffIdToggle,
   handleSubmit,
   hasSelectStaffFormChanges,
 } from "./helper";
 import { getApproversList } from "./services/select-staff.action";
+import type { Approver } from "./services/select-staff.type";
 import { styles } from "./style";
 import type { SelectStaffProps } from "./type";
 
@@ -47,6 +41,7 @@ const SelectStaff = ({
   const [staffId, setStaffId] = useState("");
   const [remarks, setRemarks] = useState(applicationDefaults.remarks);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [officerSearch, setOfficerSearch] = useState("");
 
   const initialStaffId = useMemo(
     () =>
@@ -58,6 +53,11 @@ const SelectStaff = ({
             initialAssignedId
           ),
     [approvers, initialAssignedId, initialAssignedName, isLoading]
+  );
+
+  const filteredApprovers = useMemo(
+    () => filterOfficersBySearch(approvers, officerSearch),
+    [approvers, officerSearch]
   );
 
   // Dealing remarks always start as "" (never seeded from application.remarks).
@@ -75,6 +75,7 @@ const SelectStaff = ({
 
     setRemarks(defaults.remarks);
     setStaffId("");
+    setOfficerSearch("");
     setIsSubmitting(false);
   }, [diaryNo, diaryYr, initialAssignedName, initialAssignedId]);
 
@@ -122,6 +123,16 @@ const SelectStaff = ({
     };
   }, [dispatch]);
 
+  // Same single-select + re-click-to-clear behavior as prior radio controls.
+  const selectStaff = (approver: Approver) => {
+    if (staffId === approver.id) {
+      setStaffId("");
+      return;
+    }
+
+    setStaffId(approver.id);
+  };
+
   return (
     <Box sx={styles.pageShell}>
       <Box
@@ -135,70 +146,93 @@ const SelectStaff = ({
         )}
         sx={styles.staffForm}
       >
-        <ReferenceNoBanner diaryNo={diaryNo} diaryYr={diaryYr} />
+        <ReferenceNoBanner
+          diaryNo={diaryNo}
+          diaryYr={diaryYr}
+          sx={{ flexShrink: 0 }}
+        />
 
         <Box sx={styles.section}>
           <Box component="p" sx={styles.sectionTitle}>
-            Select an officer
+            Select Officer
           </Box>
+
+          {!isLoading && approvers.length > 0 ? (
+            <Search
+              value={officerSearch}
+              onChange={handleOfficerSearchChange(setOfficerSearch)}
+              placeholder="Search officer by name or ID"
+              containerSx={styles.popupSearch}
+            />
+          ) : null}
 
           {isLoading ? (
             <Box sx={styles.loadingWrap}>
-              <CircularProgress size={28} />
+              <CircularProgress size={24} />
             </Box>
           ) : approvers.length === 0 ? (
             <Box sx={styles.emptyText}>No approvers found.</Box>
+          ) : filteredApprovers.length === 0 ? (
+            <Box sx={styles.emptyText}>No officers found.</Box>
           ) : (
-            <RadioGroup
-              value={staffId}
-              onChange={handleStaffIdChange(setStaffId)}
-              sx={styles.staffList}
-            >
-              {approvers.map((approver) => {
-                const isSelected = staffId === approver.id;
+            <Box sx={styles.staffListScroll}>
+              <Box
+                role="radiogroup"
+                aria-label="Select officer"
+                sx={styles.staffList}
+              >
+                {filteredApprovers.map((approver) => {
+                  const isSelected = staffId === approver.id;
 
-                return (
-                  <FormControlLabel
-                    key={approver.id}
-                    value={approver.id}
-                    control={
-                      <Radio
-                        onClick={handleStaffIdToggle(
-                          staffId,
-                          approver.id,
-                          setStaffId
-                        )}
+                  return (
+                    <Box
+                      key={approver.id}
+                      role="radio"
+                      aria-checked={isSelected}
+                      tabIndex={0}
+                      onClick={() => selectStaff(approver)}
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                          event.preventDefault();
+                          selectStaff(approver);
+                        }
+                      }}
+                      sx={{
+                        ...styles.staffRow,
+                        ...(isSelected ? styles.staffRowSelected : {}),
+                      }}
+                    >
+                      <Box
+                        component="span"
+                        aria-hidden
+                        sx={{
+                          ...styles.selectionMarker,
+                          ...(isSelected
+                            ? styles.selectionMarkerSelected
+                            : {}),
+                        }}
                       />
-                    }
-                    label={
-                      <Box sx={styles.staffCardLabel}>
-                        <Box
-                          component="span"
-                          sx={{
-                            ...styles.staffCardName,
-                            ...(isSelected
-                              ? styles.staffCardNameSelected
-                              : {}),
-                          }}
-                        >
-                          {approver.fullname}
-                        </Box>
 
-                        {isSelected ? (
-                          <Box component="span" sx={styles.selectedBadge}>
-                            Selected
-                          </Box>
-                        ) : null}
+                      <Box
+                        component="span"
+                        sx={{
+                          ...styles.staffRowName,
+                          ...(isSelected ? styles.staffRowNameSelected : {}),
+                        }}
+                      >
+                        {approver.fullname}
                       </Box>
-                    }
-                    sx={{
-                      ...styles.staffCard,
-                      ...(isSelected ? styles.staffCardSelected : {}),
-                    }}
-                  />
-                );
-              })}
-            </RadioGroup>
+
+                      {isSelected ? (
+                        <Box component="span" sx={styles.selectedBadge}>
+                          Selected
+                        </Box>
+                      ) : null}
+                    </Box>
+                  );
+                })}
+              </Box>
+            </Box>
           )}
         </Box>
 
@@ -215,6 +249,7 @@ const SelectStaff = ({
             id="staff-remarks"
             multiline
             minRows={3}
+            maxRows={3}
             placeholder="Enter remarks (optional)"
             value={remarks}
             onChange={handleRemarksChange(setRemarks)}

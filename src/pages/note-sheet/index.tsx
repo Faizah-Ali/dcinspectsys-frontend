@@ -64,7 +64,7 @@ const NoteSheet = ({ diaryNo, diaryYr, onClose }: NoteSheetProps) => {
       <ReferenceNoBanner
         diaryNo={diaryNo}
         diaryYr={diaryYr}
-        sx={{ marginBottom: "14px" }}
+        sx={{ marginBottom: "14px", flexShrink: 0 }}
       />
 
       <Box component="p" sx={styles.sectionHeading}>

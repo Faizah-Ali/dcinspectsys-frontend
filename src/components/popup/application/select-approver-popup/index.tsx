@@ -1,5 +1,6 @@
 import Popup from "../..";
 import SelectApprover from "../../../../pages/select-approver";
+import { selectApproverPopupStyles } from "../../../../pages/select-approver/style";
 import type { ApplicationResponse } from "../../../../pages/inspec-applications/services/applications.type";
 import type { SelectApproverValues } from "../../../../pages/select-approver/type";
 
@@ -20,6 +21,9 @@ const SelectApproverPopup = ({
       title="Select Approver"
       onClose={onClose}
       maxWidth="md"
+      paperSx={selectApproverPopupStyles.paper}
+      headerSx={selectApproverPopupStyles.header}
+      contentSx={selectApproverPopupStyles.content}
     >
       {application && (
         <SelectApprover
