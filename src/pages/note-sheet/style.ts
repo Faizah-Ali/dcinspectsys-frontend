@@ -10,9 +10,8 @@ export const styles = {
     flexDirection: "column" as const,
     gap: 0,
     width: "100%",
-    maxWidth: "720px",
+    maxWidth: "100%",
     margin: "0 auto",
-    height: "100%",
     minHeight: 0,
   },
   /** Kept for residual consumers. */
@@ -36,14 +35,16 @@ export const styles = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    flex: "1 1 auto",
     minHeight: "100px",
     marginBottom: "12px",
+    flexShrink: 0,
   },
   tableWrapper: {
     width: "100%",
     maxWidth: "100%",
-    flex: "1 1 auto",
+    flex: "0 1 auto",
+    // Header (~36px) + 3 data rows (~48px each) — then scroll.
+    maxHeight: "180px",
     minHeight: 0,
     boxShadow: "none",
     borderRadius: "6px",
@@ -52,6 +53,20 @@ export const styles = {
     overflowY: "auto" as const,
     backgroundColor: COLORS.white,
     marginBottom: "14px",
+    WebkitOverflowScrolling: "touch",
+    overscrollBehavior: "contain",
+    "&::-webkit-scrollbar": {
+      width: "8px",
+      height: "8px",
+    },
+    "&::-webkit-scrollbar-thumb": {
+      backgroundColor: "rgba(15, 23, 41, 0.25)",
+      borderRadius: "8px",
+    },
+    "&::-webkit-scrollbar-track": {
+      backgroundColor: "rgba(15, 23, 41, 0.06)",
+      borderRadius: "8px",
+    },
   },
   table: {
     width: "100%",
@@ -123,7 +138,7 @@ export const styles = {
   emptyText: {
     margin: "0 0 14px",
     padding: "20px 12px",
-    flex: "1 1 auto",
+    flexShrink: 0,
     fontSize: "13px",
     color: "rgba(15, 23, 41, 0.55)",
     textAlign: "center" as const,
@@ -161,23 +176,23 @@ export const styles = {
     },
   },
   authorCell: {
-    width: "33.33%",
+    width: "28%",
   },
   dateCell: {
-    width: "33.33%",
+    width: "30%",
     whiteSpace: "nowrap" as const,
   },
   commentCell: {
-    width: "33.34%",
+    width: "42%",
   },
-  columnWidths: ["33.33%", "33.33%", "33.34%"] as const,
+  columnWidths: ["30%", "28%", "42%"] as const,
 } as const;
 
 /** Popup chrome used only by Note Sheet entry points. */
 export const noteSheetPopupStyles = {
   paper: {
-    width: "min(760px, calc(100vw - 40px))",
-    maxWidth: "760px",
+    width: "min(740px, calc(100vw - 40px))",
+    maxWidth: "740px",
     borderRadius: "16px",
     overflow: "hidden",
     backgroundColor: COLORS.white,
@@ -189,12 +204,12 @@ export const noteSheetPopupStyles = {
   header: {
     backgroundColor: COLORS.white,
     borderBottom: "1px solid rgba(15, 23, 41, 0.1)",
-    minHeight: "60px",
+    minHeight: "56px",
     padding: "10px 16px",
     flexShrink: 0,
   },
   content: {
-    padding: "16px 24px 18px",
+    padding: "14px 20px 16px",
     backgroundColor: COLORS.white,
     overflow: "hidden",
     overflowX: "hidden",
@@ -204,7 +219,7 @@ export const noteSheetPopupStyles = {
     display: "flex",
     flexDirection: "column" as const,
     [`@media (max-width: ${MOBILE_MAX}px)`]: {
-      padding: "14px 16px 16px",
+      padding: "12px 14px 14px",
     },
   },
 } as const;
