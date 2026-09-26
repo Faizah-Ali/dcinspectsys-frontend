@@ -40,17 +40,17 @@ const ReassignApplications = () => {
     const trimmedDiaryYear = diaryYear.trim();
 
     if (!trimmedDiaryNo && !trimmedDiaryYear) {
-      showErrorToast("Please enter diary number and diary year");
+      showErrorToast("Please enter Diary No. and Diary Year");
       return;
     }
 
     if (!trimmedDiaryNo) {
-      showErrorToast("Please enter diary number");
+      showErrorToast("Please enter Diary No.");
       return;
     }
 
     if (!trimmedDiaryYear) {
-      showErrorToast("Please enter diary year");
+      showErrorToast("Please enter Diary Year");
       return;
     }
 
