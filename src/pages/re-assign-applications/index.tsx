@@ -39,8 +39,18 @@ const ReassignApplications = () => {
     const trimmedDiaryNo = diaryNo.trim();
     const trimmedDiaryYear = diaryYear.trim();
 
-    if (!trimmedDiaryNo || !trimmedDiaryYear) {
+    if (!trimmedDiaryNo && !trimmedDiaryYear) {
       showErrorToast("Please enter diary number and diary year");
+      return;
+    }
+
+    if (!trimmedDiaryNo) {
+      showErrorToast("Please enter diary number");
+      return;
+    }
+
+    if (!trimmedDiaryYear) {
+      showErrorToast("Please enter diary year");
       return;
     }
 
