@@ -14,7 +14,6 @@ import { getUploadHistory } from "../upload-history/services/upload-history.acti
 import type { UploadHistoryItem } from "../upload-history/services/upload-history.type";
 import {
   hasCurrentCycleActivePdf,
-  isCurrentCycleActiveFile,
   isDeletedUploadFile,
 } from "../upload-history/helper";
 
@@ -204,41 +203,32 @@ const UploadFile = ({
                 <>
                   {!hasCurrentPdf && (
                     <Box component="span" sx={styles.emptyFileName}>
-                      No current PDF uploaded
+                      No PDF file. uploaded
                     </Box>
                   )}
 
                   {uploadedFiles.map((item, index) => {
                     const isDeleted = isDeletedUploadFile(item);
-                    const isCurrent = isCurrentCycleActiveFile(item);
 
                     return (
                       <Box
                         key={`${item.uniqueId || item.fileName}-${index}`}
                         component="span"
                         sx={
-                          isDeleted || !isCurrent
+                          isDeleted
                             ? styles.deletedUploadedFileName
                             : styles.selectedFileName
                         }
                       >
                         {isDeleted ? (
                           <>
-                            ✕ {item.fileName} -{" "}
+                            ✖ {item.fileName} -{" "}
                             <Box component="span" sx={styles.deletedLabel}>
                               Deleted
                             </Box>
                           </>
-                        ) : isCurrent ? (
-                          <>✔ {item.fileName}</>
                         ) : (
-                          <>
-                            {item.fileName} -{" "}
-                            <Box component="span" sx={styles.deletedLabel}>
-                              {/* Historical */}
-                              Old
-                            </Box>
-                          </>
+                          <>✔ {item.fileName}</>
                         )}
                       </Box>
                     );

@@ -366,7 +366,6 @@ const UploadHistory = ({
               {pagedFiles.map((item, index) => {
                 const uniqueId = item.uniqueId?.trim() ?? "";
                 const isDeleted = isDeletedUploadFile(item);
-                const isOld = item.currentCycle === false && !isDeleted;
                 const isPreviewing = previewingUniqueId === uniqueId;
                 const isDownloading = downloadingUniqueId === uniqueId;
                 const isDeleting = deletingUniqueId === uniqueId;
@@ -398,11 +397,6 @@ const UploadHistory = ({
                         }}
                       >
                         <Box component="span">{item.fileName}</Box>
-                        {isOld ? (
-                          <Box component="span" sx={styles.oldChip}>
-                            Old
-                          </Box>
-                        ) : null}
                       </Box>
                     </TableCell>
                     <TableCell align="center" sx={styles.dataCell}>
